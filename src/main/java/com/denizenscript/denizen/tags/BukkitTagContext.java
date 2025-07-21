@@ -23,13 +23,13 @@ public class BukkitTagContext extends TagContext {
 //        this.player = entity != null && entity.isPlayer() ? entity.getDenizenPlayer() : null;
 //        this.npc = entity != null && entity.isNPC() ? entity.getDenizenNPC() : null;
 //    }
-//
-//    public BukkitTagContext(PlayerTag player, NPCTag npc, ScriptTag script) {
-//        super(script == null || script.getContainer().shouldDebug(), null, script);
-//        this.player = player;
+
+    public BukkitTagContext(PlayerTag player, /*NPCTag npc,*/ ScriptTag script) {
+        super(script == null || script.getContainer().shouldDebug(), null, script);
+        this.player = player;
 //        this.npc = npc;
-//    }
-//
+    }
+
     public BukkitTagContext(PlayerTag player, /*NPCTag npc,*/ ScriptEntry entry, boolean debug, ScriptTag script) {
         super(debug, entry, script);
         this.player = player;

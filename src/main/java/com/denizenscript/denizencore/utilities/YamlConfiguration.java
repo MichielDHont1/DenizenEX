@@ -3,13 +3,13 @@ package com.denizenscript.denizencore.utilities;
 import com.denizenscript.denizencore.scripts.ScriptBuilder;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
-//import org.yaml.snakeyaml.DumperOptions;
-//import org.yaml.snakeyaml.LoaderOptions;
-//import org.yaml.snakeyaml.Yaml;
-//import org.yaml.snakeyaml.constructor.SafeConstructor;
-//import org.yaml.snakeyaml.representer.Representer;
-//import org.yaml.snakeyaml.resolver.Resolver;
-//import org.yaml.snakeyaml.scanner.ScannerImpl;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
+import org.yaml.snakeyaml.representer.Representer;
+import org.yaml.snakeyaml.resolver.Resolver;
+import org.yaml.snakeyaml.scanner.ScannerImpl;
 
 import java.io.InputStream;
 import java.util.*;
@@ -19,62 +19,62 @@ import java.util.*;
  */
 public class YamlConfiguration {
 
-//    static {
-//        ScannerImpl.ESCAPE_REPLACEMENTS.put('/', "/");
-//    }
-//
-//    public static class CustomResolver extends Resolver {
-//        @Override
-//        protected void addImplicitResolvers() {
-//        }
-//    }
-//
-//    private static volatile boolean hasModernYaml = true; // Note: can be called async
-//
-//    public static Yaml createBaseYaml(boolean useCustomResolver) {
-//        DumperOptions options = new DumperOptions();
-//        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-//        options.setAllowUnicode(true);
-//        LoaderOptions loaderOptions = new LoaderOptions();
-//        SafeConstructor safeCtor;
-//        Representer reper;
-//        try {
-//            if (hasModernYaml) {
-//                loaderOptions.setCodePointLimit(Integer.MAX_VALUE);
-//            }
-//        }
-//        catch (NoSuchMethodError ignored) {
-//            hasModernYaml = false; // pre-1.32 snakeyaml
-//        }
-//        try {
-//            safeCtor = new SafeConstructor(loaderOptions);
-//            reper = new Representer(options);
-//        }
-//        catch (NoSuchMethodError ignored) {
+    static {
+        ScannerImpl.ESCAPE_REPLACEMENTS.put('/', "/");
+    }
+
+    public static class CustomResolver extends Resolver {
+        @Override
+        protected void addImplicitResolvers() {
+        }
+    }
+
+    private static volatile boolean hasModernYaml = true; // Note: can be called async
+
+    public static Yaml createBaseYaml(boolean useCustomResolver) {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setAllowUnicode(true);
+        LoaderOptions loaderOptions = new LoaderOptions();
+        SafeConstructor safeCtor = null;
+        Representer reper = null;;
+        try {
+            if (hasModernYaml) {
+                loaderOptions.setCodePointLimit(Integer.MAX_VALUE);
+            }
+        }
+        catch (NoSuchMethodError ignored) {
+            hasModernYaml = false; // pre-1.32 snakeyaml
+        }
+        try {
+            safeCtor = new SafeConstructor(loaderOptions);
+            reper = new Representer(options);
+        }
+        catch (NoSuchMethodError ignored) {
+            //todo ask about this
 //            safeCtor = new SafeConstructor();
 //            reper = new Representer();
-//        }
-//        return new Yaml(safeCtor, reper, options, loaderOptions, useCustomResolver ? new CustomResolver() : new Resolver());
-//    }
-//
+        }
+        return new Yaml(safeCtor, reper, options, loaderOptions, useCustomResolver ? new CustomResolver() : new Resolver());
+    }
+
     public static YamlConfiguration load(String data) {
         return load(data, true);
     }
-//
+
     public static YamlConfiguration load(String data, boolean useCustomResolver) {
-//        Object obj = createBaseYaml(useCustomResolver).load(data);
-//        return loadRaw(obj);
-    return null;
+        Object obj = createBaseYaml(useCustomResolver).load(data);
+        return loadRaw(obj);
     }
-//
-//    public static YamlConfiguration load(InputStream inputStream) {
-//        return load(inputStream, true);
-//    }
-//
-//    public static YamlConfiguration load(InputStream inputStream, boolean useCustomResolver) {
-//        Object obj = createBaseYaml(useCustomResolver).load(inputStream);
-//        return loadRaw(obj);
-//    }
+
+    public static YamlConfiguration load(InputStream inputStream) {
+        return load(inputStream, true);
+    }
+
+    public static YamlConfiguration load(InputStream inputStream, boolean useCustomResolver) {
+        Object obj = createBaseYaml(useCustomResolver).load(inputStream);
+        return loadRaw(obj);
+    }
 
     /**
      * Loads a raw object into a YamlConfiguration. For internal use.
@@ -230,17 +230,17 @@ public class YamlConfiguration {
         return strings;
     }
 
-//    public String saveToString(boolean patchLines) {
-//        DumperOptions options = new DumperOptions();
-//        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-//        options.setAllowUnicode(true);
-//        Yaml yaml = new Yaml(options);
-//        String dumped = yaml.dump(reverse(contents, patchLines));
-//        if (CoreConfiguration.debugVerbose) {
-//            Debug.log("Outputting " + dumped);
-//        }
-//        return dumped;
-//    }
+    public String saveToString(boolean patchLines) {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setAllowUnicode(true);
+        Yaml yaml = new Yaml(options);
+        String dumped = yaml.dump(reverse(contents, patchLines));
+        if (CoreConfiguration.debugVerbose) {
+            Debug.log("Outputting " + dumped);
+        }
+        return dumped;
+    }
 
     public Object get(String path) {
         if (path.isEmpty()) {

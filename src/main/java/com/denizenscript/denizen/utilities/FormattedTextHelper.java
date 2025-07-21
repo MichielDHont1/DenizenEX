@@ -15,7 +15,7 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.google.gson.Gson;
 import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.TextComponent;
-//import net.md_5.bungee.api.ChatColor;
+import com.denizenscript.denizen.utilities.ChatColor;
 //import net.md_5.bungee.api.chat.*;
 //import net.md_5.bungee.chat.ChatVersion;
 //import net.md_5.bungee.chat.ComponentSerializer;
@@ -246,7 +246,7 @@ public class FormattedTextHelper {
 //        return toRet;
 //    }
 
-    public static BaseComponent[] parse(String str, ChatColor baseColor) {
+    public static TextComponent parse(String str, ChatColor baseColor) {
         if (str == null) {
             return null;
         }
@@ -437,7 +437,7 @@ public class FormattedTextHelper {
 //        return new BaseComponent[] { root };
 //    }
 
-    public static BaseComponent[] parse(String str, ChatColor baseColor, boolean cleanBase) {
+    public static TextComponent parse(String str, ChatColor baseColor, boolean cleanBase) {
         if (str == null) {
             return null;
         }
@@ -447,7 +447,7 @@ public class FormattedTextHelper {
 //        catch (Throwable ex) {
 //            Debug.echoError(ex);
 //        }
-        return new BaseComponent[]{new TextComponent(str)};
+        return new TextComponent(str);
     }
 
 //    private static BaseComponent parseTranslatable(String str, ChatColor baseColor, boolean optimize) {

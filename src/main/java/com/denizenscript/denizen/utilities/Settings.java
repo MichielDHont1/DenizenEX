@@ -63,6 +63,11 @@ public class Settings {
         CoreConfiguration.debugPrefix = Config.DEBUG_PREFIX.get();
         CoreConfiguration.debugLineLength = Config.DEBUG_LINE_LENGTH.get();
         DebugSubmitter.pasteURL = Config.PASTE_URL.get();
+        cache_useDefaultScriptPath = Config.USE_ALTERNATE_PATH.get();
+        cache_getAlternateScriptPath = Config.ALTERNATE_PATH.get();
+
+
+
         if (DebugSubmitter.pasteURL.equals("default")) {
             DebugSubmitter.pasteURL = DebugSubmitter.corePasteURL;
         }
@@ -86,10 +91,8 @@ public class Settings {
 //        worldPlayerDataSaveDelay = (float) DurationTag.valueOf(config.getString("Save world player file delay", "10s"), CoreUtilities.basicContext).getSeconds();
 //        worldPlayerDataMaxCacheTicks = DurationTag.valueOf(config.getString("World player data max cache", "1h"), CoreUtilities.basicContext).getTicks();
 //        cache_overrideHelp = config.getBoolean("Debug.Override help", true);
-//        cache_useDefaultScriptPath = config.getBoolean("Scripts location.Use default script folder", true);
 //        cache_showExHelp = config.getBoolean("Debug.Ex command help", true);
 //        cache_showExDebug = config.getBoolean("Debug.Ex command debug", true);
-//        cache_getAlternateScriptPath = config.getString("Scripts location.Alternative folder path", "plugins/Denizen");
 //        cache_canRecordStats = config.getBoolean("Debug.Stats", true);
 //        cache_defaultDebugMode = config.getBoolean("Debug.Container default", true);
 //        cache_warnOnAsyncPackets = config.getBoolean("Debug.Warn on async packets", false);

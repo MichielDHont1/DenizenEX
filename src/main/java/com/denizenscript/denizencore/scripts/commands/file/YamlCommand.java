@@ -323,64 +323,64 @@ public class YamlCommand extends AbstractCommand implements Holdable {
                 }
                 break;
             case SAVE:
-//                if (yamlDocuments.containsKey(id)) {
-//                    try {
-//                        if (!CoreConfiguration.allowStrangeFileSaves) {
-//                            File fileObj = new File(DenizenCore.implementation.
-//                                    getDataFolder().getAbsolutePath() + "/" + filename.asString());
-//                            String directory = URLDecoder.decode(System.getProperty("user.dir"));
-//                            if (!fileObj.getCanonicalPath().startsWith(directory)) {
-//                                Debug.echoError("Outside-the-main-folder YAML saves disabled by administrator.");
-//                                scriptEntry.setFinished(true);
-//                                return;
-//                            }
-//                        }
-//                        File fileObj = new File(DenizenCore.implementation.
-//                                getDataFolder().getAbsolutePath() + "/" + filename.asString());
-//                        if (!DenizenCore.implementation.canWriteToFile(fileObj)) {
-//                            Debug.echoError("Cannot write to that file path due to security settings in Denizen/config.yml.");
-//                            scriptEntry.setFinished(true);
-//                            return;
-//                        }
-//                        fileObj.getParentFile().mkdirs();
-//                        YamlConfiguration yaml = yamlDocuments.get(id);
-////                        String outp = yaml.saveToString(false);
-////                        yaml.setDirty(false);
-////                        Runnable saveRunnable = () -> {
-////                            try {
-////                                Charset charset = CoreConfiguration.scriptEncoding == null ? null : CoreConfiguration.scriptEncoding.charset();
-////                                FileOutputStream fiout = new FileOutputStream(fileObj);
-////                                OutputStreamWriter writer;
-////                                if (charset == null) {
-////                                    writer = new OutputStreamWriter(fiout);
-////                                }
-////                                else {
-////                                    writer = new OutputStreamWriter(fiout, charset);
-////                                }
-////                                writer.write(outp);
-////                                writer.close();
-////                            }
-////                            catch (IOException e) {
-////                                Debug.echoError(e);
-////                            }
-//                            scriptEntry.setFinished(true);
-//                        };
-//                        if (scriptEntry.shouldWaitFor()) {
-//                            DenizenCore.runAsync(saveRunnable);
-//                        }
-//                        else {
-//                            saveRunnable.run();
-//                        }
-//                    }
-//                    catch (IOException e) {
-//                        Debug.echoError(e);
-//                    }
-//                }
-//                else {
-//                    Debug.echoError("Unknown YAML ID '" + id + "'");
-//                    scriptEntry.setFinished(true);
-//                }
-//                break;
+                if (yamlDocuments.containsKey(id)) {
+                    try {
+                        if (!CoreConfiguration.allowStrangeFileSaves) {
+                            File fileObj = new File(DenizenCore.implementation.
+                                    getDataFolder().getAbsolutePath() + "/" + filename.asString());
+                            String directory = URLDecoder.decode(System.getProperty("user.dir"));
+                            if (!fileObj.getCanonicalPath().startsWith(directory)) {
+                                Debug.echoError("Outside-the-main-folder YAML saves disabled by administrator.");
+                                scriptEntry.setFinished(true);
+                                return;
+                            }
+                        }
+                        File fileObj = new File(DenizenCore.implementation.
+                                getDataFolder().getAbsolutePath() + "/" + filename.asString());
+                        if (!DenizenCore.implementation.canWriteToFile(fileObj)) {
+                            Debug.echoError("Cannot write to that file path due to security settings in Denizen/config.yml.");
+                            scriptEntry.setFinished(true);
+                            return;
+                        }
+                        fileObj.getParentFile().mkdirs();
+                        YamlConfiguration yaml = yamlDocuments.get(id);
+                        String outp = yaml.saveToString(false);
+                        yaml.setDirty(false);
+                        Runnable saveRunnable = () -> {
+                            try {
+                                Charset charset = CoreConfiguration.scriptEncoding == null ? null : CoreConfiguration.scriptEncoding.charset();
+                                FileOutputStream fiout = new FileOutputStream(fileObj);
+                                OutputStreamWriter writer;
+                                if (charset == null) {
+                                    writer = new OutputStreamWriter(fiout);
+                                }
+                                else {
+                                    writer = new OutputStreamWriter(fiout, charset);
+                                }
+                                writer.write(outp);
+                                writer.close();
+                            }
+                            catch (IOException e) {
+                                Debug.echoError(e);
+                            }
+                            scriptEntry.setFinished(true);
+                        };
+                        if (scriptEntry.shouldWaitFor()) {
+                            DenizenCore.runAsync(saveRunnable);
+                        }
+                        else {
+                            saveRunnable.run();
+                        }
+                    }
+                    catch (IOException e) {
+                        Debug.echoError(e);
+                    }
+                }
+                else {
+                    Debug.echoError("Unknown YAML ID '" + id + "'");
+                    scriptEntry.setFinished(true);
+                }
+                break;
             case COPYKEY: {
                 if (!yamlDocuments.containsKey(id)) {
                     break;
@@ -855,9 +855,9 @@ public class YamlCommand extends AbstractCommand implements Holdable {
         // @description
         // Converts the YAML container to raw YAML text.
         // -->
-//        if (attribute.startsWith("to_text")) {
-//            return new ElementTag(yaml.saveToString(false));
-//        }
+        if (attribute.startsWith("to_text")) {
+            return new ElementTag(yaml.saveToString(false));
+        }
         return null;
     }
 }

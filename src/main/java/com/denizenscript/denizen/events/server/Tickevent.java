@@ -9,17 +9,20 @@ import com.denizenscript.denizen.utilities.flags.PlayerFlagHandler;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.StrongWarning;
+import net.minecraft.Util;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import com.denizenscript.denizen.utilities.debugging.StatsRecord;
 
+@Mod.EventBusSubscriber(modid = "denizenex", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Tickevent extends BukkitScriptEvent {
-    private int tickTimer = 0;
+    static int tickTimer = 0;
     @SubscribeEvent
-    public void onPlayerEvent(TickEvent.ServerTickEvent event) {
+    public static void onServerTickEvent(TickEvent.ServerTickEvent event) {
         DenizenCore.tick(50); // Sadly, minecraft has no delta timing, so a tick is always 50ms.
         if ((tickTimer % (20 * 60 * 60) == 0) && Settings.canRecordStats()) {
             StatsRecord.trigger();
@@ -39,7 +42,7 @@ public class Tickevent extends BukkitScriptEvent {
             Debug.log(warnText.toString());
             for (String playername : ServerLifecycleHooks.getCurrentServer().getPlayerList().getOps().getUserList()) {
                 Player player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByName(playername);
-                player.sendMessage(new TextComponent(warnText.toString()), player.getUUID());
+                player.sendMessage(new TextComponent(warnText.toString()), Util.NIL_UUID);
             }
         }
 //        fire(event);

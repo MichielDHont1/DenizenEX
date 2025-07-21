@@ -978,11 +978,11 @@ public class MapTag implements ObjectTag {
         // # b: '2'
         // - narrate <map[a=1;b=2].to_yaml>
         // -->
-//        tagProcessor.registerStaticTag(ElementTag.class, "to_yaml", (attribute, object) -> {
-//            YamlConfiguration output = new YamlConfiguration();
-//            output.contents = (Map) CoreUtilities.objectTagToJavaForm(object.duplicate(), true, false);
-//            return new ElementTag(output.saveToString(false));
-//        });
+        tagProcessor.registerStaticTag(ElementTag.class, "to_yaml", (attribute, object) -> {
+            YamlConfiguration output = new YamlConfiguration();
+            output.contents = (Map) CoreUtilities.objectTagToJavaForm(object.duplicate(), true, false);
+            return new ElementTag(output.saveToString(false));
+        });
 
         // <--[tag]
         // @attribute <MapTag.parse_value[<tag>]>

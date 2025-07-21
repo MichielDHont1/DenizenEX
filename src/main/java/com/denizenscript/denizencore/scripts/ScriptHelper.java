@@ -200,14 +200,14 @@ public class ScriptHelper {
                     }
                     try {
                         yaml = loadConfig(f.getAbsolutePath(), new FileInputStream(f));
-//                        String saved = yaml != null ? yaml.saveToString(false) : null;
-//                        if (saved != null && saved.length() > 0) {
-//                            outList.add(yaml);
-//                        }
-//                        else {
-//                            Debug.echoError("Error parsing '<Y>" + fileName + "<W>'! This script has been skipped. No internal error - is the file empty?");
-//                            hadError = true;
-//                        }
+                        String saved = yaml != null ? yaml.saveToString(false) : null;
+                        if (saved != null && saved.length() > 0) {
+                            outList.add(yaml);
+                        }
+                        else {
+                            Debug.echoError("Error parsing '<Y>" + fileName + "<W>'! This script has been skipped. No internal error - is the file empty?");
+                            hadError = true;
+                        }
                     }
                     catch (Exception e) {
                         Debug.echoError("Error parsing '<Y>" + fileName + "<W>'!");

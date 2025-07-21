@@ -81,7 +81,7 @@ public class NoteManager {
         }
         objectToName.clear();
         for (StringHolder key : getSaveConfig().getKeys(false)) {
-//            Class<? extends ObjectTag> clazz = namesToTypes.get(key.str);
+            Class<? extends ObjectTag> clazz = namesToTypes.get(key.str);
             YamlConfiguration section = getSaveConfig().getConfigurationSection(key.str);
             if (section == null) {
                 continue;
@@ -100,20 +100,20 @@ public class NoteManager {
                     else {
                         objText = section.getString(noteName);
                     }
-////                    Notable obj = (Notable) ObjectFetcher.getObjectFrom(clazz, objText, CoreUtilities.errorButNoDebugContext);
-////                    if (obj != null) {
-////                        obj.makeUnique(note);
-////                        if (flagText != null && obj instanceof FlaggableObject) {
-////                            SavableMapFlagTracker tracker = new SavableMapFlagTracker(flagText);
-////                            if (!CoreConfiguration.skipAllFlagCleanings) {
-////                                tracker.doTotalClean();
-////                            }
-////                            ((FlaggableObject) getSavedObject(note)).reapplyTracker(tracker);
-////                        }
-//                    }
-//                    else {
-//                        Debug.echoError("Note '" + note + "' failed to load!");
-//                    }
+                    Notable obj = (Notable) ObjectFetcher.getObjectFrom(clazz, objText, CoreUtilities.errorButNoDebugContext);
+                    if (obj != null) {
+                        obj.makeUnique(note);
+                        if (flagText != null && obj instanceof FlaggableObject) {
+                            SavableMapFlagTracker tracker = new SavableMapFlagTracker(flagText);
+                            if (!CoreConfiguration.skipAllFlagCleanings) {
+                                tracker.doTotalClean();
+                            }
+                            ((FlaggableObject) getSavedObject(note)).reapplyTracker(tracker);
+                        }
+                    }
+                    else {
+                        Debug.echoError("Note '" + note + "' failed to load!");
+                    }
                 }
                 catch (Throwable ex) {
                     Debug.echoError("Note '" + note + "' failed to load due to an exception:");
@@ -123,30 +123,30 @@ public class NoteManager {
         }
     }
 
-//    private static void saveToConfig() {
-//        YamlConfiguration saveConfig = getSaveConfig();
-//        for (StringHolder key : saveConfig.getKeys(false)) {
-//            saveConfig.set(key.str, null);
-//        }
-//        for (Map.Entry<String, Notable> note : nameToObject.entrySet()) {
-//            try {
-//                saveConfig.set(typesToNames.get(getClass(note.getValue())) + "." + EscapeTagUtil.escape(CoreUtilities.toLowerCase(note.getKey())), note.getValue().getSaveObject());
-//            }
-//            catch (Exception e) {
-//                Debug.echoError("Note '" + note.getKey() + "' failed to save!");
-//                Debug.echoError(e);
-//            }
-//        }
-//    }
+    private static void saveToConfig() {
+        YamlConfiguration saveConfig = getSaveConfig();
+        for (StringHolder key : saveConfig.getKeys(false)) {
+            saveConfig.set(key.str, null);
+        }
+        for (Map.Entry<String, Notable> note : nameToObject.entrySet()) {
+            try {
+                saveConfig.set(typesToNames.get(getClass(note.getValue())) + "." + EscapeTagUtil.escape(CoreUtilities.toLowerCase(note.getKey())), note.getValue().getSaveObject());
+            }
+            catch (Exception e) {
+                Debug.echoError("Note '" + note.getKey() + "' failed to save!");
+                Debug.echoError(e);
+            }
+        }
+    }
 
-//    private static <T extends Notable> Class<T> getClass(Notable note) {
-//        for (Class clazz : typesToNames.keySet()) {
-//            if (clazz.isInstance(note)) {
-//                return clazz;
-//            }
-//        }
-//        return null;
-//    }
+    private static <T extends Notable> Class<T> getClass(Notable note) {
+        for (Class clazz : typesToNames.keySet()) {
+            if (clazz.isInstance(note)) {
+                return clazz;
+            }
+        }
+        return null;
+    }
 
     private static YamlConfiguration saveConfig = null;
     private static String saveFilePath = null;
@@ -156,7 +156,7 @@ public class NoteManager {
             saveFilePath = new File(DenizenCore.implementation.getDataFolder(), "notables.yml").getPath();
         }
         String rawFileData = CoreUtilities.journallingLoadFile(saveFilePath);
-//        saveConfig = rawFileData == null ? new YamlConfiguration() : YamlConfiguration.load(rawFileData);
+        saveConfig = rawFileData == null ? new YamlConfiguration() : YamlConfiguration.load(rawFileData);
         if (saveConfig == null) {
             saveConfig = new YamlConfiguration();
         }
@@ -174,39 +174,39 @@ public class NoteManager {
         if (saveConfig == null || saveFilePath == null) {
             return;
         }
-//        saveToConfig();
+        saveToConfig();
         if (nameToObject.isEmpty()) {
             if (new File(saveFilePath).exists()) {
                 new File(saveFilePath).delete();
             }
         }
-//        else {
-//            String data = saveConfig.saveToString(false);
-//            Runnable run = () -> CoreUtilities.journallingFileSave(saveFilePath, data);
-//            if (lockUntilDone) {
-//                run.run();
-//            }
-//            else {
-//                DenizenCore.runAsync(run);
-//            }
-//        }
+        else {
+            String data = saveConfig.saveToString(false);
+            Runnable run = () -> CoreUtilities.journallingFileSave(saveFilePath, data);
+            if (lockUntilDone) {
+                run.run();
+            }
+            else {
+                DenizenCore.runAsync(run);
+            }
+        }
     }
 
     ///////////////////
     // Note Annotation Handler
     ///////////////////
 
-//    public static Map<Class, String> typesToNames = new HashMap<>();
-//    public static Map<String, Class> namesToTypes = new HashMap<>();
-//
-//    public static void registerObjectTypeAsNotable(Class notable) {
-//        for (Method method : notable.getMethods()) {
-//            if (method.isAnnotationPresent(Note.class)) {
-//                String note = method.getAnnotation(Note.class).value();
-//                typesToNames.put(notable, note);
-//                namesToTypes.put(note, notable);
-//                notesByType.put(notable, new HashSet<>());
-//            }
-//        }
-//    }
+    public static Map<Class, String> typesToNames = new HashMap<>();
+    public static Map<String, Class> namesToTypes = new HashMap<>();
+
+    public static void registerObjectTypeAsNotable(Class notable) {
+        for (Method method : notable.getMethods()) {
+            if (method.isAnnotationPresent(Note.class)) {
+                String note = method.getAnnotation(Note.class).value();
+                typesToNames.put(notable, note);
+                namesToTypes.put(note, notable);
+                notesByType.put(notable, new HashSet<>());
+            }
+        }
+    }
 }

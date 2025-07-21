@@ -8,19 +8,9 @@ public class DebugConsoleSender {
 
     public static boolean showColor = true;
 
-//    static CommandSender commandSender = null;
-//
-//    public static void sendMessage(String string) {
-//        if (commandSender == null) {
-//            commandSender = Bukkit.getServer().getConsoleSender();
-//        }
-//        //                                                                       "[HH:mm:ss INFO]: "
-//        string = CoreConfiguration.debugPrefix + string.replace("<FORCE_ALIGN>", "                 ");
-//        if (showColor) {
-//            PaperAPITools.instance.sendConsoleMessage(commandSender, string);
-//        }
-//        else {
-//            commandSender.sendMessage(ChatColor.stripColor(string));
-//        }
-//    }
+
+    public static void sendMessage(String string) {
+        string = CoreConfiguration.debugPrefix + string.replace("<FORCE_ALIGN>", "                 ");
+        System.out.println(string);
+    }
 }

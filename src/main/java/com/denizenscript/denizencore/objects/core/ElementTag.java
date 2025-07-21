@@ -2500,9 +2500,9 @@ public class ElementTag implements ObjectTag {
         // @description
         // Parses the input YAML or JSON text into a MapTag.
         // -->
-//        tagProcessor.registerStaticTag(MapTag.class, "parse_yaml", (attribute, object) -> {
-//            return (MapTag) CoreUtilities.objectToTagForm(YamlConfiguration.load(object.asString()).contents, attribute.context);
-//        });
+        tagProcessor.registerStaticTag(MapTag.class, "parse_yaml", (attribute, object) -> {
+            return (MapTag) CoreUtilities.objectToTagForm(YamlConfiguration.load(object.asString()).contents, attribute.context);
+        });
 
         // <--[tag]
         // @attribute <ElementTag.millis_to_time>

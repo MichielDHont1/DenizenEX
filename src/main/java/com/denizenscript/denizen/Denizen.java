@@ -14,20 +14,20 @@ import com.denizenscript.denizen.events.ScriptEventRegistry;
 //import com.denizenscript.denizen.objects.NPCTag;
 //import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizen.objects.properties.PropertyRegistry;
-//import com.denizenscript.denizen.scripts.commands.BukkitCommandRegistry;
+import com.denizenscript.denizen.scripts.commands.BukkitCommandRegistry;
 //import com.denizenscript.denizen.scripts.commands.player.ClickableCommand;
-//import com.denizenscript.denizen.scripts.containers.ContainerRegistry;
-//import com.denizenscript.denizen.scripts.containers.core.*;
-//import com.denizenscript.denizen.scripts.triggers.TriggerRegistry;
-//import com.denizenscript.denizen.scripts.triggers.core.ChatTrigger;
+import com.denizenscript.denizen.scripts.containers.ContainerRegistry;
+import com.denizenscript.denizen.scripts.containers.core.*;
+import com.denizenscript.denizen.scripts.triggers.TriggerRegistry;
+import com.denizenscript.denizen.scripts.triggers.core.ChatTrigger;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 //import com.denizenscript.denizen.tags.core.NPCTagBase;
 import com.denizenscript.denizen.utilities.*;
 //import com.denizenscript.denizen.utilities.blocks.FullBlockData;
-//import com.denizenscript.denizen.utilities.command.*;
-//import com.denizenscript.denizen.utilities.command.manager.CommandManager;
-//import com.denizenscript.denizen.utilities.command.manager.Injector;
-//import com.denizenscript.denizen.utilities.command.manager.messaging.Messaging;
+import com.denizenscript.denizen.utilities.command.*;
+import com.denizenscript.denizen.utilities.command.manager.CommandManager;
+import com.denizenscript.denizen.utilities.command.manager.Injector;
+import com.denizenscript.denizen.utilities.command.manager.messaging.Messaging;
 //import com.denizenscript.denizen.utilities.debugging.BStatsMetricsLite;
 //import com.denizenscript.denizen.utilities.debugging.DebugSubmit;
 //import com.denizenscript.denizen.utilities.debugging.StatsRecord;
@@ -36,7 +36,7 @@ import com.denizenscript.denizen.utilities.flags.PlayerFlagHandler;
 import com.denizenscript.denizen.utilities.flags.WorldFlagHandler;
 import com.denizenscript.denizen.utilities.implementation.DenizenCoreImplementation;
 //import com.denizenscript.denizen.utilities.maps.DenizenMapManager;
-//import com.denizenscript.denizen.utilities.packets.NetworkInterceptHelper;
+import com.denizenscript.denizen.utilities.packets.NetworkInterceptHelper;
 //import com.denizenscript.denizen.utilities.world.VoidGenerator;
 //import com.denizenscript.denizen.utilities.world.WorldListChangeTracker;
 import com.denizenscript.denizencore.DenizenCore;
@@ -81,7 +81,7 @@ public class Denizen {
 
     public Denizen()
     {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC, "denizen-config.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "denizen-config.toml");
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
@@ -99,17 +99,16 @@ public class Denizen {
     private boolean startedSuccessful = false;
 
     public static boolean supportsPaper = false;
-//todo
-//    public CommandManager commandManager;
+    public CommandManager commandManager;
 
-//    public TriggerRegistry triggerRegistry;
+    public TriggerRegistry triggerRegistry;
 //
 //    public BukkitWorldScriptHelper worldScriptHelper;
 //
 //    public ItemScriptHelper itemScriptHelper;
 
-//    public ExCommandHandler exCommand;
-//
+    public ExCommandHandler exCommand;
+
     public DenizenCoreImplementation coreImplementation = new DenizenCoreImplementation();
 
     /*
@@ -168,7 +167,7 @@ public class Denizen {
 //                    + " If this message appears with both Denizen and Spigot fully up-to-date, contact the Denizen team (via GitHub, Spigot, or Discord) to request an update be built.");
 //            LOGGER.warn("-------------------------------------");
 //        }
-//        triggerRegistry = new TriggerRegistry();
+        triggerRegistry = new TriggerRegistry();
         boolean citizensBork = false;
         try {
             // Populate config.yml if it doesn't yet exist.
@@ -197,39 +196,40 @@ public class Denizen {
         catch (Throwable ex) {
             Debug.echoError(ex);
         }
-//        try {
+        try {
+            //todo debug
 //            DebugSubmit.init();
-//
-//            // Create our CommandManager to handle '/denizen' commands
-//            commandManager = new CommandManager();
-//            commandManager.setInjector(new Injector(this));
-//            commandManager.register(DenizenCommandHandler.class);
-//
+
+            // Create our CommandManager to handle '/denizen' commands
+            commandManager = new CommandManager();
+            commandManager.setInjector(new Injector(this));
+            commandManager.register(DenizenCommandHandler.class);
+
 //            DenizenEntityType.registerEntityType("ITEM_PROJECTILE", ItemProjectile.class);
 //            DenizenEntityType.registerEntityType("FAKE_ARROW", FakeArrow.class);
 //            DenizenEntityType.registerEntityType("FAKE_PLAYER", FakePlayer.class);
-//            // Track all player names for quick PlayerTag matching
-//            //todo get list of offline players
-////            for (var info : infolist ) {
-////                OfflinePlayer player = info.getProfile()
-////                PlayerTag.notePlayer(player);
-////            }
-//        }
-//        catch (Exception e) {
-//            Debug.echoError(e);
-//        }
-//        try {
-//            BukkitCommandRegistry.registerCommands();
-//        }
-//        catch (Exception e) {
-//            Debug.echoError(e);
-//        }
-//        try {
-//            ContainerRegistry.registerMainContainers();
-//        }
-//        catch (Exception e) {
-//            Debug.echoError(e);
-//        }
+            // Track all player names for quick PlayerTag matching
+            //todo get list of offline players
+//            for (var info : infolist ) {
+//                OfflinePlayer player = info.getProfile()
+//                PlayerTag.notePlayer(player);
+//            }
+        }
+        catch (Exception e) {
+            Debug.echoError(e);
+        }
+        try {
+            BukkitCommandRegistry.registerCommands();
+        }
+        catch (Exception e) {
+            Debug.echoError(e);
+        }
+        try {
+            ContainerRegistry.registerMainContainers();
+        }
+        catch (Exception e) {
+            Debug.echoError(e);
+        }
         try {
             // Ensure the Scripts and Midi folder exist
             new File(getDataFolder() + "/scripts").mkdirs();
@@ -267,16 +267,16 @@ public class Denizen {
         catch (Exception e) {
             Debug.echoError(e);
         }
-//        try {
+        try {
 //            worldScriptHelper = new BukkitWorldScriptHelper();
 //            itemScriptHelper = new ItemScriptHelper();
 //            new InventoryScriptHelper();
 //            new EntityScriptHelper();
-//            new CommandScriptHelper();
-//        }
-//        catch (Exception e) {
-//            Debug.echoError(e);
-//        }
+            new CommandScriptHelper();
+        }
+        catch (Exception e) {
+            Debug.echoError(e);
+        }
 //        try {
 //            if (Depends.citizens != null) {
 //                // Register traits
@@ -320,10 +320,9 @@ public class Denizen {
 //            Debug.echoError(e);
 //        }
         Debug.log("Loaded <A>" + DenizenCore.commandRegistry.instances.size() + "<W> core commands and <A>" + ObjectFetcher.objectsByPrefix.size() + "<W> core object types, at <A>" + (System.currentTimeMillis() - startTime) + "<W>ms from start.");
-//todo implement ex command
-        //        exCommand = new ExCommandHandler();
+                exCommand = new ExCommandHandler();
 //        exCommand.enableFor(getCommand("ex"));
-//        ExSustainedCommandHandler exsCommand = new ExSustainedCommandHandler();
+        ExSustainedCommandHandler exsCommand = new ExSustainedCommandHandler();
 //        exsCommand.enableFor(getCommand("exs"));
 //        FullBlockData.init();
         // Load script files without processing.
@@ -432,7 +431,7 @@ public class Denizen {
      * Immediately saves all non-core save data.
      * @param lockUntilDone 'true' if the system should sleep and lock the thread until saves are complete. 'false' is saves can happen in the future.
      */
-//    public void saveSaves(boolean lockUntilDone) {
+    public void saveSaves(boolean lockUntilDone) {
 //        // Save scoreboards to scoreboards.yml
 //        //todo
 ////        ScoreboardHelper._saveScoreboards();
@@ -450,7 +449,7 @@ public class Denizen {
 //        PlayerFlagHandler.saveAllNow(lockUntilDone);
 //        worldFlags.saveAll(lockUntilDone);
 //        RunLaterCommand.saveToFile(!lockUntilDone);
-//    }
+    }
 
 //    @Override
 //    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {

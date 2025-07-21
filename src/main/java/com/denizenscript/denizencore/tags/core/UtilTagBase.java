@@ -848,20 +848,20 @@ public class UtilTagBase extends PseudoObjectTagBase<UtilTagBase> {
         // Valid types: locations, cuboids, ellipsoids, inventories, polygons
         // This is primarily intended for debugging purposes, and it's best to avoid using this in a live script if possible.
         // -->
-//        tagProcessor.registerTag(ListTag.class, "notes", (attribute, object) -> {
-//            if (attribute.hasParam()) {
-//                String type = CoreUtilities.toLowerCase(attribute.getParam());
-//                for (Map.Entry<String, Class> typeClass : NoteManager.namesToTypes.entrySet()) {
-//                    if (type.equals(CoreUtilities.toLowerCase(typeClass.getKey()))) {
-//                        return new ListTag(NoteManager.getAllType(typeClass.getValue()), notable -> (ObjectTag) notable);
-//                    }
-//                }
-//            }
-//            else {
-//                return new ListTag(NoteManager.nameToObject.values(), notable -> (ObjectTag) notable);
-//            }
-//            return new ListTag();
-//        });
+        tagProcessor.registerTag(ListTag.class, "notes", (attribute, object) -> {
+            if (attribute.hasParam()) {
+                String type = CoreUtilities.toLowerCase(attribute.getParam());
+                for (Map.Entry<String, Class> typeClass : NoteManager.namesToTypes.entrySet()) {
+                    if (type.equals(CoreUtilities.toLowerCase(typeClass.getKey()))) {
+                        return new ListTag(NoteManager.getAllType(typeClass.getValue()), notable -> (ObjectTag) notable);
+                    }
+                }
+            }
+            else {
+                return new ListTag(NoteManager.nameToObject.values(), notable -> (ObjectTag) notable);
+            }
+            return new ListTag();
+        });
 
         // <--[tag]
         // @attribute <util.sql_connections>
@@ -893,11 +893,11 @@ public class UtilTagBase extends PseudoObjectTagBase<UtilTagBase> {
         // @description
         // Returns a list of all Redis connections opened by <@link command redis>.
         // -->
-//        if (CommandRegistry.shouldRegisterByClass("Redis command", "redis.clients.jedis.Jedis")) {
-//            tagProcessor.registerTag(ListTag.class, "redis_connections", (attribute, object) -> {
-//                return new ListTag(RedisHelper.connections.keySet(), true);
-//            });
-//        }
+        if (CommandRegistry.shouldRegisterByClass("Redis command", "redis.clients.jedis.Jedis")) {
+            tagProcessor.registerTag(ListTag.class, "redis_connections", (attribute, object) -> {
+                return new ListTag(RedisHelper.connections.keySet(), true);
+            });
+        }
 
         // <--[tag]
         // @attribute <util.mongo_connections>

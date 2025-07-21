@@ -59,6 +59,8 @@ public class Config {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_STUPID2;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_STUPID3;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ALLOW_STUPIDX;
+    public static final ForgeConfigSpec.ConfigValue<String > ALTERNATE_PATH;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_ALTERNATE_PATH;
 
 
 
@@ -112,6 +114,8 @@ public class Config {
         ALLOW_STUPID2 = BUILDER.define("Commands.General.Confirm allowing unrestricted file access", false);
         ALLOW_STUPID3 = BUILDER.define("Commands.General.Unrestricted file access is very bad and dangerous are you sure you want that", false);
         ALLOW_STUPIDX = BUILDER.define("Commands.General.Don't change this unrestricted file access option though", false);
+        USE_ALTERNATE_PATH = BUILDER.define("Scripts location.Use default script folder", true);
+        ALTERNATE_PATH = BUILDER.define("Scripts location.Alternative folder path", "mods/DenizenEX");
 
         //other config
 //        skipChunkFlagCleaning = config.getBoolean("Saves.Skip chunk flag cleaning", false);
@@ -119,10 +123,8 @@ public class Config {
 //        worldPlayerDataSaveDelay = (float) DurationTag.valueOf(config.getString("Save world player file delay", "10s"), CoreUtilities.basicContext).getSeconds();
 //        worldPlayerDataMaxCacheTicks = DurationTag.valueOf(config.getString("World player data max cache", "1h"), CoreUtilities.basicContext).getTicks();
 //        cache_overrideHelp = config.getBoolean("Debug.Override help", true);
-////        cache_useDefaultScriptPath = config.getBoolean("Scripts location.Use default script folder", true);
 //        cache_showExHelp = config.getBoolean("Debug.Ex command help", true);
 //        cache_showExDebug = config.getBoolean("Debug.Ex command debug", true);
-////        cache_getAlternateScriptPath = config.getString("Scripts location.Alternative folder path", "plugins/Denizen");
 //        cache_canRecordStats = config.getBoolean("Debug.Stats", true);
 //        cache_defaultDebugMode = config.getBoolean("Debug.Container default", true);
 //        cache_warnOnAsyncPackets = config.getBoolean("Debug.Warn on async packets", false);

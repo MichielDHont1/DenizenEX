@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.scripts.commands.Holdable;
 import com.denizenscript.denizencore.utilities.CoreConfiguration;
-//import com.denizenscript.denizencore.utilities.RedisHelper;
+import com.denizenscript.denizencore.utilities.RedisHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
@@ -127,9 +127,9 @@ public class RedisCommand extends AbstractCommand implements Holdable {
 
     @Override
     public void onDisable() {
-//        if (everUsed) {
-//            RedisHelper.onDisable();
-//        }
+        if (everUsed) {
+            RedisHelper.onDisable();
+        }
     }
 
     public static volatile boolean everUsed = false;
@@ -181,6 +181,6 @@ public class RedisCommand extends AbstractCommand implements Holdable {
             return;
         }
         everUsed = true;
-//        RedisHelper.executeCommand(scriptEntry);
+        RedisHelper.executeCommand(scriptEntry);
     }
 }

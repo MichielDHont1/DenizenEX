@@ -21,6 +21,9 @@ package com.denizenscript.denizen.objects;
 ////import com.denizenscript.denizen.utilities.entity.HideEntitiesHelper;
 ////import com.denizenscript.denizen.utilities.entity.Position;
 //import com.denizenscript.denizen.utilities.flags.PlayerFlagHandler;
+
+import net.minecraft.world.entity.player.Player;
+
 ////import com.denizenscript.denizen.utilities.inventory.InventoryViewUtil;
 ////import com.denizenscript.denizen.utilities.packets.DenizenPacketHandler;
 ////import com.denizenscript.denizen.utilities.packets.HideParticles;
@@ -77,7 +80,14 @@ package com.denizenscript.denizen.objects;
 //
 //import java.util.*;
 //
-public class PlayerTag {}//implements ObjectTag, Adjustable, EntityFormObject, FlaggableObject {
+public class PlayerTag {
+
+    //todo remove this
+    public PlayerTag(Player player) {
+        {
+        }
+    }
+}//implements ObjectTag, Adjustable, EntityFormObject, FlaggableObject {
 
 //    // <--[ObjectType]
 //    // @name PlayerTag

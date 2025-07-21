@@ -30,13 +30,13 @@ public class SecretTag implements ObjectTag {
                 return;
             }
             fileContent = fileContent.substring("!SECRETS_FILE".length());
-//            try {
-//                secretsFile = YamlConfiguration.load(fileContent);
-//            }
-//            catch (MarkedYAMLException mye) {
-//                Mark problem = mye.getProblemMark();
-//                Debug.echoError("Error occurred while loading secrets file, on line " + (problem.getLine() + 1) + ", column " + (problem.getColumn() + 1) + ": " + mye.getProblem());
-//            }
+            try {
+                secretsFile = YamlConfiguration.load(fileContent);
+            }
+            catch (MarkedYAMLException mye) {
+                Mark problem = mye.getProblemMark();
+                Debug.echoError("Error occurred while loading secrets file, on line " + (problem.getLine() + 1) + ", column " + (problem.getColumn() + 1) + ": " + mye.getProblem());
+            }
         }
         else {
             secretsFile = new YamlConfiguration();

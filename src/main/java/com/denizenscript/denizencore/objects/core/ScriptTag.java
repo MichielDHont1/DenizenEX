@@ -405,12 +405,12 @@ public class ScriptTag implements ObjectTag, Adjustable, FlaggableObject {
         // Converts the Script Container to raw YAML text.
         // Best used with 'data' type scripts.
         // -->
-//        tagProcessor.registerStaticTag(ElementTag.class, "to_yaml", (attribute, object) -> {
-//            YamlConfiguration config = new YamlConfiguration();
-//            config.addAll(object.getContainer().getContents().getMap());
-//            config.set("type", null);
-//            return new ElementTag(config.saveToString(true));
-//        });
+        tagProcessor.registerStaticTag(ElementTag.class, "to_yaml", (attribute, object) -> {
+            YamlConfiguration config = new YamlConfiguration();
+            config.addAll(object.getContainer().getContents().getMap());
+            config.set("type", null);
+            return new ElementTag(config.saveToString(true));
+        });
         tagProcessor.registerFutureTagDeprecation("to_yaml", "to_text");
 
         // <--[tag]

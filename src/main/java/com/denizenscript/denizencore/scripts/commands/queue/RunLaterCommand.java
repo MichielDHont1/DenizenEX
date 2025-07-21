@@ -341,7 +341,7 @@ public class RunLaterCommand extends AbstractCommand {
                     }
                     return;
                 }
-//                CoreUtilities.journallingFileSave(persistFilePath, toSave.saveToString(false));
+                CoreUtilities.journallingFileSave(persistFilePath, toSave.saveToString(false));
             }
             catch (Throwable ex) {
                 Debug.echoError(ex);

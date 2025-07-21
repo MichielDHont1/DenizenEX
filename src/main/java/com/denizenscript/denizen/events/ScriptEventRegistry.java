@@ -264,6 +264,7 @@ public class ScriptEventRegistry {
 //        ScriptEvent.registerScriptEvent(ResourcePackStatusScriptEvent.class);
 //
 //        // Server events
+
 //        ScriptEvent.registerScriptEvent(CommandEvent.class);
 //        ScriptEvent.registerScriptEvent(InternalEventScriptEvent.class);
 //        if (!Denizen.supportsPaper) {

@@ -57,7 +57,7 @@ public class DenizenCoreImplementation implements DenizenImplementation {
 
     @Override
     public String getImplementationName() {
-        return "Spigot";
+        return "Forge";
     }
 
     @Override
@@ -388,7 +388,7 @@ public class DenizenCoreImplementation implements DenizenImplementation {
 
     @Override
     public void doFinalDebugOutput(String rawText) {
-//        DebugConsoleSender.sendMessage(rawText);
+        DebugConsoleSender.sendMessage(rawText);
     }
 
     @Override
