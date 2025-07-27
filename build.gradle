@@ -117,15 +117,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
-//    maven {
-//        url = uri('https://maven.freneticllc.com/')
-//    }
+    maven {
+        url = uri('https://maven.freneticllc.com/')
+    }
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     // flatDir {
     //     dir 'libs'
     // }
 }
-
+jarJar.enable() //needed to include dependencies in the jar
+tasks.named('jarJar') {
+    // ...
+}
 dependencies {
     // Specify the version of Minecraft to use.
     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
@@ -134,13 +137,17 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation 'org.json:json:20180130'
-    compileOnly 'org.yaml:snakeyaml:1.33'
-    implementation "org.yaml:snakeyaml:1.33"
+//    compileOnly 'org.yaml:snakeyaml:1.33'
+//    implementation "org.yaml:snakeyaml:1.33"
     implementation "org.ow2.asm:asm:9.4"
     implementation "org.ow2.asm:asm-commons:9.4"
     implementation "redis.clients:jedis:4.3.1"
     implementation "org.mongodb:mongodb-driver-sync:4.8.1"
-//    implementation 'com.freneticllc.freneticutilities:freneticdatasyntax:1.1'
+    implementation 'com.freneticllc.freneticutilities:freneticdatasyntax:1.1'
+    minecraftLibrary fg.deobf("org.yaml:snakeyaml:2.4")
+    jarJar(group: 'org.yaml', name: 'snakeyaml', version: '[1.33,2.4)') {
+        jarJar.pin(it, '2.4')
+    }
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
@@ -174,7 +181,6 @@ tasks.named('processResources', ProcessResources).configure {
         expand replaceProperties + [project: project]
     }
 }
-
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
     manifest {
