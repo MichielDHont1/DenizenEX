@@ -13,6 +13,7 @@ import com.denizenscript.denizen.events.ScriptEventRegistry;
 //import com.denizenscript.denizen.objects.InventoryTag;
 //import com.denizenscript.denizen.objects.NPCTag;
 //import com.denizenscript.denizen.objects.PlayerTag;
+import com.denizenscript.denizen.events.player.PlayerBreaksBlockScriptEvent;
 import com.denizenscript.denizen.objects.properties.PropertyRegistry;
 import com.denizenscript.denizen.scripts.commands.BukkitCommandRegistry;
 //import com.denizenscript.denizen.scripts.commands.player.ClickableCommand;
@@ -81,6 +82,8 @@ public class Denizen {
 
     public Denizen()
     {
+        //todo move events to
+        MinecraftForge.EVENT_BUS.register(new PlayerBreaksBlockScriptEvent());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "denizen-config.toml");
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);

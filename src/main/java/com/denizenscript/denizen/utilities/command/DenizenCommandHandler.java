@@ -27,6 +27,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class DenizenCommandHandler {
@@ -41,14 +42,24 @@ public class DenizenCommandHandler {
             return debug(SourceStack.getSource(), null);
         })).then(Commands.literal("debug").then(Commands.argument("args", StringArgumentType.string()).executes((SourceStack) -> {
             return debug(SourceStack.getSource(), StringArgumentType.getString(SourceStack, "args"));
-        }))).then(Commands.literal("reload").then(Commands.argument("args", StringArgumentType.string()).executes((SourceStack) -> {
-                    return reload(SourceStack.getSource(), StringArgumentType.getString(SourceStack, "args"));
-        }))).then(Commands.literal("save").executes((SourceStack) -> {
+        }))).then(Commands.literal("reload").then(Commands.literal("scripts").executes((SourceStack) -> {
+                    return reload(SourceStack.getSource(), "scripts");
+        }))).then(Commands.literal("reload").then(Commands.literal("saves").executes((SourceStack) -> {
+            return reload(SourceStack.getSource(), "saves");
+        }))).then(Commands.literal("reload").then(Commands.literal("notes").executes((SourceStack) -> {
+            return reload(SourceStack.getSource(), "notes");
+        }))).then(Commands.literal("reload").then(Commands.literal("config").executes((SourceStack) -> {
+            return reload(SourceStack.getSource(), "config");
+        }))).then(Commands.literal("reload").then(Commands.literal("all").executes((SourceStack) -> {
+            return reload(SourceStack.getSource(), "all");
+        }))).then(Commands.literal("saves").executes((SourceStack) -> {
             return save(SourceStack.getSource());
         })).then(Commands.literal("version").executes((SourceStack) -> {
             return version(SourceStack.getSource(), null);
-        })).then(Commands.literal("scripts ").then(Commands.argument("args", StringArgumentType.string()).executes((SourceStack) -> {
-                    return scripts(SourceStack.getSource(), StringArgumentType.getString(SourceStack, "args"));
+        })).then(Commands.literal("scripts").executes((SourceStack) -> {
+                    return scripts(SourceStack.getSource(), "1");
+        })).then(Commands.literal("scripts").then(Commands.argument("page", StringArgumentType.string()).executes((SourceStack) -> {
+            return scripts(SourceStack.getSource(), StringArgumentType.getString(SourceStack, "page"));
         }))));
     }
 
@@ -307,7 +318,7 @@ public class DenizenCommandHandler {
         } else {
             sender = null;
         }
-        Messaging.sendInfo(sender, "<2>DENIZEN<7>: A high-power scripting engine for Spigot!");
+        Messaging.sendInfo(sender, "<2>DENIZEN<7>: A high-power scripting engine for spigot and forge!");
         Messaging.send(sender, "");
         Messaging.send(sender, "<7>by: <f>the DenizenScript team, with help from many skilled contributors!");
         Messaging.send(sender, "<7>chat with us at: <f>https://discord.gg/Q6pZGSR");
@@ -406,11 +417,13 @@ public class DenizenCommandHandler {
 //            desc = "Lists the currently loaded scripts.", modifiers = {"scripts"},
 //            min = 1, max = 4, permission = "denizen.basic")
     public static int scripts(CommandSourceStack command, @Nullable String arguments) {
+        ArrayList<String> checkedflags = new ArrayList<>();
         String[] flags;
         Player sender;
         String type = null;
         String filter = null;
         int PageNumber = -1;
+        int foundInt = 0;
         if(command.getEntity() instanceof Player){
             sender = (Player) command.getEntity();
         } else {
@@ -419,31 +432,31 @@ public class DenizenCommandHandler {
         if (arguments != null)
         {
             flags = arguments.split(" ");
-            for(String flag : flags)
+            for (String flag : flags)
             {
                 try
                 {
                     PageNumber = Integer.parseInt(flag);
-                    ArrayUtils.removeElement(flags, PageNumber);
+                    break;
                 }
                 catch (NumberFormatException e) {
-
+                    checkedflags.add(flag);
                 }
             }
-            if ((flags.length != 2) && (flags.length != 4))
+            if ((checkedflags.size() != 0) && (checkedflags.size() != 2) && (checkedflags.size() != 4))
             {
                 Messaging.send(sender, ChatColor.RED + "Invalid missing flag value, use (--type assignment|task|...) (--filter string)");
                 return -1;
             }
             else
             {
-                for (int i = 0;i < flags.length; i += 2) {
-                    switch (flags[i]) {
+                for (int i = 0;i < checkedflags.size(); i += 2) {
+                    switch (checkedflags.get(i)) {
                         case "--type":
-                            type = flags[i + 1];
+                            type = checkedflags.get(i + 1);
                             break;
                         case "--filter":
-                            filter = flags[i + 1];
+                            filter = checkedflags.get(i + 1);
                             break;
                         default:
                             Messaging.send(sender, ChatColor.RED + "Invalid flag name, use (--type assignment|task|...) (--filter string)");
