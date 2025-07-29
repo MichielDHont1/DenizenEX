@@ -7,7 +7,7 @@ import com.denizenscript.denizen.utilities.maps.MapImage;
 import com.denizenscript.denizencore.objects.core.ColorTag;
 
 import org.bukkit.EntityEffect;
-import org.bukkit.Location;
+import com.denizenscript.denizen.utilities.Location;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;

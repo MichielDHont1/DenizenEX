@@ -5,8 +5,8 @@ import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.nms.interfaces.BlockHelper;
 import com.denizenscript.denizen.objects.properties.material.*;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
-import com.denizenscript.denizen.utilities.PaperAPITools;
-import com.denizenscript.denizen.utilities.VanillaTagHelper;
+//import com.denizenscript.denizen.utilities.PaperAPITools;
+//import com.denizenscript.denizen.utilities.VanillaTagHelper;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.flags.AbstractFlagTracker;
@@ -25,10 +25,6 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.PropertyMatchHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.minecraft.world.item.Item;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.data.BlockData;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -91,6 +87,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         if (string.equals("RANDOM")) {
             return new MaterialTag(Material.values()[CoreUtilities.getRandom().nextInt(Material.values().length)]);
         }
+        Item m = GameData.itemRegistry.get(name)
         Material m = Material.getMaterial(string);
         if (m != null) {
             return new MaterialTag(m);
@@ -136,7 +133,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         }
     }
 
-    public MaterialTag(Material material) {
+    public MaterialTag(Item material) {
         this.material = material;
         if (material.isBlock()) {
             modernData = material.createBlockData();
@@ -158,7 +155,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         this.material = data.getMaterial();
     }
 
-    private Material material;
+    private Item material;
     private BlockData modernData;
     private Item item;
     public boolean hasModernData() {
@@ -173,7 +170,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         modernData = data;
     }
 
-    public Material getMaterial() {
+    public Item getMaterial() {
         return material;
     }
     public Item GetItem()
@@ -794,7 +791,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         tagProcessor.processMechanism(this, mechanism);
     }
 
-    public static boolean advancedMatchesInternal(Material mat, String comparedto, boolean allowByMaterialName) {
+    public static boolean advancedMatchesInternal(Item mat, String comparedto, boolean allowByMaterialName) {
         if (comparedto == null || comparedto.isEmpty() || mat == null) {
             return false;
         }
@@ -802,12 +799,13 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         if (matcherLow.equals("material")) {
             return true;
         }
-        if (matcherLow.equals("block")) {
-            return mat.isBlock();
-        }
-        if (matcherLow.equals("item")) {
-            return mat.isItem();
-        }
+        //todo check if can be removed
+//        if (matcherLow.equals("block")) {
+//            return mat.isBlock();
+//        }
+//        if (matcherLow.equals("item")) {
+//            return mat.isItem();
+//        }
         if (matcherLow.contains(":")) {
             if (matcherLow.startsWith("vanilla_tagged:")) {
                 String tagCheck = comparedto.substring("vanilla_tagged:".length());

@@ -5,6 +5,7 @@ import net.minecraft.core.PositionImpl;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.system.CallbackI;
 
@@ -82,6 +83,22 @@ public class Location implements Cloneable {
         return new Location(world, x + addLocation.getX(), y + addLocation.getY(), z + addLocation.getZ(), XRotation, YRotation);
     }
 
+    public Location subtract(double addX, double addY, double addZ)
+    {
+        return new Location(world, x - addX, y - addY, z - addZ, XRotation, YRotation);
+    }
+
+    public Location subtract(Vec3 addVec)
+    {
+        return new Location(world, x - addVec.x, y - addVec.y, z - addVec.z, XRotation, YRotation);
+    }
+
+    public Location subtract(Location addLocation)
+    {
+        return new Location(world, x - addLocation.getX(), y - addLocation.getY(), z - addLocation.getZ(), XRotation, YRotation);
+    }
+
+
     public void ConvertToIntegerLocation()
     {
         x = Math.floor(x);
@@ -92,6 +109,11 @@ public class Location implements Cloneable {
     public Block getBlock()
     {
         return this.world.getBlockState(new BlockPos(x, y, z)).getBlock();
+    }
+
+    public BlockState getBlockState()
+    {
+        return this.world.getBlockState(new BlockPos(x, y, z));
     }
 
     public double getX()
@@ -116,17 +138,17 @@ public class Location implements Cloneable {
         return YRotation;
     }
 
-    void setX(double newx)
+    public void setX(double newx)
     {
         x = newx;
     }
 
-    void setY(double newy)
+    public void setY(double newy)
     {
         y = newy;
     }
 
-    void setZ(double newz)
+    public void setZ(double newz)
     {
         z = newz;
     }
@@ -169,5 +191,25 @@ public class Location implements Cloneable {
 
     public void setWorld(Level newWorld){
         world = newWorld;
+    }
+
+    public Vec3 toVector()
+    {
+        return new Vec3(x, y, z);
+    }
+
+    public int getBlockY()
+    {
+        return (int)y;
+    }
+
+    public int getBlockZ()
+    {
+        return (int)z;
+    }
+
+    public int getBlockX()
+    {
+        return (int)x;
     }
 }

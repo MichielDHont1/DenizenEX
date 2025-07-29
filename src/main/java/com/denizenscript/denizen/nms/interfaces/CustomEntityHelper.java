@@ -1,6 +1,6 @@
 package com.denizenscript.denizen.nms.interfaces;
 
-import org.bukkit.Location;
+import com.denizenscript.denizen.utilities.Location;
 import net.minecraft.world.item.ItemStack;
 
 public interface CustomEntityHelper {

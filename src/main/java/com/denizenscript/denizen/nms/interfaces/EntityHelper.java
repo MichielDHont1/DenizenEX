@@ -8,6 +8,7 @@ import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
@@ -312,9 +313,9 @@ public abstract class EntityHelper {
      * @param vector The vector you want to get a yaw from.
      * @return The yaw.
      */
-    public float getYaw(Vector vector) {
-        double dx = vector.getX();
-        double dz = vector.getZ();
+    public float getYaw(Vec3 vector) {
+        double dx = vector.x();
+        double dz = vector.z();
         double yaw = 0;
         // Set yaw
         if (dx != 0) {

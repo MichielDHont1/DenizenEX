@@ -1,7 +1,7 @@
 package com.denizenscript.denizen.nms.interfaces;
 
 import com.denizenscript.denizen.objects.BiomeTag;
-import org.bukkit.Location;
+import com.denizenscript.denizen.utilities.Location;
 import org.bukkit.World;
 
 public interface WorldHelper {

@@ -11,6 +11,7 @@ import com.denizenscript.denizen.scripts.containers.core.BookScriptContainer;
 import com.denizenscript.denizen.scripts.containers.core.ItemScriptContainer;
 import com.denizenscript.denizen.scripts.containers.core.ItemScriptHelper;
 import com.denizenscript.denizen.tags.BukkitTagContext;
+import com.denizenscript.denizen.utilities.NamespacedKey;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizen.utilities.nbt.CustomNBT;
 import com.denizenscript.denizencore.events.ScriptEvent;
@@ -31,24 +32,10 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.PropertyMatchHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.Debuggable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import org.bukkit.Keyed;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapPalette;
-import org.bukkit.map.MapView;
-
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -102,16 +89,24 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
     //    OBJECT FETCHER
     ////////////////
 
-    public static ItemTag valueOf(String string, PlayerTag player, NPCTag npc) {
-        return valueOf(string, new BukkitTagContext(player, npc, null));
+    public static ItemTag valueOf(String string, PlayerTag player/*, NPCTag npc*/) {
+        return valueOf(string, new BukkitTagContext(player, /*npc, */null));
     }
 
     public static ItemTag valueOf(String string, Debuggable debugMe) {
-        return valueOf(string, new BukkitTagContext(null, null, null, debugMe == null || debugMe.shouldDebug(), null));
+        return valueOf(string, new BukkitTagContext(null, /*null, */null, debugMe == null || debugMe.shouldDebug(), null));
     }
 
     public static ItemTag valueOf(String string, boolean debugMe) {
-        return valueOf(string, new BukkitTagContext(null, null, null, debugMe, null));
+        return valueOf(string, new BukkitTagContext(null, /*null, */null, debugMe, null));
+    }
+    public ItemTag valueof(NamespacedKey namespacedItem, TagContext context)
+    {
+        if ((namespacedItem.getNamespace()) == null || (namespacedItem.getKey() == null))
+        {
+            return null;
+        }
+        return valueOf(namespacedItem.getNamespace() + ":" + namespacedItem.getKey() , context);
     }
 
     @Fetchable("i")
@@ -200,18 +195,18 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public ObjectTag duplicate() {
-        return new ItemTag(item.clone());
+        return new ItemTag(item.copy());
     }
 
     ///////////////
     //   Constructors
     /////////////
 
-    public ItemTag(Material material) {
+    public ItemTag(Item material) {
         this(new ItemStack(material));
     }
 
-    public ItemTag(Material material, int qty) {
+    public ItemTag(Item material, int qty) {
         this(new ItemStack(material, qty));
     }
 
@@ -257,25 +252,27 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 
     private ItemStack item;
 
-    public ItemMeta metaCache;
 
     public AbstractFlagTracker flagTrackerCache;
 
     public ItemStack getItemStack() {
         return item;
     }
+//todo replace
 
-    public ItemMeta getItemMeta() {
-        if (metaCache == null) {
-            metaCache = item.getItemMeta();
-        }
-        return metaCache;
-    }
+    //    public ItemMeta metaCache;
 
-    public void setItemMeta(ItemMeta meta) {
-        this.metaCache = meta;
-        item.setItemMeta(meta);
-    }
+//    public ItemMeta getItemMeta() {
+//        if (metaCache == null) {
+//            metaCache = item.getItemMeta();
+//        }
+//        return metaCache;
+//    }
+//
+//    public void setItemMeta(ItemMeta meta) {
+//        this.metaCache = meta;
+//        item.setItemMeta(meta);
+//    }
 
     public void setItemStack(ItemStack item) {
         this.item = item;
@@ -283,7 +280,8 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
     }
 
     public void resetCache() {
-        metaCache = null;
+       //todo meta
+//        metaCache = null;
         flagTrackerCache = null;
     }
 
@@ -304,60 +302,61 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         }
         int determination = 0;
         ItemStack compared = getItemStack();
-        if (compared.getType() != compared_to.getType()) {
+        if (compared.getItem() != compared_to.getItem()) {
             return -1;
         }
-        if (compared_to.hasItemMeta()) {
-            if (!compared.hasItemMeta()) {
-                return -1;
-            }
-            ItemMeta thisMeta = getItemMeta();
-            ItemMeta comparedItemMeta = compared_to.getItemMeta();
-            if (comparedItemMeta.hasDisplayName()) {
-                if (!thisMeta.hasDisplayName()) {
-                    return -1;
-                }
-                if (CoreUtilities.toLowerCase(comparedItemMeta.getDisplayName()).startsWith(CoreUtilities.toLowerCase(thisMeta.getDisplayName()))) {
-                    if (thisMeta.getDisplayName().length() > comparedItemMeta.getDisplayName().length()) {
-                        determination++;
-                    }
-                }
-                else {
-                    return -1;
-                }
-            }
-            if (comparedItemMeta.hasLore()) {
-                if (!thisMeta.hasLore()) {
-                    return -1;
-                }
-                for (String lore : comparedItemMeta.getLore()) {
-                    if (!thisMeta.getLore().contains(lore)) {
-                        return -1;
-                    }
-                }
-                if (thisMeta.getLore().size() > comparedItemMeta.getLore().size()) {
-                    determination++;
-                }
-            }
-            if (!comparedItemMeta.getEnchants().isEmpty()) {
-                if (thisMeta.getEnchants().isEmpty()) {
-                    return -1;
-                }
-                for (Map.Entry<Enchantment, Integer> enchant : comparedItemMeta.getEnchants().entrySet()) {
-                    if (!thisMeta.getEnchants().containsKey(enchant.getKey()) || thisMeta.getEnchants().get(enchant.getKey()) < enchant.getValue()) {
-                        return -1;
-                    }
-                }
-                if (thisMeta.getEnchants().size() > comparedItemMeta.getEnchants().size()) {
-                    determination++;
-                }
-            }
-            if (isRepairable()) {
-                if (((Damageable) thisMeta).getDamage() < ((Damageable) comparedItemMeta).getDamage()) {
-                    determination++;
-                }
-            }
-        }
+        //todo compare metadata
+//        if (compared_to.hasItemMeta()) {
+//            if (!compared.hasItemMeta()) {
+//                return -1;
+//            }
+//            ItemMeta thisMeta = getItemMeta();
+//            ItemMeta comparedItemMeta = compared_to.getItemMeta();
+//            if (comparedItemMeta.hasDisplayName()) {
+//                if (!thisMeta.hasDisplayName()) {
+//                    return -1;
+//                }
+//                if (CoreUtilities.toLowerCase(comparedItemMeta.getDisplayName()).startsWith(CoreUtilities.toLowerCase(thisMeta.getDisplayName()))) {
+//                    if (thisMeta.getDisplayName().length() > comparedItemMeta.getDisplayName().length()) {
+//                        determination++;
+//                    }
+//                }
+//                else {
+//                    return -1;
+//                }
+//            }
+//            if (comparedItemMeta.hasLore()) {
+//                if (!thisMeta.hasLore()) {
+//                    return -1;
+//                }
+//                for (String lore : comparedItemMeta.getLore()) {
+//                    if (!thisMeta.getLore().contains(lore)) {
+//                        return -1;
+//                    }
+//                }
+//                if (thisMeta.getLore().size() > comparedItemMeta.getLore().size()) {
+//                    determination++;
+//                }
+//            }
+//            if (!comparedItemMeta.getEnchants().isEmpty()) {
+//                if (thisMeta.getEnchants().isEmpty()) {
+//                    return -1;
+//                }
+//                for (Map.Entry<Enchantment, Integer> enchant : comparedItemMeta.getEnchants().entrySet()) {
+//                    if (!thisMeta.getEnchants().containsKey(enchant.getKey()) || thisMeta.getEnchants().get(enchant.getKey()) < enchant.getValue()) {
+//                        return -1;
+//                    }
+//                }
+//                if (thisMeta.getEnchants().size() > comparedItemMeta.getEnchants().size()) {
+//                    determination++;
+//                }
+//            }
+//            if (isRepairable()) {
+//                if (((Damageable) thisMeta).getDamage() < ((Damageable) comparedItemMeta).getDamage()) {
+//                    determination++;
+//                }
+//            }
+//        }
         return determination;
     }
 
@@ -380,8 +379,8 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         setItemScriptName(script.getName());
     }
 
-    public Material getBukkitMaterial() {
-        return getItemStack().getType();
+    public Item getBukkitMaterial() {
+        return getItemStack().getItem();
     }
 
     public MaterialTag getMaterial() {
@@ -390,13 +389,13 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 
     public void setAmount(int value) {
         if (item != null) {
-            item.setAmount(value);
+            item.setCount(value);
         }
     }
 
     public int getAmount() {
         if (item != null) {
-            return item.getAmount();
+            return item.getCount();
         }
         else {
             return 0;
@@ -404,26 +403,26 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
     }
 
     public void setDurability(short value) {
-        ItemMeta meta = getItemMeta();
-        if (meta instanceof Damageable) {
-            ((Damageable) meta).setDamage(value);
-            setItemMeta(meta);
+        ItemStack thisItem = getItemStack();
+        if (thisItem.isDamageableItem())
+        {
+            thisItem.setDamageValue(value);
         }
     }
 
     public boolean isRepairable() {
-        return getItemMeta() instanceof Damageable;
+        return getItemStack().isRepairable();
     }
 
     public boolean matchesRawExact(ItemTag item) {
         ItemTag thisItem = this;
-        if (thisItem.getItemStack().getAmount() != 1) {
-            thisItem = new ItemTag(thisItem.getItemStack().clone());
-            thisItem.getItemStack().setAmount(1);
+        if (thisItem.getItemStack().getCount() != 1) {
+            thisItem = new ItemTag(thisItem.getItemStack().copy());
+            thisItem.getItemStack().setCount(1);
         }
-        if (item.getItemStack().getAmount() != 1) {
-            item = new ItemTag(item.getItemStack().clone());
-            item.getItemStack().setAmount(1);
+        if (item.getItemStack().getCount() != 1) {
+            item = new ItemTag(item.getItemStack().copy());
+            item.getItemStack().setCount(1);
         }
         return thisItem.identify().equals(item.identify());
     }

@@ -1,6 +1,6 @@
 package com.denizenscript.denizen.nms.interfaces;
 
-import org.bukkit.Location;
+import com.denizenscript.denizen.utilities.Location;
 import org.bukkit.entity.FishHook;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

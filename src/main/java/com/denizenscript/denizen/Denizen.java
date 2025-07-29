@@ -14,6 +14,7 @@ import com.denizenscript.denizen.events.ScriptEventRegistry;
 //import com.denizenscript.denizen.objects.NPCTag;
 //import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizen.events.player.PlayerBreaksBlockScriptEvent;
+import com.denizenscript.denizen.events.player.PlayerClicksBlockScriptEvent;
 import com.denizenscript.denizen.objects.properties.PropertyRegistry;
 import com.denizenscript.denizen.scripts.commands.BukkitCommandRegistry;
 //import com.denizenscript.denizen.scripts.commands.player.ClickableCommand;
@@ -55,6 +56,8 @@ import com.denizenscript.denizencore.utilities.debugging.StrongWarning;
 //import com.denizenscript.denizencore.utilities.text.ConfigUpdater;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.BusBuilder;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -79,11 +82,14 @@ import org.apache.logging.log4j.Logger;
 public class Denizen {
     private static final Logger LOGGER = LogManager.getLogger();
     public static Denizen instance;
+    public static final IEventBus DENIZEN_EVENTBUS = BusBuilder.builder().startShutdown().build();
 
     public Denizen()
     {
         //todo move events to
+        Denizen.DENIZEN_EVENTBUS.register(new ItemScriptHelper());
         MinecraftForge.EVENT_BUS.register(new PlayerBreaksBlockScriptEvent());
+        MinecraftForge.EVENT_BUS.register(new PlayerClicksBlockScriptEvent());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC, "denizen-config.toml");
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);

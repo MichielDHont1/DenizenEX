@@ -8,10 +8,10 @@ import com.denizenscript.denizen.nms.interfaces.FakePlayer;
 import com.denizenscript.denizen.nms.interfaces.PlayerHelper;
 //import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 //import com.denizenscript.denizen.npc.traits.MirrorTrait;
-//import com.denizenscript.denizen.objects.properties.entity.EntityAge;
-//import com.denizenscript.denizen.objects.properties.entity.EntityColor;
-//import com.denizenscript.denizen.objects.properties.entity.EntityTame;
-//import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
+import com.denizenscript.denizen.objects.properties.entity.EntityAge;
+import com.denizenscript.denizen.objects.properties.entity.EntityColor;
+import com.denizenscript.denizen.objects.properties.entity.EntityTame;
+import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
 //import com.denizenscript.denizen.scripts.commands.player.DisguiseCommand;
 //import com.denizenscript.denizen.scripts.containers.core.EntityScriptContainer;
 //import com.denizenscript.denizen.scripts.containers.core.EntityScriptHelper;
@@ -41,26 +41,11 @@ import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.npc.ai.NPCHolder;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.ChiseledBookshelf;
 import net.minecraft.world.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.*;
-import org.bukkit.loot.LootTable;
-import org.bukkit.loot.Lootable;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
+
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -152,29 +137,29 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         return new EntityTag(entity).getDenizenObject();
     }
 
-    public static boolean isNPC(Entity entity) {
-        return entity != null && entity.hasMetadata("NPC") && entity.getMetadata("NPC").get(0).asBoolean();
-    }
+//    public static boolean isNPC(Entity entity) {
+//        return entity != null && entity.hasMetadata("NPC") && entity.getMetadata("NPC").get(0).asBoolean();
+//    }
 
-    public static boolean isCitizensNPC(Entity entity) {
-        if (entity == null) {
-            return false;
-        }
-        if (Depends.citizens == null) {
-            return false;
-        }
-        if (!CitizensAPI.hasImplementation()) {
-            return false;
-        }
-        if (!(entity instanceof NPCHolder)) {
-            return false;
-        }
-        NPC npc = ((NPCHolder) entity).getNPC();
-        if (npc == null) {
-            return false;
-        }
-        return true;
-    }
+//    public static boolean isCitizensNPC(Entity entity) {
+//        if (entity == null) {
+//            return false;
+//        }
+//        if (Depends.citizens == null) {
+//            return false;
+//        }
+//        if (!CitizensAPI.hasImplementation()) {
+//            return false;
+//        }
+//        if (!(entity instanceof NPCHolder)) {
+//            return false;
+//        }
+//        NPC npc = ((NPCHolder) entity).getNPC();
+//        if (npc == null) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     public static NPCTag getNPCFrom(Entity entity) {
         if (isCitizensNPC(entity)) {

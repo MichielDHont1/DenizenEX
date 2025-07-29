@@ -1,6 +1,6 @@
 package com.denizenscript.denizen.scripts.containers.core;
 
-//import com.denizenscript.denizen.objects.ItemTag;
+import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.FormattedTextHelper;
 import com.denizenscript.denizencore.objects.core.ScriptTag;
@@ -9,6 +9,13 @@ import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.denizencore.utilities.YamlConfiguration;
 import com.denizenscript.denizen.utilities.ChatColor;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.server.network.TextFilter;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.List;
 
@@ -54,45 +61,56 @@ public class BookScriptContainer extends ScriptContainer {
         canRunScripts = false;
     }
 
-//    public ItemTag getBookFrom(TagContext context) {
-//        Material material = Material.WRITTEN_BOOK;
-//        if (contains("signed", String.class) && getString("signed").equalsIgnoreCase("false")) {
-//            material = Material.WRITABLE_BOOK;
-//        }
-//        ItemTag stack = new ItemTag(material);
-//        return writeBookTo(stack, context);
-//    }
-//
-//    public ItemTag writeBookTo(ItemTag book, TagContext context) {
-//        if (context == null) {
-//            context = new BukkitTagContext(null, null, new ScriptTag(this));
-//        }
-//        if (contains("signed", String.class)) {
-//            Material target = getString("signed").equalsIgnoreCase("false") ? Material.WRITABLE_BOOK : Material.WRITTEN_BOOK;
-//            if (book.getItemStack().getType() != target) {
-//                book.getItemStack().setType(target);
-//                book.setItemStack(book.getItemStack());
-//            }
-//        }
-//        BookMeta bookInfo = (BookMeta) book.getItemMeta();
-//        if (contains("title", String.class)) {
-//            String title = getString("title");
-//            title = TagManager.tag(title, context);
-//            bookInfo.setTitle(title);
-//        }
-//        if (contains("author", String.class)) {
-//            String author = getString("author");
-//            author = TagManager.tag(author, context);
-//            bookInfo.setAuthor(author);
-//        }
-//        if (contains("text", List.class)) {
-//            List<String> pages = getStringList("text");
-//            for (String page : pages) {
-//                page = TagManager.tag(page, context);
-//                bookInfo.spigot().addPage(FormattedTextHelper.parse(page, ChatColor.BLACK));
-//            }
-//        }
-//        book.setItemMeta(bookInfo);
-//        return book;
-//    }
+    public ItemTag getBookFrom(TagContext context) {
+        Item material = Items.WRITTEN_BOOK;
+        if (contains("signed", String.class) && getString("signed").equalsIgnoreCase("false")) {
+            material = Items.WRITABLE_BOOK;
+        }
+        ItemTag stack = new ItemTag(material);
+        return writeBookTo(stack, context);
+    }
+
+    public ItemTag writeBookTo(ItemTag book, TagContext context) {
+        ItemStack target;
+        if (context == null) {
+            context = new BukkitTagContext(null, /*null, */new ScriptTag(this));
+        }
+        if (contains("signed", String.class)) {
+            target = getString("signed").equalsIgnoreCase("false") ? new ItemStack(Items.WRITABLE_BOOK) : new ItemStack(Items.WRITTEN_BOOK);
+
+            if (!book.getItemStack().is(target.getItem())) {
+                CompoundTag compoundtag = book.getItemStack().getTag();
+                if (compoundtag != null) {
+                    target.setTag(compoundtag.copy());
+                }
+            }
+        }
+        else
+        {
+            target = book.getItemStack();
+        }
+
+        if (contains("title", String.class)) {
+            String title = getString("title");
+            title = TagManager.tag(title, context);
+            target.addTagElement("title", StringTag.valueOf(title));
+
+        }
+        if (contains("author", String.class)) {
+            String author = getString("author");
+            author = TagManager.tag(author, context);
+            target.addTagElement("title", StringTag.valueOf(author));
+        }
+        if (contains("text", List.class)) {
+            ListTag listtag = new ListTag();
+            List<String> pages = getStringList("text");
+            for (String page : pages) {
+                page = TagManager.tag(page, context);
+                listtag.add(StringTag.valueOf(page));
+                target.addTagElement("pages", listtag);
+            }
+        }
+        book.setItemStack(target);
+        return book;
+    }
 }
