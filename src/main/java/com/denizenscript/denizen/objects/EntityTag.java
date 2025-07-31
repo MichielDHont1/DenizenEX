@@ -6,24 +6,25 @@ import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.nms.interfaces.EntityAnimation;
 import com.denizenscript.denizen.nms.interfaces.FakePlayer;
 import com.denizenscript.denizen.nms.interfaces.PlayerHelper;
-//import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
+import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 //import com.denizenscript.denizen.npc.traits.MirrorTrait;
 import com.denizenscript.denizen.objects.properties.entity.EntityAge;
 import com.denizenscript.denizen.objects.properties.entity.EntityColor;
 import com.denizenscript.denizen.objects.properties.entity.EntityTame;
+import com.denizenscript.denizen.objects.properties.inventory.InventoryHolder;
 import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
 //import com.denizenscript.denizen.scripts.commands.player.DisguiseCommand;
-//import com.denizenscript.denizen.scripts.containers.core.EntityScriptContainer;
-//import com.denizenscript.denizen.scripts.containers.core.EntityScriptHelper;
+import com.denizenscript.denizen.scripts.containers.core.EntityScriptContainer;
+import com.denizenscript.denizen.scripts.containers.core.EntityScriptHelper;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 //import com.denizenscript.denizen.utilities.MultiVersionHelper1_19;
 import com.denizenscript.denizen.utilities.Utilities;
 //import com.denizenscript.denizen.utilities.VanillaTagHelper;
 //import com.denizenscript.denizen.utilities.depends.Depends;
-//import com.denizenscript.denizen.utilities.entity.DenizenEntityType;
-//import com.denizenscript.denizen.utilities.entity.EntityAttachmentHelper;
-//import com.denizenscript.denizen.utilities.entity.FakeEntity;
-//import com.denizenscript.denizen.utilities.entity.HideEntitiesHelper;
+import com.denizenscript.denizen.utilities.entity.DenizenEntityType;
+import com.denizenscript.denizen.utilities.entity.EntityAttachmentHelper;
+import com.denizenscript.denizen.utilities.entity.FakeEntity;
+import com.denizenscript.denizen.utilities.entity.HideEntitiesHelper;
 import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
@@ -42,6 +43,7 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.*;
@@ -161,17 +163,17 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 //        return true;
 //    }
 
-    public static NPCTag getNPCFrom(Entity entity) {
-        if (isCitizensNPC(entity)) {
-            return NPCTag.fromEntity(entity);
-        }
-        else {
-            return null;
-        }
-    }
+//    public static NPCTag getNPCFrom(Entity entity) {
+//        if (isCitizensNPC(entity)) {
+//            return NPCTag.fromEntity(entity);
+//        }
+//        else {
+//            return null;
+//        }
+//    }
 
     public static boolean isPlayer(Entity entity) {
-        return entity instanceof Player && !isNPC(entity);
+        return entity instanceof Player /*&& !isNPC(entity)*/;
     }
 
     public static PlayerTag getPlayerFrom(Entity entity) {
@@ -461,10 +463,10 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 
     @Override
     public AbstractFlagTracker getFlagTracker() {
-        if (isCitizensNPC()) {
+        /*if (isCitizensNPC()) {
             return getDenizenNPC().getFlagTracker();
         }
-        else if (isPlayer()) {
+        else */if (isPlayer()) {
             return getDenizenPlayer().getFlagTracker();
         }
         Entity ent = getBukkitEntity();
@@ -505,7 +507,7 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     public long cleanRateProtect = -60000;
     public DenizenEntityType entity_type = null;
     private String data1 = null;
-    private NPCTag npc = null;
+//    private NPCTag npc = null;
     public UUID uuid = null;
     private String entityScript = null;
     public boolean isFake = false;
@@ -529,7 +531,7 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 
     public UUID getUUID() {
         if (uuid == null && entity != null) {
-            uuid = entity.getUniqueId();
+            uuid = entity.getUUID();
         }
         return uuid;
     }
@@ -540,12 +542,12 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     }
 
     public EntityFormObject getDenizenObject() {
-        if (entity == null && npc == null) {
+        if (entity == null/* && npc == null*/) {
             return this;
         }
-        if (isCitizensNPC()) {
-            return getDenizenNPC();
-        }
+//        if (isCitizensNPC()) {
+//            return getDenizenNPC();
+//        }
         else if (isPlayer()) {
             return new PlayerTag(getPlayer());
         }
@@ -555,14 +557,15 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     }
 
     public Entity getBukkitEntity() {
-        if (uuid != null && (entity == null || !entity.isValid())) {
-            if (!isFake) {
-                Entity backup = Bukkit.getEntity(uuid);
-                if (backup != null) {
-                    entity = backup;
-                }
-            }
-        }
+        //todo backup needed in forge?
+//        if (uuid != null && (entity == null || !entity.isAddedToWorld())) {
+//            if (!isFake) {
+//                Entity backup = Bukkit.getEntity(uuid);
+//                if (backup != null) {
+//                    entity = backup;
+//                }
+//            }
+//        }
         return entity;
     }
 
@@ -580,53 +583,57 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     }
 
     public boolean isLivingEntityType() {
-        if (getBukkitEntity() == null && entity_type != null) {
-            return entity_type.getBukkitEntityType().isAlive();
-        }
+        //todo fallback needed?
+//        if (getBukkitEntity() == null && entity_type != null) {
+//            return entity_type.getBukkitEntityType().isAlive();
+//        }
         return entity instanceof LivingEntity;
     }
 
     public boolean isMonsterType() {
-        if (getBukkitEntity() == null && entity_type != null) {
-            return Monster.class.isAssignableFrom(entity_type.getBukkitEntityType().getEntityClass());
-        }
+        //todo fallback needed?
+//        if (getBukkitEntity() == null && entity_type != null) {
+//            return Monster.class.isAssignableFrom(entity_type.getBukkitEntityType().getEntityClass());
+//        }
         return getBukkitEntity() instanceof Monster;
     }
 
     public boolean isMobType() {
-        if (getBukkitEntity() == null && entity_type != null) {
-            return Mob.class.isAssignableFrom(entity_type.getBukkitEntityType().getEntityClass());
-        }
+        //todo fallback needed?
+//        if (getBukkitEntity() == null && entity_type != null) {
+//            return Mob.class.isAssignableFrom(entity_type.getBukkitEntityType().getEntityClass());
+//        }
         return getBukkitEntity() instanceof Mob;
     }
 
     public boolean isAnimalType() {
-        if (getBukkitEntity() == null && entity_type != null) {
-            return Animals.class.isAssignableFrom(entity_type.getBukkitEntityType().getEntityClass());
-        }
+        //todo fallback needed?
+//        if (getBukkitEntity() == null && entity_type != null) {
+//            return Animals.class.isAssignableFrom(entity_type.getBukkitEntityType().getEntityClass());
+//        }
         return getBukkitEntity() instanceof Animals;
     }
+//todo inventory
+//    public boolean hasInventory() {
+//        return getBukkitEntity() instanceof InventoryHolder /*|| isCitizensNPC()*/;
+//    }
 
-    public boolean hasInventory() {
-        return getBukkitEntity() instanceof InventoryHolder || isCitizensNPC();
-    }
-
-    public NPCTag getDenizenNPC() {
-        if (npc != null) {
-            return npc;
-        }
-        else {
-            return getNPCFrom(entity);
-        }
-    }
-
-    public boolean isNPC() {
-        return npc != null || isNPC(entity);
-    }
-
-    public boolean isCitizensNPC() {
-        return npc != null || isCitizensNPC(entity);
-    }
+//    public NPCTag getDenizenNPC() {
+//        if (npc != null) {
+//            return npc;
+//        }
+//        else {
+//            return getNPCFrom(entity);
+//        }
+//    }
+//
+//    public boolean isNPC() {
+//        return npc != null || isNPC(entity);
+//    }
+//
+//    public boolean isCitizensNPC() {
+//        return npc != null || isCitizensNPC(entity);
+//    }
 
     public Player getPlayer() {
         if (isPlayer()) {
@@ -648,9 +655,9 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 
     public boolean isPlayer() {
         if (entity == null) {
-            return entity_type.getBukkitEntityType() == EntityType.PLAYER && npc == null;
+            return entity_type.getBukkitEntityType() == EntityType.PLAYER /*&& npc == null*/;
         }
-        return entity instanceof Player && !isNPC();
+        return entity instanceof Player/* && !isNPC()*/;
     }
 
     public <T extends Entity> T as(Class<T> entityClass) {
@@ -692,15 +699,15 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     public boolean hasShooter() {
         return getShooter() != null;
     }
-
-    public Inventory getBukkitInventory() {
-        if (hasInventory()) {
-            if (!isCitizensNPC()) {
-                return ((InventoryHolder) getBukkitEntity()).getInventory();
-            }
-        }
-        return null;
-    }
+//todo inventory
+//    public Inventory getBukkitInventory() {
+//        if (hasInventory()) {
+//            if (!isCitizensNPC()) {
+//                return ((InventoryHolder) getBukkitEntity()).getInventory();
+//            }
+//        }
+//        return null;
+//    }
 
     public InventoryTag getInventory() {
         return hasInventory() ? isCitizensNPC() ? getDenizenNPC().getDenizenInventory() : InventoryTag.mirrorBukkitInventory(getBukkitInventory()) : null;

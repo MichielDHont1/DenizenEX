@@ -24,8 +24,14 @@ import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.PropertyMatchHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -85,12 +91,20 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
             string = string.substring("M@".length());
         }
         if (string.equals("RANDOM")) {
-            return new MaterialTag(Material.values()[CoreUtilities.getRandom().nextInt(Material.values().length)]);
+            int randomIndex = CoreUtilities.getRandom().nextInt(ForgeRegistries.ITEMS.getValues().size());
+            int currentIndex = 0;
+            for (Item randomItem : ForgeRegistries.ITEMS.getValues())
+            {
+                if (currentIndex++ == randomIndex)
+                {
+                    return new MaterialTag(randomItem);
+                }
+            }
+            return null;
         }
-        Item m = GameData.itemRegistry.get(name)
-        Material m = Material.getMaterial(string);
-        if (m != null) {
-            return new MaterialTag(m);
+        Item item1 = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(string));
+        if (item1 != null) {
+            return new MaterialTag(item1);
         }
         return null;
     }
@@ -133,57 +147,48 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         }
     }
 
-    public MaterialTag(Item material) {
-        this.material = material;
-        if (material.isBlock()) {
-            modernData = material.createBlockData();
-        }
+    public MaterialTag(Item item) {
+        this.item = item;
+        //todo block and item
+//        if (material.isBlock()) {
+//            modernData = material.createBlockData();
+//        }
     }
 
     public MaterialTag(BlockState state) {
-        this.material = state.getType();
-        this.modernData = state.getBlockData();
+        this.material = state.getMaterial();
     }
 
     public MaterialTag(Block block) {
-        this.modernData = block.getBlockData();
-        this.material = modernData.getMaterial();
+        this.item = Item.BY_BLOCK.getOrDefault(block, Items.AIR);
+//todo material
+//        this.material = modernData.getMaterial();
     }
 
-    public MaterialTag(BlockData data) {
-        this.modernData = data;
-        this.material = data.getMaterial();
-    }
-
-    private Item material;
-    private BlockData modernData;
+//    public MaterialTag(BlockData data) {
+//        this.modernData = data;
+//        this.material = data.getMaterial();
+//    }
+//todo handle actual materials
+//    private Material material;
     private Item item;
-    public boolean hasModernData() {
-        return modernData != null;
-    }
 
-    public BlockData getModernData() {
-        return modernData;
-    }
 
-    public void setModernData(BlockData data) {
-        modernData = data;
-    }
-
-    public Item getMaterial() {
+    public Material getMaterial() {
         return material;
     }
+
     public Item GetItem()
     {
         return item;
     }
 
     public String name() {
-        return material.name();
+        return item.toString();
     }
 
     public boolean isStructure() {
-        if (material == Material.CHORUS_PLANT || material == Material.RED_MUSHROOM_BLOCK || material == Material.BROWN_MUSHROOM_BLOCK) {
+        if (item == Items.CHORUS_PLANT || item == Items.RED_MUSHROOM_BLOCK || item == Items.BROWN_MUSHROOM_BLOCK) {
             return true;
         }
         return false;
@@ -208,7 +213,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public String debuggable() {
-        return "<LG>m@<Y>" + CoreUtilities.toLowerCase(material.name()) + PropertyParser.getPropertiesDebuggable(this);
+        return "<LG>m@<Y>" + CoreUtilities.toLowerCase(item.toString()) + PropertyParser.getPropertiesDebuggable(this);
     }
 
     @Override
@@ -217,15 +222,15 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
     }
 
     public String identifyNoPropertiesNoIdentifier() {
-        return CoreUtilities.toLowerCase(material.name());
+        return CoreUtilities.toLowerCase(item.toString());
     }
 
     public String identifyNoIdentifier() {
-        return CoreUtilities.toLowerCase(material.name()) + PropertyParser.getPropertiesString(this);
+        return CoreUtilities.toLowerCase(item.toString()) + PropertyParser.getPropertiesString(this);
     }
 
     public String identifySimpleNoIdentifier() {
-        return CoreUtilities.toLowerCase(material.name());
+        return CoreUtilities.toLowerCase(item.toString());
     }
 
     @Override
@@ -235,7 +240,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public Object getJavaObject() {
-        return modernData == null ? material : modernData;
+        return item;
     }
 
     @Override
@@ -253,7 +258,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public AbstractFlagTracker getFlagTracker() {
-        return new RedirectionFlagTracker(DenizenCore.serverFlagMap, "__materials." + material.name().replace(".", "&dot"));
+        return new RedirectionFlagTracker(DenizenCore.serverFlagMap, "__materials." + item.toString().replace(".", "&dot"));
     }
 
     @Override
@@ -540,7 +545,7 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the name of the material.
         // -->
         tagProcessor.registerTag(ElementTag.class, "name", (attribute, object) -> {
-            return new ElementTag(CoreUtilities.toLowerCase(object.material.name()));
+            return new ElementTag(CoreUtilities.toLowerCase(object.item.toString()));
         });
 
         // <--[tag]

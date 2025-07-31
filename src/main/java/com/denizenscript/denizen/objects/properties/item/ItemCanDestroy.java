@@ -8,6 +8,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
+import net.minecraft.world.level.material.Material;
 import org.bukkit.Material;
 import net.minecraft.world.item.ItemStack;
 

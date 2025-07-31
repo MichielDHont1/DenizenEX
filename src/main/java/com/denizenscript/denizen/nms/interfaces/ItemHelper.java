@@ -9,20 +9,11 @@ import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.utilities.nbt.CustomNBT;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.google.gson.JsonObject;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Banner;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.player.Player;
-import org.bukkit.inventory.Inventory;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ShieldMeta;
-import org.bukkit.map.MapView;
+
 
 import java.util.List;
 import java.util.Map;
@@ -144,7 +135,7 @@ public abstract class ItemHelper {
         throw new UnsupportedOperationException();
     }
 
-    public BlockData getPlacedBlock(Material material) {
+    public Block getPlacedBlock(Item material) {
         throw new UnsupportedOperationException();
     }
 

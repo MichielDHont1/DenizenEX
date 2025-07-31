@@ -11,10 +11,8 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 import com.denizenscript.denizen.utilities.Location;
-import org.bukkit.Material;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;

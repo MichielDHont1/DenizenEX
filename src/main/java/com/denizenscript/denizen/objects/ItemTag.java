@@ -32,10 +32,16 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.PropertyMatchHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.Debuggable;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -147,23 +153,24 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
                 Debug.echoError(ex);
             }
         }
-        try {
-            MaterialTag mat = MaterialTag.valueOf(string, context);
-            if (mat != null) {
-                stack = new ItemTag(mat.getMaterial());
-            }
-            if (stack != null) {
-                return stack;
-            }
-        }
-        catch (Exception ex) {
-            if (!string.equalsIgnoreCase("none") && (context == null || context.showErrors())) {
-                Debug.log("Does not match a valid item ID or material: " + string);
-            }
-            if (CoreConfiguration.debugVerbose) {
-                Debug.echoError(ex);
-            }
-        }
+        //todo material
+//        try {
+//            MaterialTag mat = MaterialTag.valueOf(string, context);
+//            if (mat != null) {
+//                stack = new ItemTag(mat.getMaterial());
+//            }
+//            if (stack != null) {
+//                return stack;
+//            }
+//        }
+//        catch (Exception ex) {
+//            if (!string.equalsIgnoreCase("none") && (context == null || context.showErrors())) {
+//                Debug.log("Does not match a valid item ID or material: " + string);
+//            }
+//            if (CoreConfiguration.debugVerbose) {
+//                Debug.echoError(ex);
+//            }
+//        }
         if (context == null || context.showErrors()) {
             Debug.log("valueOf ItemTag returning null: " + string);
         }
@@ -209,10 +216,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
     public ItemTag(Item material, int qty) {
         this(new ItemStack(material, qty));
     }
-
-    public ItemTag(MaterialTag material, int qty) {
-        this.item = new ItemStack(material.getMaterial(), qty);
-    }
+//todo material
+//    public ItemTag(MaterialTag material, int qty) {
+//        this.item = new ItemStack(material.getMaterial(), qty);
+//    }
 
     public ItemTag(ItemStack item) {
         if (item == null || item.isEmpty()) {
@@ -446,7 +453,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public String identify() {
-        if (item == null || item.getType() == Material.AIR) {
+        if (item == null || item.getItem().equals(Items.AIR)) {
             return "i@air";
         }
         return "i@" + getMaterial().identifyNoPropertiesNoIdentifier() + PropertyParser.getPropertiesString(this);
@@ -454,7 +461,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public String debuggable() {
-        if (item == null || item.getType() == Material.AIR) {
+        if (item == null || item.getItem().equals(Items.AIR)) {
             return "<LG>i@<Y>air";
         }
         return "<LG>i@<Y>" + getMaterial().identifyNoPropertiesNoIdentifier() + PropertyParser.getPropertiesDebuggable(this);
@@ -465,7 +472,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         if (item == null) {
             return "null";
         }
-        if (item.getType() != Material.AIR) {
+        if (item.getItem().equals(Items.AIR)) {
             if (isItemscript()) {
                 return "i@" + getScriptName();
             }
@@ -494,7 +501,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 
     @Override
     public boolean isTruthy() {
-        return !getBukkitMaterial().isAir();
+        return !getBukkitMaterial().equals(Items.AIR);
     }
 
     public static void register() {
@@ -596,20 +603,21 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the MaterialTag that is the basis of the item.
         // EG, a stone with lore and a display name, etc. will return only "m@stone".
         // -->
-        tagProcessor.registerTag(ObjectTag.class, "material", (attribute, object) -> {
-            if (attribute.getAttribute(2).equals("formatted")) {
-                return object;
-            }
-            if (object.getItemMeta() instanceof BlockStateMeta) {
-                if (object.getBukkitMaterial() == Material.SHIELD) {
-                    MaterialTag material = new MaterialTag(Material.SHIELD);
-                    material.setModernData(((BlockStateMeta) object.getItemMeta()).getBlockState().getBlockData());
-                    return material;
-                }
-                return new MaterialTag(((BlockStateMeta) object.getItemMeta()).getBlockState());
-            }
-            return object.getMaterial();
-        });
+        //todo material
+//        tagProcessor.registerTag(ObjectTag.class, "material", (attribute, object) -> {
+//            if (attribute.getAttribute(2).equals("formatted")) {
+//                return object;
+//            }
+//            if (object.getItemMeta() instanceof BlockStateMeta) {
+//                if (object.getBukkitMaterial() == Material.SHIELD) {
+//                    MaterialTag material = new MaterialTag(Material.SHIELD);
+//                    material.setModernData(((BlockStateMeta) object.getItemMeta()).getBlockState().getBlockData());
+//                    return material;
+//                }
+//                return new MaterialTag(((BlockStateMeta) object.getItemMeta()).getBlockState());
+//            }
+//            return object.getMaterial();
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.placed_material>
@@ -621,7 +629,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns null if the item doesn't place as a block.
         // -->
         tagProcessor.registerTag(ObjectTag.class, "placed_material", (attribute, object) -> {
-            BlockData data = NMSHandler.itemHelper.getPlacedBlock(object.getBukkitMaterial());
+            Block data = NMSHandler.itemHelper.getPlacedBlock(object.getBukkitMaterial());
             if (data == null) {
                 return null;
             }
@@ -649,9 +657,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the name of the Bukkit item meta type that applies to this item.
         // This is for debugging purposes.
         // -->
-        tagProcessor.registerTag(ElementTag.class, "meta_type", (attribute, object) -> {
-            return new ElementTag(object.getItemMeta().getClass().getName());
-        });
+        //todo should be saparated into different tags
+//        tagProcessor.registerTag(ElementTag.class, "meta_type", (attribute, object) -> {
+//            return new ElementTag(object.getItemMeta().getClass().getName());
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.bukkit_serial>
@@ -744,8 +753,9 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <ItemTag.material>
         // -->
-        tagProcessor.registerMechanism("material", true, MaterialTag.class, (object, mechanism, material) -> {
-            object.item.setType(material.getMaterial());
+        //todo verify this works
+        tagProcessor.registerMechanism("material", true, ItemTag.class, (object, mechanism, itemTag) -> {
+            object.item = itemTag.getItemStack();
         });
 
         if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_20)) {
@@ -758,24 +768,25 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
             // Must specify a player for the map to render for, as if that player is holding the map.
             // Note that this does not include cursors, as their rendering is entirely client-side.
             // -->
-            tagProcessor.registerTag(ImageTag.class, PlayerTag.class, "map_to_image", (attribute, object, input) -> {
-                if (!(object.getItemMeta() instanceof MapMeta mapMeta)) {
-                    return null;
-                }
-                MapView mapView = mapMeta.getMapView();
-                if (mapView == null) {
-                    attribute.echoError("Invalid map item: must have contents.");
-                    return null;
-                }
-                byte[] data = NMSHandler.itemHelper.renderMap(mapView, input.getPlayerEntity());
-                BufferedImage image = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
-                for (int x = 0; x < 128; x++) {
-                    for (int y = 0; y < 128; y++) {
-                        image.setRGB(x, y, MapPalette.getColor(data[y * 128 + x]).getRGB());
-                    }
-                }
-                return new ImageTag(image);
-            });
+            //todo maps
+//            tagProcessor.registerTag(ImageTag.class, PlayerTag.class, "map_to_image", (attribute, object, input) -> {
+//                if (!(object.getItemMeta() instanceof MapMeta mapMeta)) {
+//                    return null;
+//                }
+//                MapView mapView = mapMeta.getMapView();
+//                if (mapView == null) {
+//                    attribute.echoError("Invalid map item: must have contents.");
+//                    return null;
+//                }
+//                byte[] data = NMSHandler.itemHelper.renderMap(mapView, input.getPlayerEntity());
+//                BufferedImage image = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
+//                for (int x = 0; x < 128; x++) {
+//                    for (int y = 0; y < 128; y++) {
+//                        image.setRGB(x, y, MapPalette.getColor(data[y * 128 + x]).getRGB());
+//                    }
+//                }
+//                return new ImageTag(image);
+//            });
         }
     }
 
@@ -787,7 +798,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         if (id.equals("ice") || id.equals("dirt") || id.endsWith("copper") || id.endsWith("cream")) {
             return id;
         }
-        if (getItemStack().getAmount() > 1) {
+        if (getItemStack().getCount() > 1) {
             if (id.equals("cactus")) {
                 return "cacti";
             }
@@ -851,18 +862,19 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         String matcherLow = CoreUtilities.toLowerCase(matcher);
         if (matcherLow.contains(":")) {
             if (matcherLow.startsWith("item_flagged:")) {
-                if (getBukkitMaterial().isAir()) {
+                if (getBukkitMaterial().equals(Items.AIR)) {
                     return false;
                 }
                 return BukkitScriptEvent.coreFlaggedCheck(matcher.substring("item_flagged:".length()), getFlagTracker());
             }
             else if (matcherLow.startsWith("item_enchanted:")) {
                 String enchMatcher = matcher.substring("item_enchanted:".length());
-                if (getBukkitMaterial().isAir() || !getItemMeta().hasEnchants()) {
+                if (getBukkitMaterial().equals(Items.AIR) ||  !item.isEnchanted()) {
                     return false;
                 }
-                for (Enchantment enchant : getItemMeta().getEnchants().keySet()) {
-                    if (BukkitScriptEvent.runGenericCheck(enchMatcher, enchant.getKey().getKey())) {
+                for (Enchantment enchant : EnchantmentHelper.getEnchantments(item).keySet()) {
+                    //todo verify this works
+                    if (BukkitScriptEvent.runGenericCheck(enchMatcher, enchant.getDescriptionId())) {
                         return true;
                     }
                 }
@@ -873,7 +885,8 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
                 return compareItem != null && compareItem.matchesRawExact(this);
             }
         }
-        if (matcherLow.equals("potion") && CoreUtilities.toLowerCase(getBukkitMaterial().name()).contains("potion")) {
+        //todo make sure it doesnt check in the namespace
+        if (matcherLow.equals("potion") && CoreUtilities.toLowerCase(getBukkitMaterial().toString()).contains("potion")) {
             return true;
         }
         boolean isItemScript = isItemscript();
