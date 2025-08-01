@@ -1,27 +1,20 @@
 package com.denizenscript.denizen.nms.interfaces;
 
-import com.denizenscript.denizen.events.entity.EntityEntersVehicleScriptEvent;
-import com.denizenscript.denizen.events.entity.EntityExitsVehicleScriptEvent;
+//import com.denizenscript.denizen.events.entity.EntityEntersVehicleScriptEvent;
+//import com.denizenscript.denizen.events.entity.EntityExitsVehicleScriptEvent;
 import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.objects.LocationTag;
+import com.denizenscript.denizen.utilities.Location;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.block.data.BlockData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.util.BoundingBox;
-import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.UUID;
@@ -375,11 +368,11 @@ public abstract class EntityHelper {
         }
     }
 
-    public abstract void snapPositionTo(Entity entity, Vector vector);
+    public abstract void snapPositionTo(Entity entity, Vec3 vector);
 
-    public abstract void move(Entity entity, Vector vector);
+    public abstract void move(Entity entity, Vec3 vector);
 
-    public void fakeMove(Entity entity, Vector vector) {
+    public void fakeMove(Entity entity, Vec3 vector) {
         throw new UnsupportedOperationException();
     }
 
@@ -391,7 +384,7 @@ public abstract class EntityHelper {
         throw new UnsupportedOperationException();
     }
 
-    public abstract void teleport(Entity entity, Location loc);
+    public abstract void teleport(Entity entity,  Location loc);
 
     public abstract void setBoundingBox(Entity entity, BoundingBox box);
 
