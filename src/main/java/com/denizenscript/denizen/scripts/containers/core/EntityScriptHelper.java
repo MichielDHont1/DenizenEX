@@ -3,53 +3,42 @@ package com.denizenscript.denizen.scripts.containers.core;
 import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.utilities.DataPersistenceHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
-import com.denizenscript.denizen.events.entity.EntityDespawnScriptEvent;
+//import com.denizenscript.denizen.events.entity.EntityDespawnScriptEvent;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ScriptTag;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.world.EntitiesUnloadEvent;
-
 import java.util.HashMap;
 
-public class EntityScriptHelper implements Listener {
+public class EntityScriptHelper {
 
     public static HashMap<String, EntityScriptContainer> scripts = new HashMap<>();
 
-    public EntityScriptHelper() {
-        Denizen.getInstance().getServer().getPluginManager()
-                .registerEvents(this, Denizen.getInstance());
-    }
+//todo
+//    @EventHandler(priority = EventPriority.MONITOR)
+//    public void onEntityDeath(EntityDeathEvent event) {
+//        Entity entity = event.getEntity();
+//        EntityTag.rememberEntity(entity);
+//        EntityDespawnScriptEvent.instance.entity = new EntityTag(entity);
+//        EntityDespawnScriptEvent.instance.cause = new ElementTag("DEATH");
+//        EntityDespawnScriptEvent.instance.fire();
+//        EntityTag.forgetEntity(entity);
+//    }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onEntityDeath(EntityDeathEvent event) {
-        Entity entity = event.getEntity();
-        EntityTag.rememberEntity(entity);
-        EntityDespawnScriptEvent.instance.entity = new EntityTag(entity);
-        EntityDespawnScriptEvent.instance.cause = new ElementTag("DEATH");
-        EntityDespawnScriptEvent.instance.fire();
-        EntityTag.forgetEntity(entity);
-    }
-
-    @EventHandler
-    public void onChunkUnload(EntitiesUnloadEvent event) {
-        for (Entity ent : event.getEntities()) {
-            if (!(ent instanceof LivingEntity) || ((LivingEntity) ent).getRemoveWhenFarAway()) {
-                EntityTag.rememberEntity(ent);
-                EntityDespawnScriptEvent.instance.entity = new EntityTag(ent);
-                EntityDespawnScriptEvent.instance.cause = new ElementTag("CHUNK_UNLOAD");
-                EntityDespawnScriptEvent.instance.fire();
-                EntityTag.forgetEntity(ent);
-            }
-        }
-    }
+//    @EventHandler
+//    public void onChunkUnload(EntitiesUnloadEvent event) {
+//        for (Entity ent : event.getEntities()) {
+//            if (!(ent instanceof LivingEntity) || ((LivingEntity) ent).getRemoveWhenFarAway()) {
+//                EntityTag.rememberEntity(ent);
+//                EntityDespawnScriptEvent.instance.entity = new EntityTag(ent);
+//                EntityDespawnScriptEvent.instance.cause = new ElementTag("CHUNK_UNLOAD");
+//                EntityDespawnScriptEvent.instance.fire();
+//                EntityTag.forgetEntity(ent);
+//            }
+//        }
+//    }
 
     /**
      * Indicates whether a specified entity has a custom entity script.

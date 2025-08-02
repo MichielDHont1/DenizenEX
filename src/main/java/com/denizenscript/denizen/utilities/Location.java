@@ -45,6 +45,14 @@ public class Location implements Cloneable {
         YRotation = 0;
     }
 
+    public Location(Vec3 vector)
+    {
+        x = vector.x();
+        y = vector.y();
+        z = vector.z();
+
+    }
+
     public BlockPos toBlockPos()
     {
         return new BlockPos(x,y,z);

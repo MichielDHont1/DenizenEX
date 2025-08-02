@@ -26,6 +26,8 @@ import com.denizenscript.denizen.tags.BukkitTagContext;
 //import com.denizenscript.denizen.tags.core.NPCTagBase;
 import com.denizenscript.denizen.utilities.*;
 //import com.denizenscript.denizen.utilities.blocks.FullBlockData;
+import com.denizenscript.denizen.utilities.Persistence.PersistentDataCapability;
+import com.denizenscript.denizen.utilities.Persistence.PersistentDataStorage;
 import com.denizenscript.denizen.utilities.command.*;
 import com.denizenscript.denizen.utilities.command.manager.CommandManager;
 import com.denizenscript.denizen.utilities.command.manager.Injector;
@@ -54,8 +56,10 @@ import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.DebugInternals;
 import com.denizenscript.denizencore.utilities.debugging.StrongWarning;
 //import com.denizenscript.denizencore.utilities.text.ConfigUpdater;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.BusBuilder;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
@@ -129,7 +133,7 @@ public class Denizen {
         instance = this;
         try {
             versionTag = ModLoadingContext.get().getActiveContainer().getModInfo().getVersion().getQualifier();
-
+            CapabilityManager.INSTANCE.register(PersistentDataCapability.class, PersistentDataStorage);
 
             CoreUtilities.noDebugContext = new BukkitTagContext(null, /*null,*/ null, false, null);
             CoreUtilities.noDebugContext.showErrors = () -> false;
@@ -519,5 +523,8 @@ public class Denizen {
 //        };
 //    }
 
+        public MinecraftServer getServer() {
+            return ServerLifecycleHooks.getCurrentServer();
+        }
 
 }

@@ -288,7 +288,7 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
     }
 
     //todo chunkloading
-//    public boolean isChunkLoaded() {
+    public boolean isChunkLoaded() {
 //        return getWorld() != null && getWorld().isChunkLoaded(getBlockX() >> 4, getBlockZ() >> 4);
 //    }
 //
@@ -300,7 +300,8 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
 //        finally {
 //            NMSHandler.chunkHelper.restoreServerThread(getWorld());
 //        }
-//    }
+        return false;
+    }
 
     @Override
     public Block getBlock() {

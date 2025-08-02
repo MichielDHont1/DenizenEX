@@ -3,7 +3,7 @@ package com.denizenscript.denizen.utilities.entity;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizen.utilities.Settings;
 import com.denizenscript.denizen.nms.NMSHandler;
-import com.denizenscript.denizen.nms.enums.CustomEntityType;
+//import com.denizenscript.denizen.nms.enums.CustomEntityType;
 import com.denizenscript.denizen.nms.interfaces.CustomEntity;
 import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.utilities.packets.NetworkInterceptHelper;
@@ -11,9 +11,15 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 import com.denizenscript.denizen.utilities.Location;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,15 +28,17 @@ import java.util.Map;
 public class DenizenEntityType {
 
     private static final Map<String, DenizenEntityType> registeredTypes = new HashMap<>();
-    private final EntityType bukkitEntityType;
+    private final EntityType<?> bukkitEntityType;
     private final String name;
     private final String lowercaseName;
     private final double gravity;
-    public final CustomEntityType customEntityType;
+//    public final CustomEntityType customEntityType;
 
     static {
-        for (EntityType entityType : EntityType.values()) {
-            registeredTypes.put(entityType.name(), new DenizenEntityType(entityType));
+        EntityType<?> type = null;
+        for (ResourceLocation location : Registry.ENTITY_TYPE.keySet()) {
+            type = Registry.ENTITY_TYPE.get(location);
+            registeredTypes.put(type.toString(), new DenizenEntityType(type));
         }
     }
 
@@ -45,12 +53,12 @@ public class DenizenEntityType {
     //   Use with the mechanisms "name" and "skin" to alter the respective properties.
     // -->
 
-    private DenizenEntityType(EntityType entityType) {
+    private DenizenEntityType(EntityType<?> entityType) {
         this.bukkitEntityType = entityType;
-        this.name = entityType.name();
+        this.name = entityType.toString();
         this.lowercaseName = CoreUtilities.toLowerCase(name);
         this.gravity = Gravity.getGravity(entityType);
-        this.customEntityType = null;
+//        this.customEntityType = null;
     }
 
     private DenizenEntityType(String name, Class<? extends CustomEntity> entityType) {
@@ -58,79 +66,94 @@ public class DenizenEntityType {
     }
 
     private DenizenEntityType(String name, Class<? extends CustomEntity> entityType, double gravity) {
-        EntityType bukkitEntityType = EntityType.UNKNOWN;
-        if (entityType != null) {
-            for (EntityType type : EntityType.values()) {
-                Class<? extends Entity> clazz = type.getEntityClass();
-                if (clazz != null && clazz.isAssignableFrom(entityType)) {
-                    bukkitEntityType = type;
-                    break;
-                }
-            }
-        }
+        EntityType<?> bukkitEntityType = null;
+        //todo
+//        if (entityType != null) {
+//
+//            for (EntityType<?> type : EntityType.values()) {
+//                Class<? extends Entity> clazz = type.getEntityClass();
+//                if (clazz != null && clazz.isAssignableFrom(entityType)) {
+//                    bukkitEntityType = type;
+//                    break;
+//                }
+//            }
+//        }
         this.bukkitEntityType = bukkitEntityType;
         this.name = name.toUpperCase();
         this.lowercaseName = CoreUtilities.toLowerCase(name);
         this.gravity = gravity;
-        this.customEntityType = CustomEntityType.valueOf(name.toUpperCase());
+//        this.customEntityType = CustomEntityType.valueOf(name.toUpperCase());
     }
 
-    public Entity spawnNewEntity(Location location, ArrayList<Mechanism> mechanisms, String scriptName, CreatureSpawnEvent.SpawnReason reason) {
+    public Entity spawnNewEntity(Location location, ArrayList<Mechanism> mechanisms, String scriptName, MobSpawnType reason) {
         try {
             if (name.equals("DROPPED_ITEM")) {
-                ItemStack itemStack = new ItemStack(Material.STONE);
+                ItemStack itemStack = new ItemStack(Items.STONE);
                 for (Mechanism mechanism : mechanisms) {
                     if (mechanism.matches("item") && mechanism.requireObject(ItemTag.class)) {
                         itemStack = mechanism.valueAsType(ItemTag.class).getItemStack();
                         break;
                     }
                 }
-                return location.getWorld().dropItem(location, itemStack);
+                ItemEntity toSpawn = new ItemEntity(EntityType.ITEM, location.getWorld());
+                toSpawn.setPos(location.toVector());
+                toSpawn.setItem(itemStack);
+                location.getWorld().addFreshEntity(toSpawn);
+                return toSpawn;
             }
-            else if (!isCustom()) {
-                return SpawnEntityHelper.spawn(location, bukkitEntityType, mechanisms, scriptName, reason);
-            }
-            else {
-                switch (customEntityType) {
-                    case FAKE_ARROW:
-                        return NMSHandler.customEntityHelper.spawnFakeArrow(location);
-                    case FAKE_PLAYER:
-                        if (Settings.packetInterception()) {
-                            String name = null;
-                            String skin = null;
-                            String blob = null;
-                            for (Mechanism mechanism : new ArrayList<>(mechanisms)) {
-                                if (mechanism.matches("name")) {
-                                    name = mechanism.getValue().asString();
-                                    mechanisms.remove(mechanism);
-                                }
-                                else if (mechanism.matches("skin")) {
-                                    skin = mechanism.getValue().asString();
-                                    mechanisms.remove(mechanism);
-                                }
-                                else if (mechanism.matches("skin_blob")) {
-                                    blob = mechanism.getValue().asString();
-                                    mechanisms.remove(mechanism);
-                                }
-                                if (name != null && (skin != null || blob != null)) {
-                                    break;
-                                }
-                            }
-                            NetworkInterceptHelper.enable();
-                            return NMSHandler.customEntityHelper.spawnFakePlayer(location, name, skin, blob, true);
-                        }
-                        break;
-                    case ITEM_PROJECTILE:
-                        BukkitImplDeprecations.itemProjectile.warn();
-                        ItemStack itemStack = new ItemStack(Material.STONE);
-                        for (Mechanism mechanism : mechanisms) {
-                            if (mechanism.matches("item") && mechanism.requireObject(ItemTag.class)) {
-                                itemStack = mechanism.valueAsType(ItemTag.class).getItemStack();
-                            }
-                        }
-                        return NMSHandler.customEntityHelper.spawnItemProjectile(location, itemStack);
-                }
-            }
+            //todo handle other entity types
+//            else {
+//                ItemEntity toSpawn = new Entity(getBukkitEntityType(), location.getWorld());
+//                toSpawn.setPos(location.toVector());
+//                toSpawn.setItem(itemStack);
+//                location.getWorld().addFreshEntity(toSpawn);
+//                return toSpawn;
+//                return SpawnEntityHelper.spawn(location, bukkitEntityType, mechanisms, scriptName, reason);
+//            }
+//            else if (!isCustom()) {
+//                return SpawnEntityHelper.spawn(location, bukkitEntityType, mechanisms, scriptName, reason);
+//            }
+//            else {
+//                switch (customEntityType) {
+//                    case FAKE_ARROW:
+//                        return NMSHandler.customEntityHelper.spawnFakeArrow(location);
+//                    case FAKE_PLAYER:
+//                        if (Settings.packetInterception()) {
+//                            String name = null;
+//                            String skin = null;
+//                            String blob = null;
+//                            for (Mechanism mechanism : new ArrayList<>(mechanisms)) {
+//                                if (mechanism.matches("name")) {
+//                                    name = mechanism.getValue().asString();
+//                                    mechanisms.remove(mechanism);
+//                                }
+//                                else if (mechanism.matches("skin")) {
+//                                    skin = mechanism.getValue().asString();
+//                                    mechanisms.remove(mechanism);
+//                                }
+//                                else if (mechanism.matches("skin_blob")) {
+//                                    blob = mechanism.getValue().asString();
+//                                    mechanisms.remove(mechanism);
+//                                }
+//                                if (name != null && (skin != null || blob != null)) {
+//                                    break;
+//                                }
+//                            }
+//                            NetworkInterceptHelper.enable();
+//                            return NMSHandler.customEntityHelper.spawnFakePlayer(location, name, skin, blob, true);
+//                        }
+//                        break;
+//                    case ITEM_PROJECTILE:
+//                        BukkitImplDeprecations.itemProjectile.warn();
+//                        ItemStack itemStack = new ItemStack(Material.STONE);
+//                        for (Mechanism mechanism : mechanisms) {
+//                            if (mechanism.matches("item") && mechanism.requireObject(ItemTag.class)) {
+//                                itemStack = mechanism.valueAsType(ItemTag.class).getItemStack();
+//                            }
+//                        }
+//                        return NMSHandler.customEntityHelper.spawnItemProjectile(location, itemStack);
+//                }
+//            }
         }
         catch (Exception e) {
             Debug.echoError(e);
@@ -171,13 +194,13 @@ public class DenizenEntityType {
             return getByName(((CustomEntity) entity).getEntityTypeName());
         }
         else {
-            return getByName(entity.getType().name());
+            return getByName(entity.getType().toString());
         }
     }
 
-    public boolean isCustom() {
-        return customEntityType != null;
-    }
+//    public boolean isCustom() {
+//        return customEntityType != null;
+//    }
 
     @Override
     public String toString() {

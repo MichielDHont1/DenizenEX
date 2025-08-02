@@ -847,7 +847,7 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
             Debug.echoError("Cannot spawn a null EntityTag!");
             return;
         }
-        if (entity_type.getBukkitEntityType() == EntityType.PLAYER && !entity_type.isCustom()) {
+        if (entity_type.getBukkitEntityType() == EntityType.PLAYER /*&& !entity_type.isCustom()*/) {
 //            if (Depends.citizens == null) {
                 Debug.echoError("Cannot spawn entity of type PLAYER!");
                 return;

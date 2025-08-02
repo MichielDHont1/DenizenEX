@@ -71,6 +71,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraftforge.common.world.ForgeChunkManager;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 
@@ -109,6 +110,16 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     /////////////////
 
     public static PlayerTag mirrorBukkitPlayer(OfflinePlayer player) {
+        if (player == null) {
+            return null;
+        }
+        else {
+            return new PlayerTag(player);
+        }
+    }
+
+
+    public static PlayerTag mirrorBukkitPlayer(Player player) {
         if (player == null) {
             return null;
         }

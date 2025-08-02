@@ -9,8 +9,8 @@ import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
 import com.denizenscript.denizen.scripts.containers.core.ItemScriptHelper;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
-import com.denizenscript.denizen.utilities.PaperAPITools;
-import com.denizenscript.denizen.utilities.depends.Depends;
+//import com.denizenscript.denizen.utilities.PaperAPITools;
+//import com.denizenscript.denizen.utilities.depends.Depends;
 import com.denizenscript.denizen.utilities.inventory.InventoryTrackerSystem;
 import com.denizenscript.denizen.utilities.inventory.InventoryViewUtil;
 import com.denizenscript.denizen.utilities.inventory.RecipeHelper;
@@ -37,21 +37,10 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.YamlConfiguration;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 //import net.citizensnpcs.api.CitizensAPI;
-//
-//import org.bukkit.Keyed;
-//import org.bukkit.Material;
-//import org.bukkit.block.BlockState;
-//import org.bukkit.block.DoubleChest;
-//import net.minecraft.world.entity.Entity;
-//import org.bukkit.entity.HumanEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-//import org.bukkit.event.inventory.InventoryType;
-//import org.bukkit.inventory.*;
-//import org.bukkit.inventory.meta.BookMeta;
-//import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -173,7 +162,7 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         }
     }
 
-    public void setInventory(Container inventory) {
+    public void setInventory(InventoryMenu inventory) {
         if (isUnique()) {
             InventoryScriptHelper.notedInventories.remove(this.inventory);
             InventoryScriptHelper.notedInventories.put(inventory, this);
@@ -186,7 +175,9 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
     public void makeUnique(String id) {
         InventoryTag toNote = new InventoryTag(inventory, idType, idHolder);
         toNote.uniquifier = null;
-        String title = PaperAPITools.instance.getTitle(inventory);
+        String title = inventory.toString();
+        //todo verify
+//        String title = PaperAPITools.instance.getTitle(inventory);
         if (title == null || title.startsWith("container.")) {
             title = toNote.inventory.getType().getDefaultTitle();
         }
@@ -253,12 +244,12 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         return "unknown reason - something went wrong";
     }
 
-    public static InventoryTag valueOf(String string, PlayerTag player, NPCTag npc, boolean silent) {
-        return valueOf(string, new BukkitTagContext(player, npc, null, !silent, null));
+    public static InventoryTag valueOf(String string, PlayerTag player/*, NPCTag npc*/, boolean silent) {
+        return valueOf(string, new BukkitTagContext(player, /*npc, */null, !silent, null));
     }
 
-    public static InventoryTag valueOf(String string, PlayerTag player, NPCTag npc) {
-        return valueOf(string, player, npc, false);
+    public static InventoryTag valueOf(String string, PlayerTag player/*, NPCTag npc*/) {
+        return valueOf(string, player, /*npc, */false);
     }
 
     public static InventoryTag internalGetInventoryFor(TagContext context, List<String> properties) {

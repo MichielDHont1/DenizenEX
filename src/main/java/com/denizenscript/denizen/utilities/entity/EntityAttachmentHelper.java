@@ -4,6 +4,7 @@ import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.utilities.packets.NetworkInterceptHelper;
 import com.denizenscript.denizen.utilities.Location;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -273,7 +274,7 @@ public class EntityAttachmentHelper {
         }
     }
 
-    public static void forceAttachMove(EntityTag attached, EntityTag to, Vector offset, boolean matchRotation) {
+    public static void forceAttachMove(EntityTag attached, EntityTag to, Vec3 offset, boolean matchRotation) {
         removeAttachment(attached.getUUID(), null);
         if (to == null) {
             return;
@@ -281,7 +282,7 @@ public class EntityAttachmentHelper {
         AttachmentData data = new AttachmentData();
         data.attached = attached;
         data.to = to;
-        data.positionalOffset = offset == null ? null : offset.toLocation(null);
+        data.positionalOffset = offset == null ? null : new Location(offset);
         data.offsetRelative = matchRotation;
         registerAttachment(data);
     }
