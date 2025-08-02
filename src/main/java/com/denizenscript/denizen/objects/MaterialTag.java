@@ -173,10 +173,10 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
 //    private Material material;
     private Item item;
 
-
-    public Material getMaterial() {
-        return material;
-    }
+//todo material
+//    public Material getMaterial() {
+//        return material;
+//    }
 
     public Item GetItem()
     {

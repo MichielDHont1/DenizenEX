@@ -3,9 +3,7 @@ package com.denizenscript.denizen.nms.interfaces;
 import com.denizenscript.denizen.nms.util.PlayerProfile;
 import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 import com.denizenscript.denizen.objects.EntityTag;
-import org.bukkit.*;
-import org.bukkit.block.*;
-import org.bukkit.block.data.BlockData;
+import com.denizenscript.denizen.utilities.Location;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Set;

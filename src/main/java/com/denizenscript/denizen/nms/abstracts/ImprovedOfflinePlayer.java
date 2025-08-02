@@ -48,6 +48,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import  com.denizenscript.denizen.utilities.Location;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 
@@ -202,17 +203,17 @@ public abstract class ImprovedOfflinePlayer {
         markModified();
     }
 
-    public void setBedSpawnLocation(BlockPos location) {
+    public void setBedSpawnLocation(Location location) {
         if (location == null && !compound.containsKey("SpawnDimension")) {
             return;
         }
         CompoundTagBuilder builder = compound.createBuilder();
         if (location != null) {
-            builder.putInt("SpawnX", location.getX())
-                    .putInt("SpawnY", location.getY())
-                    .putInt("SpawnZ", location.getZ())
+            builder.putInt("SpawnX", location.getBlockX())
+                    .putInt("SpawnY", location.getBlockY())
+                    .putInt("SpawnZ", location.getBlockZ())
                     .putFloat("SpawnAngle", location.getYaw())
-                    .putString("SpawnDimension", location.getWorld().getKey().toString());
+                    .putString("SpawnDimension", location.getWorld().dimension().toString());
         }
         else {
             builder.remove("SpawnX").remove("SpawnY").remove("SpawnZ").remove("SpawnAngle").remove("SpawnDimension");
@@ -289,11 +290,11 @@ public abstract class ImprovedOfflinePlayer {
     }
 
     public GameType getGameMode() {
-        return GameType.getByValue(this.compound.getInt("playerGameType"));
+        return GameType.byId(this.compound.getInt("playerGameType"));
     }
 
     public void setGameMode(GameType input) {
-        this.compound = compound.createBuilder().putInt("playerGameType", input.getValue()).build();
+        this.compound = compound.createBuilder().putInt("playerGameType", input.getId()).build();
         markModified();
     }
 
@@ -400,16 +401,16 @@ public abstract class ImprovedOfflinePlayer {
         markModified();
     }
 
-    public Vector getVelocity() {
+    public Vec3 getVelocity() {
         JNBTListTag list = this.compound.getListTag("Motion");
-        return new Vector(list.getDouble(0), list.getDouble(1), list.getDouble(2));
+        return new Vec3(list.getDouble(0), list.getDouble(1), list.getDouble(2));
     }
 
-    public void setVelocity(Vector vector) {
+    public void setVelocity(Vec3 vector) {
         List<DoubleTag> motion = new ArrayList<>();
-        motion.add(new DoubleTag(vector.getX()));
-        motion.add(new DoubleTag(vector.getY()));
-        motion.add(new DoubleTag(vector.getZ()));
+        motion.add(new DoubleTag(vector.x()));
+        motion.add(new DoubleTag(vector.y()));
+        motion.add(new DoubleTag(vector.z()));
         this.compound = compound.createBuilder().put("Motion", new JNBTListTag(DoubleTag.class, motion)).build();
         markModified();
     }
@@ -440,7 +441,7 @@ public abstract class ImprovedOfflinePlayer {
         CompoundTag compoundTag = (CompoundTag) this.compound.getValue().get("LastDeathLocation");
         compoundTag = compoundTag.createBuilder()
                 .putIntArray("pos", new int[] {deathLoc.getBlockX(), deathLoc.getBlockY(), deathLoc.getBlockZ()})
-                .putString("dimension", deathLoc.getWorld().getKey().toString()).build();
+                .putString("dimension", deathLoc.getWorld().dimension().toString()).build();
         this.compound = compound.createBuilder().put("LastDeathLocation", compoundTag).build();
         markModified();
     }

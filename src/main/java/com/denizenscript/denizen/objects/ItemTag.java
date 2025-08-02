@@ -30,6 +30,7 @@ import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.PropertyMatchHelper;
+import com.denizenscript.denizencore.utilities.YamlConfiguration;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.Debuggable;
 import net.minecraft.resources.ResourceLocation;
@@ -672,7 +673,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         tagProcessor.registerTag(ElementTag.class, "bukkit_serial", (attribute, object) -> {
             YamlConfiguration config = new YamlConfiguration();
             config.set("item", object.getItemStack());
-            return new ElementTag(config.saveToString());
+            return new ElementTag(config.saveToString(false));
         });
 
         // <--[tag]
@@ -697,38 +698,39 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // to limit to just recipes of that type.
         // Brewing recipes are only supported on Paper, and only custom ones are available.
         // -->
-        tagProcessor.registerTag(ListTag.class, "recipe_ids", (attribute, object) -> {
-            String type = attribute.hasParam() ? CoreUtilities.toLowerCase(attribute.getParam()) : null;
-            ItemScriptContainer container = ItemScriptHelper.getItemScriptContainer(object.getItemStack());
-            ListTag list = new ListTag();
-            Consumer<NamespacedKey> addRecipe = (recipe) -> {
-                if (CoreUtilities.equalsIgnoreCase(recipe.getNamespace(), "denizen")) {
-                    if (container != ItemScriptHelper.recipeIdToItemScript.get(recipe.toString())) {
-                        return;
-                    }
-                }
-                else if (container != null) {
-                    return;
-                }
-                list.add(recipe.toString());
-            };
-            if (type == null || !type.equals("brewing")) {
-                for (Recipe recipe : Bukkit.getRecipesFor(object.getItemStack())) {
-                    if (recipe instanceof Keyed keyedRecipe && Utilities.isRecipeOfType(recipe, type)) {
-                        addRecipe.accept(keyedRecipe.getKey());
-                    }
-                }
-            }
-            if (Denizen.supportsPaper && NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && (type == null || type.equals("brewing"))) {
-                for (Map.Entry<NamespacedKey, ItemHelper.BrewingRecipe> entry : NMSHandler.itemHelper.getCustomBrewingRecipes().entrySet()) {
-                    ItemStack result = entry.getValue().result();
-                    if (object.getBukkitMaterial() == result.getType() && (object.getItemStack().getDurability() == -1 || object.getItemStack().getDurability() == result.getDurability())) {
-                        addRecipe.accept(entry.getKey());
-                    }
-                }
-            }
-            return list;
-        });
+        //todo recipes
+//        tagProcessor.registerTag(ListTag.class, "recipe_ids", (attribute, object) -> {
+//            String type = attribute.hasParam() ? CoreUtilities.toLowerCase(attribute.getParam()) : null;
+//            ItemScriptContainer container = ItemScriptHelper.getItemScriptContainer(object.getItemStack());
+//            ListTag list = new ListTag();
+//            Consumer<NamespacedKey> addRecipe = (recipe) -> {
+//                if (CoreUtilities.equalsIgnoreCase(recipe.getNamespace(), "denizen")) {
+//                    if (container != ItemScriptHelper.recipeIdToItemScript.get(recipe.toString())) {
+//                        return;
+//                    }
+//                }
+//                else if (container != null) {
+//                    return;
+//                }
+//                list.add(recipe.toString());
+//            };
+//            if (type == null || !type.equals("brewing")) {
+//                for (Recipe recipe : Bukkit.getRecipesFor(object.getItemStack())) {
+//                    if (recipe instanceof Keyed keyedRecipe && Utilities.isRecipeOfType(recipe, type)) {
+//                        addRecipe.accept(keyedRecipe.getKey());
+//                    }
+//                }
+//            }
+//            if (Denizen.supportsPaper && NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && (type == null || type.equals("brewing"))) {
+//                for (Map.Entry<NamespacedKey, ItemHelper.BrewingRecipe> entry : NMSHandler.itemHelper.getCustomBrewingRecipes().entrySet()) {
+//                    ItemStack result = entry.getValue().result();
+//                    if (object.getBukkitMaterial() == result.getType() && (object.getItemStack().getDurability() == -1 || object.getItemStack().getDurability() == result.getDurability())) {
+//                        addRecipe.accept(entry.getKey());
+//                    }
+//                }
+//            }
+//            return list;
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.formatted>

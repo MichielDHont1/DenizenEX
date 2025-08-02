@@ -1,9 +1,8 @@
 package com.denizenscript.denizen.nms.interfaces;
 
 import com.denizenscript.denizen.scripts.containers.core.EnchantmentScriptContainer;
-import org.bukkit.enchantments.Enchantment;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.event.entity.EntityDamageEvent;
+
 
 public class EnchantmentHelper {
 

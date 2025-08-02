@@ -1,6 +1,7 @@
 package com.denizenscript.denizen.nms.util;
 
 
+import com.denizenscript.denizen.utilities.NamespacedKey;
 import net.minecraft.world.item.ItemStack;
 
 public class Advancement {

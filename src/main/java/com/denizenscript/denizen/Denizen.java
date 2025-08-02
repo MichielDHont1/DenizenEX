@@ -27,7 +27,6 @@ import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.*;
 //import com.denizenscript.denizen.utilities.blocks.FullBlockData;
 import com.denizenscript.denizen.utilities.Persistence.PersistentDataCapability;
-import com.denizenscript.denizen.utilities.Persistence.PersistentDataStorage;
 import com.denizenscript.denizen.utilities.command.*;
 import com.denizenscript.denizen.utilities.command.manager.CommandManager;
 import com.denizenscript.denizen.utilities.command.manager.Injector;
@@ -133,8 +132,6 @@ public class Denizen {
         instance = this;
         try {
             versionTag = ModLoadingContext.get().getActiveContainer().getModInfo().getVersion().getQualifier();
-            CapabilityManager.INSTANCE.register(PersistentDataCapability.class, PersistentDataStorage);
-
             CoreUtilities.noDebugContext = new BukkitTagContext(null, /*null,*/ null, false, null);
             CoreUtilities.noDebugContext.showErrors = () -> false;
             CoreUtilities.basicContext = new BukkitTagContext(null, /*null,*/  null, true, null);

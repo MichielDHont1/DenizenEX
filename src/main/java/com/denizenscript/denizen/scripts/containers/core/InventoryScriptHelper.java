@@ -6,35 +6,36 @@ import com.denizenscript.denizen.objects.InventoryTag;
 import com.denizenscript.denizen.utilities.Settings;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.objects.core.ScriptTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 
 import net.minecraft.world.entity.player.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.inventory.Inventory;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.*;
 
-public class InventoryScriptHelper implements Listener {
+@Mod.EventBusSubscriber(modid = "denizenex", bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class InventoryScriptHelper {
 
-    public static boolean isPersonalSpecialInv(InventoryType type) {
-        return type == InventoryType.ANVIL || type == InventoryType.WORKBENCH;
-    }
+//    public static boolean isPersonalSpecialInv(InventoryType type) {
+//        return type == InventoryType.ANVIL || type == InventoryType.WORKBENCH;
+//    }
 
-    public static boolean isPersonalSpecialInv(Inventory inv) {
-        return isPersonalSpecialInv(inv.getType());
-    }
+//    public static boolean isPersonalSpecialInv(Inventory inv) {
+//        return isPersonalSpecialInv(inv.getType());
+//    }
 
-    public static Map<InventoryMenu, InventoryTag> notedInventories = new HashMap<>();
+    public static Map<Container, InventoryTag> notedInventories = new HashMap<>();
+
+    public static Map<AbstractContainerMenu, InventoryTag> notedMenus = new HashMap<>();
 
     public static HashMap<String, InventoryScriptContainer> inventoryScripts = new HashMap<>();
-
-    public InventoryScriptHelper() {
-        Denizen.getInstance().getServer().getPluginManager().registerEvents(this, Denizen.getInstance());
-    }
 
     private final static List<UUID> toClearOfflinePlayers = new ArrayList<>();
 
@@ -59,15 +60,17 @@ public class InventoryScriptHelper implements Listener {
         toClearOfflinePlayers.clear();
     }
 
-    @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
-        ImprovedOfflinePlayer.invalidateNow(event.getPlayer().getUniqueId());
+    @SubscribeEvent
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        ImprovedOfflinePlayer.invalidateNow(event.getPlayer().getUUID());
     }
 
-    public static HashSet<ClickType> allowedClicks = new HashSet<>(Arrays.asList(ClickType.CONTROL_DROP, ClickType.CREATIVE, ClickType.DROP, ClickType.LEFT,
-            ClickType.MIDDLE, ClickType.NUMBER_KEY, ClickType.RIGHT, ClickType.WINDOW_BORDER_LEFT, ClickType.WINDOW_BORDER_RIGHT));
+    public static HashSet<ClickType> allowedClicks = new HashSet<>(Arrays.asList(
 
-    public static boolean isGUI(Inventory inv) {
+            ClickType.CLONE, ClickType.PICKUP, ClickType.PICKUP_ALL, ClickType.QUICK_CRAFT,
+            ClickType.QUICK_MOVE, ClickType.SWAP, ClickType.THROW));
+
+    public static boolean isGUI(AbstractContainerMenu inv) {
         InventoryTag inventory = InventoryTag.mirrorBukkitInventory(inv);
         if (inventory.getIdHolder() instanceof ScriptTag) {
             if (((InventoryScriptContainer) ((ScriptTag) inventory.getIdHolder()).getContainer()).gui) {
@@ -77,41 +80,54 @@ public class InventoryScriptHelper implements Listener {
         return false;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlayerClicks(InventoryClickEvent event) {
-        if (event.getRawSlot() >= event.getInventory().getSize() || event.getRawSlot() < 0) {
-            if (allowedClicks.contains(event.getClick())) {
-                return;
-            }
-        }
-        if (isGUI(event.getInventory())) {
-            event.setCancelled(true);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Denizen.getInstance(), () -> {
-                ((Player) event.getWhoClicked()).updateInventory();
-            }, 1);
-        }
-    }
+    //todo
+//    public static boolean isGUI(Container inv) {
+//        InventoryTag inventory = InventoryTag.mirrorBukkitInventory(inv);
+//        if (inventory.getIdHolder() instanceof ScriptTag) {
+//            if (((InventoryScriptContainer) ((ScriptTag) inventory.getIdHolder()).getContainer()).gui) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlayerDrags(InventoryDragEvent event) {
-        if (isGUI(event.getInventory())) {
-            boolean anyInTop = false;
-            for (int slot : event.getRawSlots()) {
-                if (slot < event.getInventory().getSize()) {
-                    anyInTop = true;
-                    break;
-                }
-            }
-            if (anyInTop) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlayerCloses(InventoryCloseEvent event) {
-        if (isPersonalSpecialInv(event.getInventory()) && isGUI(event.getInventory())) {
-            event.getInventory().clear();
-        }
-    }
+    //todo maybe requires mixins
+//    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//    public void onPlayerClicks( event) {
+//        if (event.getRawSlot() >= event.getInventory().getSize() || event.getRawSlot() < 0) {
+//            if (allowedClicks.contains(event.getClick())) {
+//                return;
+//            }
+//        }
+//        if (isGUI(event.getInventory())) {
+//            event.setCancelled(true);
+//            Bukkit.getScheduler().scheduleSyncDelayedTask(Denizen.getInstance(), () -> {
+//                ((Player) event.getWhoClicked()).updateInventory();
+//            }, 1);
+//        }
+//    }
+//
+//    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+//    public void onPlayerDrags(InventoryDragEvent event) {
+//        if (isGUI(event.getInventory())) {
+//            boolean anyInTop = false;
+//            for (int slot : event.getRawSlots()) {
+//                if (slot < event.getInventory().getSize()) {
+//                    anyInTop = true;
+//                    break;
+//                }
+//            }
+//            if (anyInTop) {
+//                event.setCancelled(true);
+//            }
+//        }
+//    }
+//
+     //todo look into what this does
+//    @SubscribeEvent(priority = EventPriority.HIGH)
+//    public void onPlayerCloses(PlayerContainerEvent.Close event) {
+//        if (isPersonalSpecialInv(event.getContainer()) && isGUI(event.getContainer())) {
+//            event.getContainer().cl();
+//        }
+//    }
 }

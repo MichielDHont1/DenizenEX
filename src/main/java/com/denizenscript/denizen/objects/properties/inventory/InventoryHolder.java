@@ -6,7 +6,6 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ScriptTag;
 import com.denizenscript.denizencore.objects.properties.ObjectProperty;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.event.inventory.InventoryType;
 
 public class InventoryHolder extends ObjectProperty<InventoryTag, ObjectTag> {
 
@@ -17,7 +16,7 @@ public class InventoryHolder extends ObjectProperty<InventoryTag, ObjectTag> {
     @Override
     public ObjectTag getPropertyValue() {
         ObjectTag holder = object.getIdHolder();
-        if (holder == null || (object.getIdType().equals("generic") && object.getInventoryType() == InventoryType.CHEST)) {
+        if (holder == null || (object.getIdType().equals("generic")/* && object.getInventoryType() == InventoryType.CHEST*/)) {
             return null;
         }
         else {

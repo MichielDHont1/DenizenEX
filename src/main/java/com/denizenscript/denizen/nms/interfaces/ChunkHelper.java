@@ -1,9 +1,7 @@
 package com.denizenscript.denizen.nms.interfaces;
 
-import com.denizenscript.denizen.nms.abstracts.BiomeNMS;
+//import com.denizenscript.denizen.nms.abstracts.BiomeNMS;
 import net.minecraft.world.level.Level;
-import org.bukkit.Chunk;
-import org.bukkit.World;
 
 public interface ChunkHelper {
 

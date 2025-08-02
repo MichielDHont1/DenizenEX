@@ -390,14 +390,14 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         }
     }
 
-//    public InventoryTag getInventory() {
-//        if (isOnline()) {
-//            return InventoryTag.mirrorBukkitInventory(getPlayerEntity().getInventory());
-//        }
-//        else {
-//            return new InventoryTag(getNBTEditor());
-//        }
-//    }
+    public InventoryTag getInventory() {
+        if (isOnline()) {
+            return InventoryTag.mirrorBukkitInventory(getPlayerEntity().getInventory());
+        }
+        else {
+            return new InventoryTag(getNBTEditor());
+        }
+    }
 //todo find correct menutype for workbench
     public CraftingMenu getBukkitWorkbench() {
         if (isOnline())
@@ -411,26 +411,26 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         return null;
     }
 
-//    public InventoryTag getWorkbench() {
-//        if (isOnline()) {
-//            CraftingMenu workbench = getBukkitWorkbench();
-//            if (workbench != null) {
-//                //todo fix inventoryholder
-//                return new InventoryTag(workbench, getPlayerEntity());
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public InventoryTag getEnderChest() {
-//        if (isOnline()) {
-//            //todo fix inventoryholder
-//            return new InventoryTag(getPlayerEntity().getEnderChestInventory(), getPlayerEntity());
-//        }
-//        else {
-//            return new InventoryTag(getNBTEditor(), true);
-//        }
-//    }
+    public InventoryTag getWorkbench() {
+        if (isOnline()) {
+            CraftingMenu workbench = getBukkitWorkbench();
+            if (workbench != null) {
+                //todo fix inventoryholder
+                return new InventoryTag(workbench, getPlayerEntity());
+            }
+        }
+        return null;
+    }
+
+    public InventoryTag getEnderChest() {
+        if (isOnline()) {
+            //todo fix inventoryholder
+            return new InventoryTag(getPlayerEntity().getEnderChestInventory(), getPlayerEntity());
+        }
+        else {
+            return new InventoryTag(getNBTEditor(), true);
+        }
+    }
 
     public WorldTag getWorldTag() {
         if (isOnline()) {

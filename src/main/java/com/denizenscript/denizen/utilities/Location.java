@@ -119,6 +119,11 @@ public class Location implements Cloneable {
         return this.world.getBlockState(new BlockPos(x, y, z)).getBlock();
     }
 
+    public BlockPos getBlockPos()
+    {
+        return new BlockPos(getBlockX(), getBlockY(), getBlockY());
+    }
+
     public BlockState getBlockState()
     {
         return this.world.getBlockState(new BlockPos(x, y, z));

@@ -41,10 +41,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractChestBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CommandBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -576,25 +580,36 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         return Math.pow(getX() - loc2.getX(), 2) + Math.pow(getY() - loc2.getY(), 2) + Math.pow(getZ() - loc2.getZ(), 2);
     }
 
-//    public Inventory getBukkitInventory() {
-//        BlockState state = getBlockState();
-//        if (state instanceof InventoryHolder) {
-//            return((InventoryHolder) state).getInventory();
-//        }
-//        return null;
-//    }
+    public AbstractContainerMenu getBukkitInventory() {
+        BlockEntity blockEntity = world.getBlockEntity(getBlockPos());
+        if (blockEntity != null)
+        {
+            //todo change methods that actually show the inventory
+            if (blockEntity instanceof ChestBlockEntity)
+            {
+//                ((ChestBlockEntity)blockEntity).cr
+            }
+//            return(blockEntity.get();
+        }
+        else {
+            return null;
+        }
+        return null;
+    }
 //todo
-//    public InventoryTag getInventory() {
-//        Inventory inv = getBukkitInventory();
-//        if (inv != null) {
-//            return InventoryTag.mirrorBukkitInventory(inv);
-//        }
-//        Material type = getBlock().getType();
-//        if (type == Material.ANVIL || type == Material.CHIPPED_ANVIL || type == Material.DAMAGED_ANVIL) {
-//            return new InventoryTag(Bukkit.createInventory(null, InventoryType.ANVIL), "location", this.clone());
-//        }
-//        return null;
-//    }
+    public InventoryTag getInventory() {
+        AbstractContainerMenu inv = getBukkitInventory();
+        if (inv != null) {
+            return InventoryTag.mirrorBukkitInventory(inv);
+        }
+
+        Block type = getBlock();
+        if (type == Blocks.ANVIL || type == Blocks.CHIPPED_ANVIL || type == Blocks.DAMAGED_ANVIL) {
+            //todo implement anvil inventory
+            //            return new InventoryTag(Bukkit.createInventory(null, InventoryType.ANVIL), "location", this.clone());
+        }
+        return null;
+    }
 
     //todo
 //    public BlockFace getSkullBlockFace(int rotation) {

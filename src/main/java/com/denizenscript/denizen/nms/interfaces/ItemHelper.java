@@ -6,9 +6,13 @@ import com.denizenscript.denizen.nms.util.PlayerProfile;
 import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 import com.denizenscript.denizen.nms.util.jnbt.Tag;
 import com.denizenscript.denizen.objects.ItemTag;
+import com.denizenscript.denizen.utilities.NamespacedKey;
 import com.denizenscript.denizen.utilities.nbt.CustomNBT;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.google.gson.JsonObject;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.player.Player;
@@ -21,23 +25,26 @@ import java.util.function.Consumer;
 
 public abstract class ItemHelper {
 
-    public abstract void setMaxStackSize(Material material, int size);
 
-    public abstract Integer burnTime(Material material);
+
+    //todo materials
+//    public abstract void setMaxStackSize(Material material, int size);
+//
+//    public abstract Integer burnTime(Material material);
 
     public abstract void registerStonecuttingRecipe(String keyName, String group, ItemStack result, ItemStack[] ingredient, boolean exact);
 
     public abstract void registerFurnaceRecipe(String keyName, String group, ItemStack result, ItemStack[] ingredient, float exp, int time, String type, boolean exact, String category);
 
     public abstract void registerShapelessRecipe(String keyName, String group, ItemStack result, List<ItemStack[]> ingredients, boolean[] exact, String category);
-
-    public abstract void setShapedRecipeIngredient(ShapedRecipe recipe, char c, ItemStack[] item, boolean exact);
+//todo recipe
+//    public abstract void setShapedRecipeIngredient(ShapedRecipe recipe, char c, ItemStack[] item, boolean exact);
 
     public abstract String getJsonString(ItemStack itemStack);
 
-    public String getLegacyHoverNbt(ItemTag item) { // TODO: once 1.20 is the minimum supported version, remove this
-        return item.getItemMeta().getAsString();
-    }
+//    public String getLegacyHoverNbt(ItemTag item) { // TODO: once 1.20 is the minimum supported version, remove this
+//        return item.getItemMeta().getAsString();
+//    }
 
     public JsonObject getRawHoverComponentsJson(ItemStack item) {
         throw new UnsupportedOperationException();
@@ -74,7 +81,7 @@ public abstract class ItemHelper {
         return nbt != null && nbt.getValue().get("EntityTag") instanceof CompoundTag entityNbt ? entityNbt : null;
     }
 
-    public ItemStack setEntityData(ItemStack item, CompoundTag entityNbt, EntityType entityType) { // TODO: once 1.20 is the minimum supported version, remove default impl
+    public ItemStack setEntityData(ItemStack item, CompoundTag entityNbt, EntityType<?> entityType) { // TODO: once 1.20 is the minimum supported version, remove default impl
         boolean shouldRemove = entityNbt == null || entityNbt.isEmpty();
         CompoundTag nbt = getNbtData(item);
         if (shouldRemove && !nbt.containsKey("EntityTag")) {
@@ -88,28 +95,28 @@ public abstract class ItemHelper {
         }
         return setNbtData(item, nbt);
     }
-
-    public List<Material> getCanPlaceOn(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
-        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON);
-    }
-
-    public ItemStack setCanPlaceOn(ItemStack item, List<Material> canPlaceOn) { // TODO: once 1.20 is the minimum supported version, remove default impl
-        if (canPlaceOn == null) {
-            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_PLACE_ON);
-        }
-        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON, canPlaceOn);
-    }
-
-    public List<Material> getCanBreak(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
-        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY);
-    }
-
-    public ItemStack setCanBreak(ItemStack item, List<Material> canBreak) { // TODO: once 1.20 is the minimum supported version, remove default impl
-        if (canBreak == null) {
-            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_DESTROY);
-        }
-        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY, canBreak);
-    }
+//todo materials
+//    public List<Material> getCanPlaceOn(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
+//        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON);
+//    }
+//
+//    public ItemStack setCanPlaceOn(ItemStack item, List<Material> canPlaceOn) { // TODO: once 1.20 is the minimum supported version, remove default impl
+//        if (canPlaceOn == null) {
+//            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_PLACE_ON);
+//        }
+//        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON, canPlaceOn);
+//    }
+//
+//    public List<Material> getCanBreak(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
+//        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY);
+//    }
+//
+//    public ItemStack setCanBreak(ItemStack item, List<Material> canBreak) { // TODO: once 1.20 is the minimum supported version, remove default impl
+//        if (canBreak == null) {
+//            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_DESTROY);
+//        }
+//        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY, canBreak);
+//    }
 
     public MapTag getRawComponentsPatch(ItemStack item, boolean excludeHandled) {
         throw new UnsupportedOperationException();
@@ -121,7 +128,7 @@ public abstract class ItemHelper {
 
     public abstract void registerSmithingRecipe(String keyName, ItemStack result, ItemStack[] baseItem, boolean baseExact, ItemStack[] upgradeItem, boolean upgradeExact, ItemStack[] templateItem, boolean templateExact);
 
-    public abstract void setInventoryItem(Inventory inventory, ItemStack item, int slot);
+    public abstract void setInventoryItem(Container inventory, ItemStack item, int slot);
 
     public abstract String getDisplayName(ItemTag item);
 
@@ -141,48 +148,49 @@ public abstract class ItemHelper {
 
     public abstract boolean isValidMix(ItemStack input, ItemStack ingredient);
 
-    public record BrewingRecipe(RecipeChoice input, RecipeChoice ingredient, ItemStack result) {}
+    //todo recipes
+//    public record BrewingRecipe(RecipeChoice input, RecipeChoice ingredient, ItemStack result) {}
+//
+//    public Map<NamespacedKey, BrewingRecipe> getCustomBrewingRecipes() {
+//        throw new UnsupportedOperationException();
+//    }
 
-    public Map<NamespacedKey, BrewingRecipe> getCustomBrewingRecipes() {
-        throw new UnsupportedOperationException();
-    }
+//    public byte[] renderMap(MapView mapView, Player player) {
+//        throw new UnsupportedOperationException();
+//    }
 
-    public byte[] renderMap(MapView mapView, Player player) {
-        throw new UnsupportedOperationException();
-    }
+//    public int getFoodPoints(Material itemType) {
+//        throw new UnsupportedOperationException();
+//    }
 
-    public int getFoodPoints(Material itemType) {
-        throw new UnsupportedOperationException();
-    }
+//    public DyeColor getShieldColor(ItemStack item) { // TODO: once 1.21 is the minimum supported version, remove from NMS
+//        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
+//            return ((ShieldMeta) item.getItemMeta()).getBaseColor();
+//        }
+//        // TODO: once 1.20 is the minimum supported version, remove legacy code ↓
+//        BlockStateMeta stateMeta = (BlockStateMeta) item.getItemMeta();
+//        return stateMeta.hasBlockState() ? ((Banner) stateMeta.getBlockState()).getBaseColor() : null;
+//    }
 
-    public DyeColor getShieldColor(ItemStack item) { // TODO: once 1.21 is the minimum supported version, remove from NMS
-        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
-            return ((ShieldMeta) item.getItemMeta()).getBaseColor();
-        }
-        // TODO: once 1.20 is the minimum supported version, remove legacy code ↓
-        BlockStateMeta stateMeta = (BlockStateMeta) item.getItemMeta();
-        return stateMeta.hasBlockState() ? ((Banner) stateMeta.getBlockState()).getBaseColor() : null;
-    }
-
-    public ItemStack setShieldColor(ItemStack item, DyeColor color) { // TODO: once 1.21 is the minimum supported version, remove from NMS
-        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
-            ShieldMeta shieldMeta = (ShieldMeta) item.getItemMeta();
-            shieldMeta.setBaseColor(color);
-            item.setItemMeta(shieldMeta);
-            return item;
-        }
-        // TODO: once 1.20 is the minimum supported version, remove legacy code ↓
-        if (color == null) {
-            CompoundTag noStateNbt = getNbtData(item).createBuilder().remove("BlockEntityTag").build();
-            return setNbtData(item, noStateNbt);
-        }
-        BlockStateMeta stateMeta = (BlockStateMeta) item.getItemMeta();
-        Banner banner = (Banner) stateMeta.getBlockState();
-        banner.setBaseColor(color);
-        stateMeta.setBlockState(banner);
-        item.setItemMeta(stateMeta);
-        return item;
-    }
+//    public ItemStack setShieldColor(ItemStack item, DyeColor color) { // TODO: once 1.21 is the minimum supported version, remove from NMS
+//        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
+//            ShieldMeta shieldMeta = (ShieldMeta) item.getItemMeta();
+//            shieldMeta.setBaseColor(color);
+//            item.setItemMeta(shieldMeta);
+//            return item;
+//        }
+//        // TODO: once 1.20 is the minimum supported version, remove legacy code ↓
+//        if (color == null) {
+//            CompoundTag noStateNbt = getNbtData(item).createBuilder().remove("BlockEntityTag").build();
+//            return setNbtData(item, noStateNbt);
+//        }
+//        BlockStateMeta stateMeta = (BlockStateMeta) item.getItemMeta();
+//        Banner banner = (Banner) stateMeta.getBlockState();
+//        banner.setBaseColor(color);
+//        stateMeta.setBlockState(banner);
+//        item.setItemMeta(stateMeta);
+//        return item;
+//    }
 
     public void blockRecipeFinalization() {
     }
@@ -190,9 +198,9 @@ public abstract class ItemHelper {
     public void restoreRecipeFinalization() {
     }
 
-    public void removeRecipes(List<NamespacedKey> keys) {
-    }
-
-    public void registerOtherRecipe(org.bukkit.inventory.Recipe recipe) {
-    }
+//    public void removeRecipes(List<NamespacedKey> keys) {
+//    }
+//todo recipes
+//    public void registerOtherRecipe(org.bukkit.inventory.Recipe recipe) {
+//    }
 }

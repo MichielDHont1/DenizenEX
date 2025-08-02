@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Arrays;
 import java.util.HashSet;
 
-//@Mod.EventBusSubscriber(modid = "denizenex", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = "denizenex", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerBreaksBlockScriptEvent extends BukkitScriptEvent {
 
     // <--[event]
