@@ -24,13 +24,16 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 
 public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
 
@@ -74,9 +77,9 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
             return null;
         }
         string = string.replace("w@", "");
-        World returnable = null;
-        for (World world : Bukkit.getWorlds()) {
-            if (world.getName().equalsIgnoreCase(string)) {
+        Level returnable = null;
+        for (Level world : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
+            if (world.dimension().location().toString().equalsIgnoreCase(string)) {
                 returnable = world;
             }
         }
@@ -91,9 +94,9 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
 
     public static boolean matches(String arg) {
         arg = arg.replace("w@", "");
-        World returnable = null;
-        for (World world : Bukkit.getWorlds()) {
-            if (world.getName().equalsIgnoreCase(arg)) {
+        Level returnable = null;
+        for (Level world : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
+            if (world.dimension().location().toString().equalsIgnoreCase(arg)) {
                 returnable = world;
             }
         }
@@ -115,17 +118,24 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         return "is the world loaded?";
     }
 
-    public World getWorld() {
-        return Bukkit.getWorld(world_name);
+    public Level getWorld() {
+        for (Level level : ServerLifecycleHooks.getCurrentServer().getAllLevels())
+        {
+            if (level.toString().equals(world_name))
+            {
+                return level;
+            }
+        }
+        return null;
     }
 
     public String getName() {
         return world_name;
     }
-
-    public List<Entity> getEntities() {
-        return getWorld().getEntities();
-    }
+//todo
+//    public List<Entity> getEntities() {
+//        return getWorld().getEntities();
+//    }
 
     public List<Entity> getEntitiesForTag() {
         NMSHandler.chunkHelper.changeChunkServerThread(getWorld());
@@ -137,12 +147,12 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         }
     }
 
-    public final Collection<Entity> getPossibleEntitiesForBoundary(BoundingBox box) {
+    public final Collection<Entity> getPossibleEntitiesForBoundary(AABB box) {
         // Bork-prevention: getNearbyEntities loops over chunks, so for large boxes just get the direct entity list, as that's probably better than a loop over unloaded chunks
         if (box.getWidthX() > 512 || box.getWidthZ() > 512) {
             return getWorld().getEntities();
         }
-        return getWorld().getNearbyEntities(box);
+        return getWorld().getNear-byEntities(box);
     }
 
     public Collection<Entity> getPossibleEntitiesForBoundaryForTag(BoundingBox box) {
@@ -165,15 +175,9 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         }
     }
 
-    public <T> T getGameRuleOrDefault(GameRule<T> gameRule) {
-        World world = getWorld();
-        T value = world.getGameRuleValue(gameRule);
-        if (value == null) {
-            value = world.getGameRuleDefault(gameRule);
-            if (value == null) {
-                throw new IllegalStateException("World " + world_name + " contains no GameRule " + gameRule.getName());
-            }
-        }
+    public <T extends GameRules.Value<T>> T getGameRuleOrDefault(GameRules.Key<T> gameRule) {
+        Level world = getWorld();
+        T value = world.getGameRules().getRule(gameRule);
         return value;
     }
 
@@ -196,7 +200,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         else {
             this.prefix = prefix;
         }
-        this.world_name = world.getName();
+        this.world_name = world.dimension().location().toString();
     }
 
     @Override

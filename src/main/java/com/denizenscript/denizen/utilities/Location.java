@@ -3,6 +3,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.PositionImpl;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,6 +46,17 @@ public class Location implements Cloneable {
         YRotation = 0;
     }
 
+    public Location (Entity entity)
+    {
+        x = entity.getX();
+        y = entity.getY();
+        z = entity.getZ();
+        XRotation = entity.getXRot();
+        YRotation = entity.getYRot();
+        world = entity.getLevel();
+
+    }
+
     public Location(Vec3 vector)
     {
         x = vector.x();
@@ -74,6 +86,11 @@ public class Location implements Cloneable {
         clone.YRotation = YRotation;
         clone.world = world;
         return clone;
+    }
+
+    public static double DistanceBetween(Vec3 start, Vec3 end)
+    {
+        return (start.x - end.x) + (start.y - end.y) + (start.z - end.z);
     }
 
     public Location add(double addX, double addY, double addZ)
@@ -224,5 +241,16 @@ public class Location implements Cloneable {
     public int getBlockX()
     {
         return (int)x;
+    }
+
+    public double distance(Location target)
+    {
+        return (this.x - target.x) + (this.y - target.y) + (this.z - target.z);
+    }
+
+    public double distanceSquared (Location target)
+    {
+        double distance = distance(target);
+        return distance * distance;
     }
 }

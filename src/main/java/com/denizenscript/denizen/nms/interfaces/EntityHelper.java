@@ -9,9 +9,17 @@ import com.denizenscript.denizen.utilities.Location;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
+import com.mongodb.Block;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.level.block.SpawnerBlock;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
@@ -20,20 +28,20 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class EntityHelper {
-
-    public static Attribute ATTRIBUTE_ARMOR = Utilities.findBestEnumlike(Attribute.class, "ARMOR", "GENERIC_ARMOR");
-    public static Attribute ATTRIBUTE_STEP_HEIGHT = Utilities.findBestEnumlike(Attribute.class, "STEP_HEIGHT", "GENERIC_STEP_HEIGHT");
-    public static Attribute ATTRIBUTE_MOVEMENT_SPEED = Utilities.findBestEnumlike(Attribute.class, "MOVEMENT_SPEED", "GENERIC_MOVEMENT_SPEED");
-
-    // TODO: once 1.21 is the minimum supported version, remove these
-    public int getBlockHeight(Art art) {
-        return art.getBlockHeight();
-    }
+//todo
+//    public static Attribute ATTRIBUTE_ARMOR = Utilities.findBestEnumlike(Attribute.class, "ARMOR", "GENERIC_ARMOR");
+//    public static Attribute ATTRIBUTE_STEP_HEIGHT = Utilities.findBestEnumlike(Attribute.class, "STEP_HEIGHT", "GENERIC_STEP_HEIGHT");
+//    public static Attribute ATTRIBUTE_MOVEMENT_SPEED = Utilities.findBestEnumlike(Attribute.class, "MOVEMENT_SPEED", "GENERIC_MOVEMENT_SPEED");
 
     // TODO: once 1.21 is the minimum supported version, remove these
-    public int getBlockWidth(Art art) {
-        return art.getBlockWidth();
-    }
+//    public int getBlockHeight(Art art) {
+//        return art.getBlockHeight();
+//    }
+
+    // TODO: once 1.21 is the minimum supported version, remove these
+//    public int getBlockWidth(Art art) {
+//        return art.getBlockWidth();
+//    }
 
     public abstract void setInvisible(Entity entity, boolean invisible);
 
@@ -41,12 +49,12 @@ public abstract class EntityHelper {
 
     public abstract void setPose(Entity entity, Pose pose);
 
-    public void setSneaking(Entity entity, boolean sneak) {
-        if (entity instanceof Player player) {
-            player.setSneaking(sneak);
-        }
-        setPose(entity, sneak ? Pose.SNEAKING : Pose.STANDING);
-    }
+//    public void setSneaking(Entity entity, boolean sneak) {
+//        if (entity instanceof Player player) {
+//            player.setSneaking(sneak);
+//        }
+//        setPose(entity, sneak ? Pose.SNEAKING : Pose.STANDING);
+//    }
 
     public abstract double getDamageTo(LivingEntity attacker, Entity target);
 
@@ -84,114 +92,113 @@ public abstract class EntityHelper {
 
     // Taken from C2 NMS class for less dependency on C2
     public abstract void look(Entity entity, float yaw, float pitch);
+//todo maps
+//    public MapTag mapTrace(LivingEntity inputEntity) {
+//        double range = 200;
+//        Vec3 startVec = inputEntity.getEyePosition();
+//        Vec3 direction = inputEntity.getey();
+//        double bestDist = Double.MAX_VALUE;
+//        ItemFrame best = null;
+//        Vector bestHitPos = null;
+//        BlockFace bestHitFace = null;
+//        for (Entity entity : start.getWorld().getNearbyEntities(start.clone().add(direction.clone().multiply(50)), 100, 100, 100, (e) -> e instanceof ItemFrame itemFrame && itemFrame.getItem().getType() == Material.FILLED_MAP)) {
+//            double centerDist = entity.getLocation().distanceSquared(start);
+//            if (centerDist > bestDist) {
+//                continue;
+//            }
+//            ItemFrame frame = (ItemFrame) entity;
+//            double EXP_RATE = 0.125;
+//            double expandX = 0, expandY = 0, expandZ = 0;
+//            BlockFace face = frame.getFacing();
+//            switch (face) {
+//                case SOUTH, NORTH -> {
+//                    expandX = EXP_RATE;
+//                    expandY = EXP_RATE;
+//                }
+//                case EAST, WEST -> {
+//                    expandZ = EXP_RATE;
+//                    expandY = EXP_RATE;
+//                }
+//                case UP, DOWN -> {
+//                    expandX = EXP_RATE;
+//                    expandZ = EXP_RATE;
+//                }
+//            }
+//            RayTraceResult traced = frame.getBoundingBox().expand(expandX, expandY, expandZ).rayTrace(startVec, direction, range);
+//            if (traced == null || traced.getHitBlockFace() == null || traced.getHitBlockFace() != face) {
+//                continue;
+//            }
+//            bestDist = centerDist;
+//            best = frame;
+//            bestHitPos = traced.getHitPosition();
+//            bestHitFace = face;
+//        }
+//        if (best == null) {
+//            return null;
+//        }
+//        double x = 0;
+//        double y = 0;
+//        double basex = bestHitPos.getX() - Math.floor(bestHitPos.getX());
+//        double basey = bestHitPos.getY() - Math.floor(bestHitPos.getY());
+//        double basez = bestHitPos.getZ() - Math.floor(bestHitPos.getZ());
+//        switch (bestHitFace) {
+//            case NORTH -> {
+//                x = 128f - (basex * 128f);
+//                y = 128f - (basey * 128f);
+//            }
+//            case SOUTH -> {
+//                x = basex * 128f;
+//                y = 128f - (basey * 128f);
+//            }
+//            case WEST -> {
+//                x = basez * 128f;
+//                y = 128f - (basey * 128f);
+//            }
+//            case EAST -> {
+//                x = 128f - (basez * 128f);
+//                y = 128f - (basey * 128f);
+//            }
+//            case UP -> {
+//                x = basex * 128f;
+//                y = basez * 128f;
+//            }
+//            case DOWN -> {
+//                x = basex * 128f;
+//                y = 128f - (basez * 128f);
+//            }
+//        }
+//        MapMeta map = (MapMeta) best.getItem().getItemMeta();
+//        switch (best.getRotation()) {
+//            case CLOCKWISE_45, FLIPPED_45 -> { // 90 deg
+//                double origX = x;
+//                x = y;
+//                y = 128f - origX;
+//            }
+//            case CLOCKWISE, COUNTER_CLOCKWISE -> { // 180 deg
+//                x = 128f - x;
+//                y = 128f - y;
+//            }
+//            case CLOCKWISE_135, COUNTER_CLOCKWISE_45 -> { // 270 deg
+//                double origX2 = x;
+//                x = 128f - y;
+//                y = origX2;
+//            }
+//        }
+//        MapTag result = new MapTag();
+//        result.putObject("x", new ElementTag(Math.round(x)));
+//        result.putObject("y", new ElementTag(Math.round(y)));
+//        result.putObject("entity", new EntityTag(best));
+//        result.putObject("map", new ElementTag(map.hasMapId() ? map.getMapId() : 0));
+//        return result;
+//    }
 
-    public MapTag mapTrace(LivingEntity inputEntity) {
-        double range = 200;
-        Location start = inputEntity.getEyeLocation();
-        Vector startVec = start.toVector();
-        Vector direction = start.getDirection();
-        double bestDist = Double.MAX_VALUE;
-        ItemFrame best = null;
-        Vector bestHitPos = null;
-        BlockFace bestHitFace = null;
-        for (Entity entity : start.getWorld().getNearbyEntities(start.clone().add(direction.clone().multiply(50)), 100, 100, 100, (e) -> e instanceof ItemFrame itemFrame && itemFrame.getItem().getType() == Material.FILLED_MAP)) {
-            double centerDist = entity.getLocation().distanceSquared(start);
-            if (centerDist > bestDist) {
-                continue;
-            }
-            ItemFrame frame = (ItemFrame) entity;
-            double EXP_RATE = 0.125;
-            double expandX = 0, expandY = 0, expandZ = 0;
-            BlockFace face = frame.getFacing();
-            switch (face) {
-                case SOUTH, NORTH -> {
-                    expandX = EXP_RATE;
-                    expandY = EXP_RATE;
-                }
-                case EAST, WEST -> {
-                    expandZ = EXP_RATE;
-                    expandY = EXP_RATE;
-                }
-                case UP, DOWN -> {
-                    expandX = EXP_RATE;
-                    expandZ = EXP_RATE;
-                }
-            }
-            RayTraceResult traced = frame.getBoundingBox().expand(expandX, expandY, expandZ).rayTrace(startVec, direction, range);
-            if (traced == null || traced.getHitBlockFace() == null || traced.getHitBlockFace() != face) {
-                continue;
-            }
-            bestDist = centerDist;
-            best = frame;
-            bestHitPos = traced.getHitPosition();
-            bestHitFace = face;
-        }
-        if (best == null) {
-            return null;
-        }
-        double x = 0;
-        double y = 0;
-        double basex = bestHitPos.getX() - Math.floor(bestHitPos.getX());
-        double basey = bestHitPos.getY() - Math.floor(bestHitPos.getY());
-        double basez = bestHitPos.getZ() - Math.floor(bestHitPos.getZ());
-        switch (bestHitFace) {
-            case NORTH -> {
-                x = 128f - (basex * 128f);
-                y = 128f - (basey * 128f);
-            }
-            case SOUTH -> {
-                x = basex * 128f;
-                y = 128f - (basey * 128f);
-            }
-            case WEST -> {
-                x = basez * 128f;
-                y = 128f - (basey * 128f);
-            }
-            case EAST -> {
-                x = 128f - (basez * 128f);
-                y = 128f - (basey * 128f);
-            }
-            case UP -> {
-                x = basex * 128f;
-                y = basez * 128f;
-            }
-            case DOWN -> {
-                x = basex * 128f;
-                y = 128f - (basez * 128f);
-            }
-        }
-        MapMeta map = (MapMeta) best.getItem().getItemMeta();
-        switch (best.getRotation()) {
-            case CLOCKWISE_45, FLIPPED_45 -> { // 90 deg
-                double origX = x;
-                x = y;
-                y = 128f - origX;
-            }
-            case CLOCKWISE, COUNTER_CLOCKWISE -> { // 180 deg
-                x = 128f - x;
-                y = 128f - y;
-            }
-            case CLOCKWISE_135, COUNTER_CLOCKWISE_45 -> { // 270 deg
-                double origX2 = x;
-                x = 128f - y;
-                y = origX2;
-            }
-        }
-        MapTag result = new MapTag();
-        result.putObject("x", new ElementTag(Math.round(x)));
-        result.putObject("y", new ElementTag(Math.round(y)));
-        result.putObject("entity", new EntityTag(best));
-        result.putObject("map", new ElementTag(map.hasMapId() ? map.getMapId() : 0));
-        return result;
-    }
-
-    public abstract boolean canTrace(World world, Vector start, Vector end);
+//    public abstract boolean canTrace(World world, Vector start, Vector end);
 
     public Location faceLocation(Location from, Location at) {
-        Vector direction = from.toVector().subtract(at.toVector()).normalize();
+        Vec3 direction = from.toVector().subtract(at.toVector()).normalize();
         Location newLocation = from.clone();
-        newLocation.setYaw(180 - (float) Math.toDegrees(Math.atan2(direction.getX(), direction.getZ())));
-        newLocation.setPitch(90 - (float) Math.toDegrees(Math.acos(direction.getY())));
+        newLocation.setYaw(180 - (float) Math.toDegrees(Math.atan2(direction.x(), direction.z())));
+        newLocation.setPitch(90 - (float) Math.toDegrees(Math.acos(direction.y())));
         return newLocation;
     }
 
@@ -206,7 +213,7 @@ public abstract class EntityHelper {
      * @param at   The Location it should be looking at.
      */
     public void faceLocation(Entity from, Location at) {
-        if (from.getWorld() != at.getWorld()) {
+        if (from.getLevel() != at.getWorld()) {
             return;
         }
         if (EntityTag.isPlayer(from)) {
@@ -214,15 +221,24 @@ public abstract class EntityHelper {
                 return;
             }
         }
-        Location origin = from instanceof LivingEntity livingEntity ? livingEntity.getEyeLocation()
-                : new LocationTag(from.getLocation()).getBlockLocation().add(0.5, 0.5, 0.5);
+        //todo verify
+        Location origin;
+        if (from instanceof LivingEntity)
+        {
+            origin = new Location(from.getEyePosition());
+        }
+        else
+        {
+            origin = new LocationTag(new Vec3(from.eyeBlockPosition().getX(), from.eyeBlockPosition().getY(), from.eyeBlockPosition().getZ()).add(0.5, 0.5, 0.5));
+        }
+
         Location rotated = faceLocation(origin, at);
         rotate(from, rotated.getYaw(), rotated.getPitch());
     }
 
     public boolean isFacingLocation(Location from, Location at, float yawLimitDegrees, float pitchLimitDegrees) {
-        Vector direction = from.toVector().subtract(at.toVector()).normalize();
-        float pitch = 90 - (float) Math.toDegrees(Math.acos(direction.getY()));
+        Vec3 direction = from.toVector().subtract(at.toVector()).normalize();
+        float pitch = 90 - (float) Math.toDegrees(Math.acos(direction.y()));
         if (from.getPitch() > pitch + pitchLimitDegrees
                 || from.getPitch() < pitch - pitchLimitDegrees) {
             return false;
@@ -266,7 +282,7 @@ public abstract class EntityHelper {
      * @return Returns a boolean.
      */
     public boolean isFacingLocation(Entity from, Location at, float degreeLimit) {
-        return isFacingLocation(from.getLocation(), at, degreeLimit);
+        return isFacingLocation(new Location(from.getPosition(0)), at, degreeLimit);
     }
 
     /**
@@ -280,7 +296,7 @@ public abstract class EntityHelper {
      * @return Returns a boolean.
      */
     public boolean isFacingEntity(Entity from, Entity at, float degreeLimit) {
-        return isFacingLocation(from.getLocation(), at.getLocation(), degreeLimit);
+        return isFacingLocation(new Location(from.getPosition(0)), new Location(at.getPosition(0)), degreeLimit);
     }
 
     /**
@@ -385,12 +401,12 @@ public abstract class EntityHelper {
     }
 
     public abstract void teleport(Entity entity,  Location loc);
-
-    public abstract void setBoundingBox(Entity entity, BoundingBox box);
-
-    public List<Player> getPlayersThatSee(Entity entity) { // TODO: once 1.20 is the minimum supported version, remove from NMS
-        return List.copyOf(entity.getTrackedBy());
-    }
+//todo
+//    public abstract void setBoundingBox(Entity entity, BoundingBox box);
+//
+//    public List<Player> getPlayersThatSee(Entity entity) { // TODO: once 1.20 is the minimum supported version, remove from NMS
+//        return List.copyOf(entity.getTrackedBy());
+//    }
 
     public void sendAllUpdatePackets(Entity entity) {
         throw new UnsupportedOperationException();
@@ -404,62 +420,62 @@ public abstract class EntityHelper {
         ghast.setCharging(attacking);
     }
 
-    public abstract void setEndermanAngry(Enderman enderman, boolean angry);
-
-    public static EntityDamageEvent fireFakeDamageEvent(Entity target, EntityTag source, Location sourceLoc, EntityDamageEvent.DamageCause cause, float amount) {
-        EntityDamageEvent ede;
-        if (source != null) {
-            ede = new EntityDamageByEntityEvent(source.getBukkitEntity(), target, cause, amount);
-        }
-        else if (sourceLoc != null) {
-            ede = new EntityDamageByBlockEvent(sourceLoc.getBlock(), target, cause, amount);
-        }
-        else {
-            ede = new EntityDamageEvent(target, cause, amount);
-        }
-        Bukkit.getPluginManager().callEvent(ede);
-        return ede;
-    }
-
-    public abstract void damage(LivingEntity target, float amount, EntityTag source, Location sourceLoc, EntityDamageEvent.DamageCause cause);
+    public abstract void setEndermanAngry(EnderMan enderman, boolean angry);
+//todo
+//    public static EntityDamageEvent fireFakeDamageEvent(Entity target, EntityTag source, Location sourceLoc, EntityDamageEvent.DamageCause cause, float amount) {
+//        EntityDamageEvent ede;
+//        if (source != null) {
+//            ede = new EntityDamageByEntityEvent(source.getBukkitEntity(), target, cause, amount);
+//        }
+//        else if (sourceLoc != null) {
+//            ede = new EntityDamageByBlockEvent(sourceLoc.getBlock(), target, cause, amount);
+//        }
+//        else {
+//            ede = new EntityDamageEvent(target, cause, amount);
+//        }
+//        Bukkit.getPluginManager().callEvent(ede);
+//        return ede;
+//    }
+//
+//    public abstract void damage(LivingEntity target, float amount, EntityTag source, Location sourceLoc, EntityDamageEvent.DamageCause cause);
 
     public abstract void setLastHurtBy(LivingEntity mob, LivingEntity damager);
 
-    public abstract void setFallingBlockType(FallingBlock fallingBlock, BlockData block);
+    public abstract void setFallingBlockType(FallingBlockEntity fallingBlock, Block<?> block);
 
-    public abstract EntityTag getMobSpawnerDisplayEntity(CreatureSpawner spawner);
+    public abstract EntityTag getMobSpawnerDisplayEntity(SpawnerBlock spawner);
+//todo private
+//    public void setFireworkLifetime(FireworkRocketEntity firework, int ticks) { // TODO: once minimum version is 1.19, remove from NMS
+//        firework.setMaxLife(ticks);
+//    }
 
-    public void setFireworkLifetime(Firework firework, int ticks) { // TODO: once minimum version is 1.19, remove from NMS
-        firework.setMaxLife(ticks);
-    }
-
-    public int getFireworkLifetime(Firework firework) { // TODO: once minimum version is 1.19, remove from NMS
-        return firework.getMaxLife();
-    }
-
-    public abstract int getInWaterTime(Zombie zombie);
-
-    public abstract void setInWaterTime(Zombie zombie, int ticks);
+//    public int getFireworkLifetime(Firework firework) { // TODO: once minimum version is 1.19, remove from NMS
+//        return firework.getMaxLife();
+//    }
+//todo
+//    public abstract int getInWaterTime(Zombie zombie);
+//
+//    public abstract void setInWaterTime(Zombie zombie, int ticks);
 
     public abstract void setTrackingRange(Entity entity, int range);
+//todo
+//    public abstract boolean isAggressive(Mob mob);
 
-    public abstract boolean isAggressive(Mob mob);
-
-    public abstract void setAggressive(Mob mob, boolean aggressive);
+//    public abstract void setAggressive(Mob mob, boolean aggressive);
 
     public void setUUID(Entity entity, UUID id) {
         throw new UnsupportedOperationException();
     }
 
-    public float getStepHeight(Entity entity) {
-        return entity instanceof LivingEntity livingEntity ? (float) livingEntity.getAttribute(ATTRIBUTE_STEP_HEIGHT).getBaseValue() : 0;
-    }
+//    public float getStepHeight(Entity entity) {
+//        return entity instanceof LivingEntity livingEntity ? (float) livingEntity.getAttribute(ATTRIBUTE_STEP_HEIGHT).getBaseValue() : 0;
+//    }
 
-    public void setStepHeight(Entity entity, float stepHeight) {
-        if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.getAttribute(ATTRIBUTE_STEP_HEIGHT).setBaseValue(stepHeight);
-        }
-    }
+//    public void setStepHeight(Entity entity, float stepHeight) {
+//        if (entity instanceof LivingEntity livingEntity) {
+//            livingEntity.getAttribute(ATTRIBUTE_STEP_HEIGHT).setBaseValue(stepHeight);
+//        }
+//    }
 
     public List<Object> convertInternalEntityDataValues(Entity entity, MapTag internalData) {
         throw new UnsupportedOperationException();
@@ -487,25 +503,25 @@ public abstract class EntityHelper {
         throw new UnsupportedOperationException();
     }
 
-    public static class EntityEntersVehicleScriptEventImpl extends EntityEntersVehicleScriptEvent {
-        @EventHandler
-        public void onEntityMount(EntityMountEvent event) {
-            fire(event, event.getMount());
-        }
-    }
+//    public static class EntityEntersVehicleScriptEventImpl extends EntityEntersVehicleScriptEvent {
+//        @EventHandler
+//        public void onEntityMount(EntityMountEvent event) {
+//            fire(event, event.getMount());
+//        }
+//    }
 
-    public Class<? extends EntityEntersVehicleScriptEvent> getEntersVehicleEventImpl() { // TODO: once 1.20 is the minimum supported version, implement in the ScriptEvent class as usual
-        return EntityEntersVehicleScriptEventImpl.class;
-    }
+//    public Class<? extends EntityEntersVehicleScriptEvent> getEntersVehicleEventImpl() { // TODO: once 1.20 is the minimum supported version, implement in the ScriptEvent class as usual
+//        return EntityEntersVehicleScriptEventImpl.class;
+//    }
 
-    public static class EntityExitsVehicleScriptEventImpl extends EntityExitsVehicleScriptEvent {
-        @EventHandler
-        public void onEntityMount(EntityDismountEvent event) {
-            fire(event, event.getDismounted());
-        }
-    }
-
-    public Class<? extends EntityExitsVehicleScriptEvent> getExitsVehicleEventImpl() { // TODO: once 1.20 is the minimum supported version, implement in the ScriptEvent class as usual
-        return EntityExitsVehicleScriptEventImpl.class;
-    }
+//    public static class EntityExitsVehicleScriptEventImpl extends EntityExitsVehicleScriptEvent {
+//        @EventHandler
+//        public void onEntityMount(EntityDismountEvent event) {
+//            fire(event, event.getDismounted());
+//        }
+//    }
+//
+//    public Class<? extends EntityExitsVehicleScriptEvent> getExitsVehicleEventImpl() { // TODO: once 1.20 is the minimum supported version, implement in the ScriptEvent class as usual
+//        return EntityExitsVehicleScriptEventImpl.class;
+//    }
 }

@@ -1,11 +1,10 @@
 package com.denizenscript.denizen.utilities;
 
-//import com.denizenscript.denizen.nms.NMSHandler;
-//import com.denizenscript.denizen.nms.NMSVersion;
-//import com.denizenscript.denizen.nms.interfaces.BlockHelper;
-//import com.denizenscript.denizen.npc.traits.TriggerTrait;
+import com.denizenscript.denizen.nms.NMSHandler;
+import com.denizenscript.denizen.nms.NMSVersion;
+import com.denizenscript.denizen.nms.interfaces.BlockHelper;
 import com.denizenscript.denizen.objects.*;
-//import com.denizenscript.denizen.objects.properties.material.MaterialDirectional;
+import com.denizenscript.denizen.objects.properties.material.MaterialDirectional;
 //import com.denizenscript.denizen.scripts.commands.world.SignCommand;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
@@ -21,36 +20,45 @@ import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.DebugInternals;
+import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * This class has utility methods for various tasks.
  */
 public class Utilities {
 
-//    public static NamespacedKey parseNamespacedKey(String input) {
-//        input = CoreUtilities.toLowerCase(input);
-//        int colonIndex = input.indexOf(':');
-//        if (colonIndex != -1) {
-//            return new NamespacedKey(input.substring(0, colonIndex), cleanseNamespaceID(input.substring(colonIndex + 1)));
-//        }
-//        else {
-//            return NamespacedKey.minecraft(cleanseNamespaceID(input));
-//        }
-//    }
-//
-//    public static String namespacedKeyToString(NamespacedKey key) {
-//        return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
-//    }
-//
+    public static NamespacedKey parseNamespacedKey(String input) {
+        input = CoreUtilities.toLowerCase(input);
+        int colonIndex = input.indexOf(':');
+        if (colonIndex != -1) {
+            return new NamespacedKey(input.substring(0, colonIndex), cleanseNamespaceID(input.substring(colonIndex + 1)));
+        }
+        else {
+            return NamespacedKey.minecraft(cleanseNamespaceID(input));
+        }
+    }
+
+    public static String namespacedKeyToString(NamespacedKey key) {
+        return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
+    }
+//todo
 //    public static ListTag registryKeys(Registry<?> registry) {
-//        return new ListTag(registry.stream().toList(), keyed -> new ElementTag(namespacedKeyToString(keyed.getKey()), true));
+//        return new ListTag(registry.stream().toList(), keyed -> new ElementTag(namespacedKeyToString(keyed.getkey), true));
 //    }
 
     public static boolean matchesNamespacedKeyButCaseInsensitive(String input) {
@@ -216,8 +224,8 @@ public class Utilities {
             return false;
         }
     }
-
-//    public static BlockFace faceFor(Vector vec) {
+//todo
+//    public static BlockFace faceFor(Vec3 vec) {
 //        for (BlockFace face : BlockFace.values()) {
 //            if (face.getDirection().distanceSquared(vec) < 0.01) { // floating-point safe check
 //                return face;
@@ -249,7 +257,7 @@ public class Utilities {
 //                }
 //            }
 //        }
-
+//
 //        // No safe Locations found
 //        if (locations.isEmpty()) {
 //            return null;
@@ -258,56 +266,56 @@ public class Utilities {
 //        // Return a random Location from the list
 //        return locations.get(CoreUtilities.getRandom().nextInt(locations.size()));
 //    }
-
+//todo private
 //    public static boolean isWalkable(Location location) {
 //        if (location.getBlockY() < 1 || location.getBlockY() > 254) {
 //            return false;
 //        }
 //        BlockHelper blockHelper = NMSHandler.blockHelper;
-//        return location.clone().subtract(0, 1, 0).getBlock().getType().isSolid()
+//        return location.clone().subtract(0, 1, 0).getBlock().().isSolid()
 //                && !location.getBlock().getType().isSolid()
 //                && !location.clone().add(0, 1, 0).getBlock().getType().isSolid();
 //    }
 
     /**
      * @param player the player doing the talking
-     * @param npc    the npc being talked to
+//     * @param npc    the npc being talked to
      * @param range  the range, in blocks, that 'bystanders' will hear he chat
      */
-//    public static void talkToNPC(String message, PlayerTag player, NPCTag npc, double range, ScriptTag script) {
-//        String replacer = String.valueOf((char) 0x04);
-//        // Get formats from Settings, and fill in <TEXT>
-//        String talkFormat = Settings.chatToNpcFormat()
-//                .replaceAll("(?i)<TEXT>", replacer);
-//        String bystanderFormat = Settings.chatToNpcOverheardFormat()
-//                .replaceAll("(?i)<TEXT>", replacer);
-//
-//        // Fill in tags
-//        talkFormat = TagManager.tag(talkFormat, new BukkitTagContext(player, npc, script)).replace(replacer, message);
-//        bystanderFormat = TagManager.tag(bystanderFormat, new BukkitTagContext(player, npc, script)).replace(replacer, message);
-//
-//        // Send message to player
-//        player.getPlayerEntity().sendMessage(talkFormat);
-//
-//        // Send message to bystanders
-//        for (Player target : Bukkit.getOnlinePlayers()) {
-//            if (target != player.getPlayerEntity()) {
-//                if (target.getWorld().equals(player.getPlayerEntity().getWorld())
-//                        && target.getLocation().distance(player.getPlayerEntity().getLocation()) <= range) {
-//                    target.sendMessage(bystanderFormat);
-//                }
-//            }
-//        }
-//    }
+    public static void talkToNPC(String message, PlayerTag player, /*NPCTag npc, */double range, ScriptTag script) {
+        String replacer = String.valueOf((char) 0x04);
+        // Get formats from Settings, and fill in <TEXT>
+        String talkFormat = Settings.chatToNpcFormat()
+                .replaceAll("(?i)<TEXT>", replacer);
+        String bystanderFormat = Settings.chatToNpcOverheardFormat()
+                .replaceAll("(?i)<TEXT>", replacer);
 
-    /**
-     * Finds the closest NPC to a particular location.
-     *
-     * @param location The location to find the closest NPC to.
-     * @param range    The maximum range to look for the NPC.
-     * @return The closest NPC to the location, or null if no NPC was found
-     * within the range specified.
-     */
+        // Fill in tags
+        talkFormat = TagManager.tag(talkFormat, new BukkitTagContext(player, /*npc,*/ script)).replace(replacer, message);
+        bystanderFormat = TagManager.tag(bystanderFormat, new BukkitTagContext(player,/* npc,*/ script)).replace(replacer, message);
+
+        // Send message to player
+        player.getPlayerEntity().sendMessage(new TextComponent(talkFormat), Util.NIL_UUID);
+
+        // Send message to bystanders
+        for (Player target : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
+            if (target != player.getPlayerEntity()) {
+                if (target.getLevel().equals(player.getPlayerEntity().getLevel())
+                        && Location.DistanceBetween(target.getPosition(0), player.getPlayerEntity().getPosition(0)) <= range) {
+                    target.sendMessage(new TextComponent(bystanderFormat), Util.NIL_UUID);
+                }
+            }
+        }
+    }
+
+//    /**
+//     * Finds the closest NPC to a particular location.
+//     *
+//     * @param location The location to find the closest NPC to.
+//     * @param range    The maximum range to look for the NPC.
+//     * @return The closest NPC to the location, or null if no NPC was found
+//     * within the range specified.
+//     */
 //    public static NPCTag getClosestNPC_ChatTrigger(Location location, int range) {
 //        NPC closestNPC = null;
 //        double closestDistance = Math.pow(range, 2);
@@ -329,38 +337,38 @@ public class Utilities {
 //        return new NPCTag(closestNPC);
 //    }
 
-//    public static boolean checkLocationWithBoundingBox(Location baseLocation, Entity entity, double theLeeway) {
-//        if (!checkLocation(baseLocation, entity.getLocation(), theLeeway + 16)) {
-//            return false;
-//        }
-//        BoundingBox box = entity.getBoundingBox();
-//        double x = Math.max(box.getMinX(), Math.min(baseLocation.getX(), box.getMaxX()));
-//        double y = Math.max(box.getMinY(), Math.min(baseLocation.getY(), box.getMaxY()));
-//        double z = Math.max(box.getMinZ(), Math.min(baseLocation.getZ(), box.getMaxZ()));
-//        double xOff = x - baseLocation.getX();
-//        double yOff = y - baseLocation.getY();
-//        double zOff = z - baseLocation.getZ();
-//        return xOff * xOff + yOff * yOff + zOff * zOff < theLeeway * theLeeway;
-//    }
+    public static boolean checkLocationWithBoundingBox(Location baseLocation, Entity entity, double theLeeway) {
+        if (!checkLocation(baseLocation, new Location(entity), theLeeway + 16)) {
+            return false;
+        }
+        AABB box = entity.getBoundingBox();
+        double x = Math.max(box.minX, Math.min(baseLocation.getX(), box.maxX));
+        double y = Math.max(box.minY, Math.min(baseLocation.getY(), box.maxY));
+        double z = Math.max(box.minZ, Math.min(baseLocation.getZ(), box.maxZ));
+        double xOff = x - baseLocation.getX();
+        double yOff = y - baseLocation.getY();
+        double zOff = z - baseLocation.getZ();
+        return xOff * xOff + yOff * yOff + zOff * zOff < theLeeway * theLeeway;
+    }
 
-//    public static boolean checkLocation(LivingEntity entity, Location theLocation, double theLeeway) {
-//        return checkLocation(entity.getLocation(), theLocation, theLeeway);
-//    }
-//
-//    public static boolean checkLocation(Location baseLocation, Location theLocation, double theLeeway) {
-//        if (baseLocation.getWorld() != theLocation.getWorld()) {
-//            return false;
-//        }
-//        return baseLocation.distanceSquared(theLocation) < theLeeway * theLeeway;
-//    }
-//
+    public static boolean checkLocation(LivingEntity entity, Location theLocation, double theLeeway) {
+        return checkLocation(new Location(entity), theLocation, theLeeway);
+    }
+
+    public static boolean checkLocation(Location baseLocation, Location theLocation, double theLeeway) {
+        if (baseLocation.getWorld() != theLocation.getWorld()) {
+            return false;
+        }
+        return baseLocation.distanceSquared(theLocation) < theLeeway * theLeeway;
+    }
+//todo
 //    public static void setSignLines(Sign sign, String[] lines) {
 //        for (int n = 0; n < 4; n++) {
 //            PaperAPITools.instance.setSignLine(sign, n, lines[n]);
 //        }
 //        sign.update();
 //    }
-//
+//todo
 //    public static BlockFace chooseSignRotation(Block signBlock) {
 //        BlockFace[] blockFaces = {BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH};
 //        for (BlockFace blockFace : blockFaces) {
@@ -372,7 +380,7 @@ public class Utilities {
 //        }
 //        return BlockFace.SOUTH;
 //    }
-//
+//todo
 //    public static BlockFace chooseSignRotation(String direction) {
 //        String dirUpper = direction.toUpperCase();
 //        for (BlockFace blockFace : MaterialDirectional.rotatableValidFaces) {
@@ -388,7 +396,7 @@ public class Utilities {
 //        }
 //        return BlockFace.SOUTH;
 //    }
-//
+//todo
 //    public static void setSignRotation(BlockState signState, String direction) {
 //        BlockFace bf = chooseSignRotation(direction);
 //        MaterialTag signMaterial = new MaterialTag(signState.getBlock());
@@ -457,43 +465,43 @@ public class Utilities {
         return (BukkitScriptEntryData) entry.entryData;
     }
 
-//    public static WorldTag entryDefaultWorld(ScriptEntry entry, boolean playerFirst) {
-//        EntityTag entity = entryDefaultEntity(entry, playerFirst);
-//        if (entity == null) {
-//            return new WorldTag(Bukkit.getWorlds().get(0));
-//        }
-//        return new WorldTag(entity.getWorld());
-//    }
-//
-//    public static LocationTag entryDefaultLocation(ScriptEntry entry, boolean playerFirst) {
-//        EntityTag entity = entryDefaultEntity(entry, playerFirst);
-//        if (entity == null) {
-//            return null;
-//        }
-//        return entity.getLocation();
-//    }
-//
-//    public static List<EntityTag> entryDefaultEntityList(ScriptEntry entry, boolean playerFirst) {
-//        EntityTag entity = entryDefaultEntity(entry, playerFirst);
-//        if (entity == null) {
-//            return null;
-//        }
-//        return Collections.singletonList(entity);
-//    }
-//
-//    public static EntityTag entryDefaultEntity(ScriptEntry entry, boolean playerFirst) {
-//        BukkitScriptEntryData entryData = getEntryData(entry);
-//        if (playerFirst && entryData.hasPlayer() && entryData.getPlayer().isOnline()) {
-//            return entryData.getPlayer().getDenizenEntity();
-//        }
+    public static WorldTag entryDefaultWorld(ScriptEntry entry, boolean playerFirst) {
+        EntityTag entity = entryDefaultEntity(entry, playerFirst);
+        if (entity == null) {
+            return new WorldTag(ServerLifecycleHooks.getCurrentServer().getAllLevels().iterator().next());
+        }
+        return new WorldTag(entity.getWorld());
+    }
+
+    public static LocationTag entryDefaultLocation(ScriptEntry entry, boolean playerFirst) {
+        EntityTag entity = entryDefaultEntity(entry, playerFirst);
+        if (entity == null) {
+            return null;
+        }
+        return entity.getLocation();
+    }
+
+    public static List<EntityTag> entryDefaultEntityList(ScriptEntry entry, boolean playerFirst) {
+        EntityTag entity = entryDefaultEntity(entry, playerFirst);
+        if (entity == null) {
+            return null;
+        }
+        return Collections.singletonList(entity);
+    }
+
+    public static EntityTag entryDefaultEntity(ScriptEntry entry, boolean playerFirst) {
+        BukkitScriptEntryData entryData = getEntryData(entry);
+        if (playerFirst && entryData.hasPlayer() && entryData.getPlayer().isOnline()) {
+            return entryData.getPlayer().getDenizenEntity();
+        }
 //        if (entryData.hasNPC() && entryData.getNPC().isSpawned()) {
 //            return entryData.getNPC().getDenizenEntity();
 //        }
-//        if (entryData.hasPlayer() && entryData.getPlayer().isOnline()) {
-//            return entryData.getPlayer().getDenizenEntity();
-//        }
-//        return null;
-//    }
+        if (entryData.hasPlayer() && entryData.getPlayer().isOnline()) {
+            return entryData.getPlayer().getDenizenEntity();
+        }
+        return null;
+    }
 
     public static boolean entryHasPlayer(ScriptEntry entry) {
         return getEntryData(entry).hasPlayer();
@@ -514,14 +522,14 @@ public class Utilities {
 //    public static boolean isLocationYSafe(Location loc) {
 //        return isLocationYSafe(loc.getBlockY(), loc.getWorld());
 //    }
-//
-//    public static boolean isLocationYSafe(double y, World world) {
+//todo
+//    public static boolean isLocationYSafe(double y, Level world) {
 //        if (world == null) {
 //            return true;
 //        }
 //        return y >= world.getMinHeight() && y <= world.getMaxHeight();
 //    }
-//
+//todo material
 //    public static ArrayList<Material> allMaterialsThatMatch(String matcherText) {
 //        ScriptEvent.MatchHelper matcher = ScriptEvent.createMatcher(matcherText);
 //        ArrayList<Material> mats = new ArrayList<>();
@@ -532,44 +540,46 @@ public class Utilities {
 //        }
 //        return mats;
 //    }
-//
-//    // TODO once 1.21 is the minimum supported version, replace with direct registry-based handling
+
+    // TODO once 1.21 is the minimum supported version, replace with direct registry-based handling
 //    public static <T> List<T> listTypesRaw(Class<T> type) {
 //        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && Keyed.class.isAssignableFrom(type)) {
 //            return (List) Bukkit.getRegistry((Class<? extends Keyed>) type).stream().toList();
 //        }
 //        return (List) Arrays.asList(((Class<? extends Enum<?>>) type).getEnumConstants());
 //    }
-
+//
 //    public static ListTag listTypes(Class<?> type) {
 //        return new ListTag(listTypesRaw(type), Utilities::enumlikeToElement);
 //    }
-//
+
 //    public static ListTag listLegacyTypes(Class<? extends Keyed> type) {
 //        List<?> types = NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) ? Bukkit.getRegistry(type).stream().toList() : Arrays.asList(type.getEnumConstants());
 //        return new ListTag(types, Utilities::enumLikeToLegacyElement);
 //    }
-//
-//    public static ElementTag enumlikeToElement(Object val) {
-//        if (val instanceof Enum) {
-//            return new ElementTag(((Enum<?>) val).name());
-//        }
+
+    public static ElementTag enumlikeToElement(Object val) {
+        if (val instanceof Enum) {
+            return new ElementTag(((Enum<?>) val).name());
+        }
+        //todo
 //        if (val instanceof Keyed) {
 //            return new ElementTag(namespacedKeyToString(((Keyed) val).getKey()), true);
 //        }
-//        return new ElementTag(val.toString());
-//    }
-//
-//    public static ElementTag enumLikeToLegacyElement(Object val) {
-//        if (val instanceof Enum<?> enumVal) {
-//            return new ElementTag(enumVal);
-//        }
+        return new ElementTag(val.toString());
+    }
+
+    public static ElementTag enumLikeToLegacyElement(Object val) {
+        if (val instanceof Enum<?> enumVal) {
+            return new ElementTag(enumVal);
+        }
+        //todo
 //        if (val instanceof OldEnum<?> oldEnumVal) {
 //            return new ElementTag(oldEnumVal.name(), true);
 //        }
-//        throw new UnsupportedOperationException("Cannot get legacy name element, value isn't an enum: " + val);
-//    }
-//
+        throw new UnsupportedOperationException("Cannot get legacy name element, value isn't an enum: " + val);
+    }
+//todo
 //    public static <T> T elementToEnumlike(ElementTag element, Class<T> type) {
 //        return elementToEnumlike(element, type, true);
 //    }
@@ -611,7 +621,7 @@ public class Utilities {
 //        }
 //        return converted;
 //    }
-//
+//todo
 //    public static <T> T findBestEnumlike(Class<T> type, String... names) {
 //        for (String name : names) {
 //            T val = elementToEnumlike(new ElementTag(name), type, false);
@@ -625,7 +635,7 @@ public class Utilities {
 //    public static boolean matchesEnumlike(ElementTag element, Class<?> type) {
 //        return elementToEnumlike(element, type, false) != null;
 //    }
-
+//
 //    public static boolean requireEnumlike(Mechanism mechanism, Class<?> type) {
 //        if (!matchesEnumlike(mechanism.getValue(), type)) {
 //            mechanism.echoError("Invalid " + DebugInternals.getClassNameOpti(type) + " specified.");
