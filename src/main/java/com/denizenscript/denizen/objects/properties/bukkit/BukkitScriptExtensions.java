@@ -52,15 +52,16 @@ public class BukkitScriptExtensions {
         // Returns the name of a script step that the player is currently on.
         // Must be an INTERACT script.
         // -->
-        ScriptTag.tagProcessor.registerTag(ElementTag.class, "step", (attribute, script) -> {
-            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getPlayer();
-            if (player != null && player.isValid()) {
-                return new ElementTag(InteractScriptHelper.getCurrentStep(player, script.getContainer().getName()));
-            }
-            else {
-                return null;
-            }
-        });
+        //todo
+//        ScriptTag.tagProcessor.registerTag(ElementTag.class, "step", (attribute, script) -> {
+//            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getPlayer();
+//            if (player != null && player.isValid()) {
+//                return new ElementTag(InteractScriptHelper.getCurrentStep(player, script.getContainer().getName()));
+//            }
+//            else {
+//                return null;
+//            }
+//        });
 
         // <--[tag]
         // @attribute <ScriptTag.step_expiration[(<player>)]>
@@ -68,15 +69,16 @@ public class BukkitScriptExtensions {
         // @description
         // Returns the time that an interact script step expires at, if applied by <@link command zap> with a duration limit.
         // -->
-        ScriptTag.tagProcessor.registerTag(TimeTag.class, "step_expiration", (attribute, script) -> {
-            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getPlayer();
-            if (player != null && player.isValid()) {
-                return InteractScriptHelper.getStepExpiration(player, script.getContainer().getName());
-            }
-            else {
-                return null;
-            }
-        });
+        //todo
+//        ScriptTag.tagProcessor.registerTag(TimeTag.class, "step_expiration", (attribute, script) -> {
+//            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getPlayer();
+//            if (player != null && player.isValid()) {
+//                return InteractScriptHelper.getStepExpiration(player, script.getContainer().getName());
+//            }
+//            else {
+//                return null;
+//            }
+//        });
 
         // <--[tag]
         // @attribute <ScriptTag.default_step>

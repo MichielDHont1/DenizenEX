@@ -5,6 +5,9 @@ import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.utilities.Location;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SkullBlock;
 
 import java.util.Set;
 
@@ -13,32 +16,32 @@ public interface BlockHelper {
 
     void applyPhysics(Location location);
 
-    PlayerProfile getPlayerProfile(Skull skull);
+    PlayerProfile getPlayerProfile(SkullBlock skull);
 
-    void setPlayerProfile(Skull skull, PlayerProfile playerProfile);
+    void setPlayerProfile(SkullBlock skull, PlayerProfile playerProfile);
 
     CompoundTag getNbtData(Block block);
 
     void setNbtData(Block block, CompoundTag compoundTag);
 
-    boolean setBlockResistance(Material material, float resistance);
+    boolean setBlockResistance(Block material, float resistance);
 
-    float getBlockResistance(Material material);
+    float getBlockResistance(Block material);
 
     enum PistonPushReaction {
         NORMAL, DESTROY, BLOCK, IGNORE, PUSH_ONLY;
         public static final PistonPushReaction[] VALUES = values();
     }
 
-    default PistonPushReaction getPushReaction(Material mat) { // TODO: once minimum version is 1.19, remove from NMS
+    default PistonPushReaction getPushReaction(Block mat) { // TODO: once minimum version is 1.19, remove from NMS
         return PistonPushReaction.VALUES[mat.createBlockData().getPistonMoveReaction().ordinal()];
     }
 
-    void setPushReaction(Material mat, PistonPushReaction reaction);
+    void setPushReaction(Block mat, PistonPushReaction reaction);
 
-    float getBlockStrength(Material mat);
+    float getBlockStrength(Block mat);
 
-    void setBlockStrength(Material mat, float strength);
+    void setBlockStrength(Block mat, float strength);
 
     static String getMaterialNameFromBlockData(String text) {
         int openBracket = text.indexOf('[');
@@ -67,7 +70,7 @@ public interface BlockHelper {
 
     void doRandomTick(Location location);
 
-    Instrument getInstrumentFor(Material mat);
+    Instrument getInstrumentFor(Block mat);
 
     default void ringBell(Bell bell) { /// TODO: once minimum version is 1.19, remove from NMS
         bell.ring();

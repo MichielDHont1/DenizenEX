@@ -8,9 +8,7 @@ import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import net.citizensnpcs.trait.Age;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Breedable;
+import net.minecraft.world.entity.AgeableMob;
 
 public class EntityAge extends EntityProperty<ElementTag> {
 
@@ -27,7 +25,7 @@ public class EntityAge extends EntityProperty<ElementTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-        return entity.getBukkitEntity() instanceof Ageable;
+        return entity.getBukkitEntity() instanceof AgeableMob;
     }
 
     public EntityAge(EntityTag entity) {
@@ -36,7 +34,7 @@ public class EntityAge extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(Ageable.class).getAge());
+        return new ElementTag(as(AgeableMob.class).getAge());
     }
 
     @Override
@@ -58,17 +56,18 @@ public class EntityAge extends EntityProperty<ElementTag> {
                 setAge(new ElementTag(input).asInt());
             }
         }
-        if (listHack.size() > 1) {
-            BukkitImplDeprecations.oldAgeLockedControls.warn(mechanism.context);
-            if (!(getEntity() instanceof Breedable breedable)) {
-                return;
-            }
-            switch (CoreUtilities.toLowerCase(listHack.get(1))) {
-                case "locked" -> breedable.setAgeLock(true);
-                case "unlocked" -> breedable.setAgeLock(false);
-                default -> mechanism.echoError("Invalid lock state '" + listHack.get(1) + "': must be 'locked' or 'unlocked'.");
-            }
-        }
+        //todo
+//        if (listHack.size() > 1) {
+//            BukkitImplDeprecations.oldAgeLockedControls.warn(mechanism.context);
+//            if (!(getEntity() instanceof AgeableMob breedable)) {
+//                return;
+//            }
+//            switch (CoreUtilities.toLowerCase(listHack.get(1))) {
+//                case "locked" -> breedable.locka(true);
+//                case "unlocked" -> breedable.setAgeLock(false);
+//                default -> mechanism.echoError("Invalid lock state '" + listHack.get(1) + "': must be 'locked' or 'unlocked'.");
+//            }
+//        }
     }
 
     @Override
@@ -77,12 +76,12 @@ public class EntityAge extends EntityProperty<ElementTag> {
     }
 
     public void setAge(int age) {
-        if (object.isCitizensNPC()) {
-            object.getDenizenNPC().getCitizen().getOrAddTrait(Age.class).setAge(age);
-        }
-        else {
-            as(Ageable.class).setAge(age);
-        }
+//        if (object.isCitizensNPC()) {
+//            object.getDenizenNPC().getCitizen().getOrAddTrait(Age.class).setAge(age);
+//        }
+//        else {
+            as(AgeableMob.class).setAge(age);
+//        }
     }
 
     public static void register() {
@@ -97,7 +96,7 @@ public class EntityAge extends EntityProperty<ElementTag> {
         // If the entity is ageable, returns whether the entity is a baby.
         // -->
         PropertyParser.registerTag(EntityAge.class, ElementTag.class, "is_baby", (attribute, prop) -> {
-            return new ElementTag(!prop.as(Ageable.class).isAdult());
+            return new ElementTag(prop.as(AgeableMob.class).getAge() == 0);
         });
     }
 }

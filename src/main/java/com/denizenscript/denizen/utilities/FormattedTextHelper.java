@@ -13,13 +13,8 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.ReflectionHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.google.gson.Gson;
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.*;
 import com.denizenscript.denizen.utilities.ChatColor;
-//import net.md_5.bungee.api.chat.*;
-//import net.md_5.bungee.chat.ChatVersion;
-//import net.md_5.bungee.chat.ComponentSerializer;
-//import net.md_5.bungee.chat.VersionedComponentSerializer;
 
 import java.util.List;
 
@@ -129,7 +124,7 @@ public class FormattedTextHelper {
 //    public static String stringify(BaseComponent component) {
 //        return stringifySub(component, null);
 //    }
-
+//
 //    public static String stringifySub(BaseComponent component, ChatColor parentColor) {
 //        if (component == null) {
 //            return null;
@@ -864,29 +859,21 @@ public class FormattedTextHelper {
         return message;
     }
 
-//    public static Gson getBungeeGson() {
-//        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
-//            return VersionedComponentSerializer.forVersion(ChatVersion.V1_21_5).getGson();
-//        }
-//        else {
-//            return ReflectionHelper.getFieldValue(ComponentSerializer.class, "gson", null);
-//        }
-//    }
-//
+//todo
 //    static {
 //        // Explicitly before initializing vanillaStyleSpigotComponentGSON
 //        HoverFormatHelper.tryInitializeItemHoverFix();
 //    }
 
 //    public static final Gson vanillaStyleSpigotComponentGSON = getBungeeGson().newBuilder().disableHtmlEscaping().create();
-
+//
 //    public static String componentToJson(BaseComponent[] components) {
 //        if (components.length == 1) {
 //            return vanillaStyleSpigotComponentGSON.toJson(components[0]);
 //        }
 //        return vanillaStyleSpigotComponentGSON.toJson(new TextComponent(components));
 //    }
-//
+
 //    public static BaseComponent[] parseJson(String json) {
 //        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
 //            return VersionedComponentSerializer.forVersion(ChatVersion.V1_21_5).parse(json);

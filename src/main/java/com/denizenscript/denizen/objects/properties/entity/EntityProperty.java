@@ -4,8 +4,8 @@ import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.ObjectProperty;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 
 public abstract class EntityProperty<TData extends ObjectTag> extends ObjectProperty<EntityTag, TData> {
 
@@ -24,7 +24,7 @@ public abstract class EntityProperty<TData extends ObjectTag> extends ObjectProp
         return object.getLivingEntity();
     }
 
-    public EntityType getType() {
+    public EntityType<?> getType() {
         return object.getBukkitEntityType();
     }
 

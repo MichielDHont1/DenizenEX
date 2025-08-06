@@ -6,6 +6,7 @@ import com.denizenscript.denizen.scripts.containers.core.FormatScriptContainer;
 import com.denizenscript.denizen.scripts.containers.core.ItemScriptHelper;
 import com.denizenscript.denizen.tags.core.CustomColorTagBase;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
+import com.denizenscript.denizen.utilities.ChatColor;
 import com.denizenscript.denizen.utilities.FormattedTextHelper;
 import com.denizenscript.denizen.utilities.TextWidthHelper;
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
@@ -16,7 +17,6 @@ import com.denizenscript.denizencore.utilities.AsciiMatcher;
 import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.Deprecations;
-import net.md_5.bungee.api.ChatColor;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -51,10 +51,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerStaticTag(BiomeTag.class, "as_biome", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), BiomeTag.valueOf(object.asString(), attribute.context), "BiomeTag", attribute.hasAlternative());
-        });
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(BiomeTag.class, "as_biome", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), BiomeTag.valueOf(object.asString(), attribute.context), "BiomeTag", attribute.hasAlternative());
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.as_chunk>
@@ -64,10 +65,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerTag(ChunkTag.class, "as_chunk", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), ChunkTag.valueOf(object.asString(), attribute.context), "ChunkTag", attribute.hasAlternative());
-        }, "aschunk");
+        //todo
+//        ElementTag.tagProcessor.registerTag(ChunkTag.class, "as_chunk", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), ChunkTag.valueOf(object.asString(), attribute.context), "ChunkTag", attribute.hasAlternative());
+//        }, "aschunk");
 
         // <--[tag]
         // @attribute <ElementTag.as_color>
@@ -90,10 +92,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerTag(CuboidTag.class, "as_cuboid", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), CuboidTag.valueOf(object.asString(), attribute.context), "CuboidTag", attribute.hasAlternative());
-        }, "ascuboid");
+        //todo
+//        ElementTag.tagProcessor.registerTag(CuboidTag.class, "as_cuboid", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), CuboidTag.valueOf(object.asString(), attribute.context), "CuboidTag", attribute.hasAlternative());
+//        }, "ascuboid");
 
         // <--[tag]
         // @attribute <ElementTag.as_ellipsoid>
@@ -103,10 +106,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerTag(EllipsoidTag.class, "as_ellipsoid", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), EllipsoidTag.valueOf(object.asString(), attribute.context), "EllipsoidTag", attribute.hasAlternative());
-        });
+        //todo
+//        ElementTag.tagProcessor.registerTag(EllipsoidTag.class, "as_ellipsoid", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), EllipsoidTag.valueOf(object.asString(), attribute.context), "EllipsoidTag", attribute.hasAlternative());
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.as_enchantment>
@@ -116,10 +120,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerStaticTag(EnchantmentTag.class, "as_enchantment", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), EnchantmentTag.valueOf(object.asString(), attribute.context), "EnchantmentTag", attribute.hasAlternative());
-        });
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(EnchantmentTag.class, "as_enchantment", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), EnchantmentTag.valueOf(object.asString(), attribute.context), "EnchantmentTag", attribute.hasAlternative());
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.as_entity>
@@ -194,10 +199,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerTag(NPCTag.class, "as_npc", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), NPCTag.valueOf(object.asString(), attribute.context), "NPCTag", attribute.hasAlternative());
-        }, "asnpc");
+        //todo
+//        ElementTag.tagProcessor.registerTag(NPCTag.class, "as_npc", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), NPCTag.valueOf(object.asString(), attribute.context), "NPCTag", attribute.hasAlternative());
+//        }, "asnpc");
 
         // <--[tag]
         // @attribute <ElementTag.as_player>
@@ -220,10 +226,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerStaticTag(PluginTag.class, "as_plugin", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), PluginTag.valueOf(object.asString(), attribute.context), "PluginTag", attribute.hasAlternative());
-        }, "asplugin");
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(PluginTag.class, "as_plugin", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), PluginTag.valueOf(object.asString(), attribute.context), "PluginTag", attribute.hasAlternative());
+//        }, "asplugin");
 
         // <--[tag]
         // @attribute <ElementTag.as_polygon>
@@ -233,10 +240,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerTag(PolygonTag.class, "as_polygon", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), PolygonTag.valueOf(object.asString(), attribute.context), "PolygonTag", attribute.hasAlternative());
-        });
+        //todo
+//        ElementTag.tagProcessor.registerTag(PolygonTag.class, "as_polygon", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), PolygonTag.valueOf(object.asString(), attribute.context), "PolygonTag", attribute.hasAlternative());
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.as_trade>
@@ -246,10 +254,11 @@ public class BukkitElementExtensions {
         // @description
         // Deprecated in favor of <@link tag ObjectTag.as>
         // -->
-        ElementTag.tagProcessor.registerStaticTag(TradeTag.class, "as_trade", (attribute, object) -> {
-            Deprecations.asXTags.warn(attribute.context);
-            return ElementTag.handleNull(object.asString(), TradeTag.valueOf(object.asString(), attribute.context), "TradeTag", attribute.hasAlternative());
-        });
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(TradeTag.class, "as_trade", (attribute, object) -> {
+//            Deprecations.asXTags.warn(attribute.context);
+//            return ElementTag.handleNull(object.asString(), TradeTag.valueOf(object.asString(), attribute.context), "TradeTag", attribute.hasAlternative());
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.as_world>
@@ -278,7 +287,7 @@ public class BukkitElementExtensions {
             }
             else {
                 return new ElementTag(((FormatScriptContainer) format.getContainer()).getFormattedText(object.asString(),
-                        attribute.getScriptEntry() != null ? ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getNPC() : null,
+                        /*attribute.getScriptEntry() != null ? ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getNPC() : null,*/
                         attribute.getScriptEntry() != null ? ((BukkitScriptEntryData) attribute.getScriptEntry().entryData).getPlayer() : null));
             }
         });
@@ -325,7 +334,7 @@ public class BukkitElementExtensions {
             String colors = "";
             for (String line : CoreUtilities.split(object.asString(), '\n')) {
                 output.add(colors + line);
-                colors = org.bukkit.ChatColor.getLastColors(colors + line);
+                colors = ChatColor.getLastColors(colors + line);
             }
             return output;
         });
@@ -338,7 +347,7 @@ public class BukkitElementExtensions {
         // Returns the ChatColors used last in an element.
         // -->
         ElementTag.tagProcessor.registerStaticTag(ElementTag.class, "last_color", (attribute, object) -> {
-            return new ElementTag(org.bukkit.ChatColor.getLastColors(object.asString()));
+            return new ElementTag(ChatColor.getLastColors(object.asString()));
         });
 
         // <--[tag]
@@ -351,7 +360,7 @@ public class BukkitElementExtensions {
         // This will automatically translate translatable sections
         // -->
         ElementTag.tagProcessor.registerStaticTag(ElementTag.class, "strip_color", (attribute, object) -> {
-            return new ElementTag(FormattedTextHelper.parse(object.asString(), ChatColor.WHITE)[0].toPlainText());
+            return new ElementTag(FormattedTextHelper.parse(object.asString(), ChatColor.WHITE).plainCopy().getText());
         });
 
         // <--[tag]
@@ -427,9 +436,10 @@ public class BukkitElementExtensions {
         // Converts normal colored text to Minecraft-style "raw JSON" format.
         // Inverts <@link tag ElementTag.from_raw_json>.
         // -->
-        ElementTag.tagProcessor.registerStaticTag(ElementTag.class, "to_raw_json", (attribute, object) -> {
-            return new ElementTag(FormattedTextHelper.componentToJson(FormattedTextHelper.parse(object.asString(), ChatColor.WHITE)));
-        });
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(ElementTag.class, "to_raw_json", (attribute, object) -> {
+//            return new ElementTag(FormattedTextHelper.componentToJson(FormattedTextHelper.parse(object.asString(), ChatColor.WHITE)));
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.from_raw_json>
@@ -439,9 +449,10 @@ public class BukkitElementExtensions {
         // Un-hides the element's text from invisible color codes back to normal text.
         // Inverts <@link tag ElementTag.to_raw_json>.
         // -->
-        ElementTag.tagProcessor.registerStaticTag(ElementTag.class, "from_raw_json", (attribute, object) -> {
-            return new ElementTag(FormattedTextHelper.stringify(FormattedTextHelper.parseJson(object.asString())));
-        });
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(ElementTag.class, "from_raw_json", (attribute, object) -> {
+//            return new ElementTag(FormattedTextHelper.stringify(FormattedTextHelper.parseJson(object.asString())));
+//        });
 
         // <--[tag]
         // @attribute <ElementTag.optimize_json>
@@ -736,33 +747,34 @@ public class BukkitElementExtensions {
                 }
                 return new ElementTag(ChatColor.COLOR_CHAR + "[color=#" + hex + "]" + object.asString() + ChatColor.COLOR_CHAR + "[reset=color]");
             }
-            if (colorOut == null) {
-                try {
-                    ChatColor color = ChatColor.of(colorName.toUpperCase());
-                    if (color.getColor() == null) {
-                        if (!TagManager.isStaticParsing) {
-                            attribute.echoError("Color '" + colorName + "' is valid but is a format code not a real color (for ElementTag.color[...]).");
-                        }
-                        return null;
-                    }
-                    String colorStr = color.toString().replace(String.valueOf(ChatColor.COLOR_CHAR), "").replace("x", "#");
-                    colorOut = ChatColor.COLOR_CHAR + "[color=" + colorStr + "]";
-                }
-                catch (IllegalArgumentException ex) {
-                    ColorTag color = ColorTag.valueOf(colorName, attribute.context);
-                    if (color != null) {
-                        StringBuilder hex = new StringBuilder(Integer.toHexString(color.asRGB()));
-                        while (hex.length() < 6) {
-                            hex.insert(0, "0");
-                        }
-                        return new ElementTag(ChatColor.COLOR_CHAR + "[color=#" + hex + "]" + object.asString() + ChatColor.COLOR_CHAR + "[reset=color]");
-                    }
-                    if (!TagManager.isStaticParsing) {
-                        attribute.echoError("Color '" + colorName + "' doesn't exist (for ElementTag.color[...]).");
-                    }
-                    return null;
-                }
-            }
+            //todo
+//            if (colorOut == null) {
+//                try {
+//                    ChatColor color = ChatColor.of(colorName.toUpperCase());
+//                    if (color.getColor() == null) {
+//                        if (!TagManager.isStaticParsing) {
+//                            attribute.echoError("Color '" + colorName + "' is valid but is a format code not a real color (for ElementTag.color[...]).");
+//                        }
+//                        return null;
+//                    }
+//                    String colorStr = color.toString().replace(String.valueOf(ChatColor.COLOR_CHAR), "").replace("x", "#");
+//                    colorOut = ChatColor.COLOR_CHAR + "[color=" + colorStr + "]";
+//                }
+//                catch (IllegalArgumentException ex) {
+//                    ColorTag color = ColorTag.valueOf(colorName, attribute.context);
+//                    if (color != null) {
+//                        StringBuilder hex = new StringBuilder(Integer.toHexString(color.asRGB()));
+//                        while (hex.length() < 6) {
+//                            hex.insert(0, "0");
+//                        }
+//                        return new ElementTag(ChatColor.COLOR_CHAR + "[color=#" + hex + "]" + object.asString() + ChatColor.COLOR_CHAR + "[reset=color]");
+//                    }
+//                    if (!TagManager.isStaticParsing) {
+//                        attribute.echoError("Color '" + colorName + "' doesn't exist (for ElementTag.color[...]).");
+//                    }
+//                    return null;
+//                }
+//            }
             return new ElementTag(colorOut + object.asString() + ChatColor.COLOR_CHAR + "[reset=color]");
         });
 
@@ -924,24 +936,25 @@ public class BukkitElementExtensions {
         // # Use to set certain SNBT data onto an entity.
         // - adjust <[entity]> raw_nbt:<[snbt].snbt_to_map>
         // -->
-        ElementTag.tagProcessor.registerStaticTag(MapTag.class, "snbt_to_map", (attribute, object) -> {
-            try {
-                return (MapTag) ItemRawNBT.nbtTagToObject(ItemRawNBT.SNBT_PARSER.asCompound(object.asString()));
-            }
-            catch (IOException e) {
-                attribute.echoError("Element '<Y>" + object + "<W>' isn't valid SNBT: " + e.getMessage());
-                if (CoreConfiguration.debugVerbose) {
-                    attribute.echoError(e);
-                }
-                return null;
-            }
-        });
+        //todo
+//        ElementTag.tagProcessor.registerStaticTag(MapTag.class, "snbt_to_map", (attribute, object) -> {
+//            try {
+//                return (MapTag) ItemRawNBT.nbtTagToObject(ItemRawNBT.SNBT_PARSER.asCompound(object.asString()));
+//            }
+//            catch (IOException e) {
+//                attribute.echoError("Element '<Y>" + object + "<W>' isn't valid SNBT: " + e.getMessage());
+//                if (CoreConfiguration.debugVerbose) {
+//                    attribute.echoError(e);
+//                }
+//                return null;
+//            }
+//        });
     }
 
     public enum GradientStyle { RGB, HSB }
 
     public static String doGradient(String str, ColorTag fromColor, ColorTag toColor, GradientStyle style) {
-        int length = FormattedTextHelper.parse(str, ChatColor.WHITE)[0].toPlainText().length();
+        int length = FormattedTextHelper.parse(str, ChatColor.WHITE).plainCopy().getText().length();
         if (length == 0) {
             return "";
         }

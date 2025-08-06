@@ -2,6 +2,7 @@ package com.denizenscript.denizen.nms.interfaces;
 
 import com.denizenscript.denizen.scripts.containers.core.EnchantmentScriptContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 
 public class EnchantmentHelper {
@@ -41,8 +42,8 @@ public class EnchantmentHelper {
     public float getDamageBonus(Enchantment enchantment, int level, String type) {
         throw new UnsupportedOperationException();
     }
-
-    public int getDamageProtection(Enchantment enchantment, int level, EntityDamageEvent.DamageCause type, Entity attacker) {
-        throw new UnsupportedOperationException();
-    }
+//todo
+//    public int getDamageProtection(Enchantment enchantment, int level, EntityDamageEvent.DamageCause type, Entity attacker) {
+//        throw new UnsupportedOperationException();
+//    }
 }

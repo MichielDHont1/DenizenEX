@@ -5,9 +5,9 @@ import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import org.bukkit.entity.PigZombie;
-import org.bukkit.entity.Vindicator;
-import org.bukkit.entity.Wolf;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 
 public class EntityAngry extends EntityProperty<ElementTag> {
 
@@ -20,7 +20,7 @@ public class EntityAngry extends EntityProperty<ElementTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-        return entity.getBukkitEntity() instanceof PigZombie
+        return entity.getBukkitEntity() instanceof ZombifiedPiglin
                 || entity.getBukkitEntity() instanceof Wolf
                 || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && entity.getBukkitEntity() instanceof Vindicator);
     }
@@ -32,31 +32,33 @@ public class EntityAngry extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        if (getEntity() instanceof PigZombie entity) {
+        if (getEntity() instanceof ZombifiedPiglin entity) {
             return new ElementTag(entity.isAngry());
         }
         else if (getEntity() instanceof Wolf entity) {
             return new ElementTag(entity.isAngry());
         }
-        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && getEntity() instanceof Vindicator entity) {
-            return new ElementTag(entity.isJohnny());
-        }
+        //todo private
+//        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && getEntity() instanceof Vindicator entity) {
+//            return new ElementTag(entity.isJohnny());
+//        }
         return null;
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
-        if (mechanism.requireBoolean()) {
-            if (getEntity() instanceof PigZombie entity) {
-                entity.setAngry(param.asBoolean());
-            }
-            else if (getEntity() instanceof Wolf entity) {
-                entity.setAngry(param.asBoolean());
-            }
-            else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && getEntity() instanceof Vindicator entity) {
-                entity.setJohnny(param.asBoolean());
-            }
-        }
+        //todo
+//        if (mechanism.requireBoolean()) {
+//            if (getEntity() instanceof ZombifiedPiglin entity) {
+//                entity.setPersistentAngerTarget(param.asBoolean());
+//            }
+//            else if (getEntity() instanceof Wolf entity) {
+//                entity.setPersistentAngerTarget(param.asBoolean());
+//            }
+//            else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_18) && getEntity() instanceof Vindicator entity) {
+//                entity.setJohnny(param.asBoolean());
+//            }
+//        }
     }
 
     @Override

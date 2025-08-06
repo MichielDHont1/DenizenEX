@@ -4,7 +4,6 @@ import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.BinaryTag;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
-import net.kyori.adventure.nbt.BinaryTagIO;
 
 import java.io.ByteArrayInputStream;
 
@@ -26,14 +25,15 @@ public class BukkitBinaryTagExtensions {
         // - define data <entry[x].data.gzip_decompress.nbt_to_map>
         // # Now do something with "<[data]>"
         // -->
-        BinaryTag.tagProcessor.registerStaticTag(ObjectTag.class, "nbt_to_map", (attribute, object) -> {
-            try (ByteArrayInputStream input = new ByteArrayInputStream(object.data)) {
-                return ItemRawNBT.nbtTagToObject(BinaryTagIO.reader().read(input), true);
-            }
-            catch (Throwable ex) {
-                Debug.echoError(ex);
-                return null;
-            }
-        });
+        //todo
+//        BinaryTag.tagProcessor.registerStaticTag(ObjectTag.class, "nbt_to_map", (attribute, object) -> {
+//            try (ByteArrayInputStream input = new ByteArrayInputStream(object.data)) {
+//                return ItemRawNBT.jnbtTagToObject(BinaryTagIO.reader().read(input), true);
+//            }
+//            catch (Throwable ex) {
+//                Debug.echoError(ex);
+//                return null;
+//            }
+//        });
     }
 }

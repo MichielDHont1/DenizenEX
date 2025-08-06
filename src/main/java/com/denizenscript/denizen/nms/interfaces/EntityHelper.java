@@ -10,9 +10,7 @@ import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.mongodb.Block;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -22,7 +20,6 @@ import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.level.block.SpawnerBlock;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 import java.util.UUID;
@@ -458,10 +455,10 @@ public abstract class EntityHelper {
 //    public abstract void setInWaterTime(Zombie zombie, int ticks);
 
     public abstract void setTrackingRange(Entity entity, int range);
-//todo
-//    public abstract boolean isAggressive(Mob mob);
 
-//    public abstract void setAggressive(Mob mob, boolean aggressive);
+    public abstract boolean isAggressive(Mob mob);
+
+    public abstract void setAggressive(Mob mob, boolean aggressive);
 
     public void setUUID(Entity entity, UUID id) {
         throw new UnsupportedOperationException();

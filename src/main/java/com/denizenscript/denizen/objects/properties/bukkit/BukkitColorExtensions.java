@@ -4,25 +4,24 @@ import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizencore.objects.core.ColorTag;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
+import net.minecraft.world.item.DyeColor;
 
 public class BukkitColorExtensions {
-
-    public static ColorTag fromColor(Color color) {
-        return new ColorTag(color.getRed(), color.getGreen(), color.getBlue(), NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) ? color.getAlpha() : 255);
-    }
-
-    public ColorTag fromDyeColor(DyeColor dyeColor) {
-        return fromColor(dyeColor.getColor());
-    }
-
-    public static Color getColor(ColorTag tag) {
-        if (!NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
-            return Color.fromRGB(tag.red, tag.green, tag.blue);
-        }
-        return Color.fromARGB(tag.alpha, tag.red, tag.green, tag.blue);
-    }
+//todo
+//    public static ColorTag fromColor(int color) {
+//        return new ColorTag(color.getRed(), color.getGreen(), color.getBlue(), NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) ? color.getAlpha() : 255);
+//    }
+//
+//    public ColorTag fromDyeColor(DyeColor dyeColor) {
+//        return fromColor(dyeColor.getColor());
+//    }
+//
+//    public static int getColor(ColorTag tag) {
+//        if (!NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
+//            return Color.fromRGB(tag.red, tag.green, tag.blue);
+//        }
+//        return Color.fromARGB(tag.alpha, tag.red, tag.green, tag.blue);
+//    }
 
     public static void register() {
 

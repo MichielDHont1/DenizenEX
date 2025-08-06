@@ -1,7 +1,7 @@
 package com.denizenscript.denizen.objects.properties.bukkit;
 
 import com.denizenscript.denizen.utilities.implementation.BukkitScriptEntryData;
-import com.denizenscript.denizen.objects.NPCTag;
+//import com.denizenscript.denizen.objects.NPCTag;
 import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizencore.objects.core.QueueTag;
 import com.denizenscript.denizencore.scripts.ScriptEntry;
@@ -17,19 +17,20 @@ public class BukkitQueueExtensions {
         // @description
         // Returns the NPCTag linked to a queue.
         // -->
-        QueueTag.tagProcessor.registerTag(NPCTag.class, "npc", (attribute, object) -> {
-            NPCTag npc = null;
-            if (object.queue.getLastEntryExecuted() != null) {
-                npc = ((BukkitScriptEntryData) object.queue.getLastEntryExecuted().entryData).getNPC();
-            }
-            else if (object.queue.getEntries().size() > 0) {
-                npc = ((BukkitScriptEntryData) object.queue.getEntries().get(0).entryData).getNPC();
-            }
-            else if (!attribute.hasAlternative()) {
-                attribute.echoError("Can't determine a linked NPC.");
-            }
-            return npc;
-        });
+        //todo
+//        QueueTag.tagProcessor.registerTag(NPCTag.class, "npc", (attribute, object) -> {
+//            NPCTag npc = null;
+//            if (object.queue.getLastEntryExecuted() != null) {
+//                npc = ((BukkitScriptEntryData) object.queue.getLastEntryExecuted().entryData).getNPC();
+//            }
+//            else if (object.queue.getEntries().size() > 0) {
+//                npc = ((BukkitScriptEntryData) object.queue.getEntries().get(0).entryData).getNPC();
+//            }
+//            else if (!attribute.hasAlternative()) {
+//                attribute.echoError("Can't determine a linked NPC.");
+//            }
+//            return npc;
+//        });
 
         // <--[tag]
         // @attribute <QueueTag.player>
@@ -77,11 +78,12 @@ public class BukkitQueueExtensions {
         // @tags
         // <QueueTag.npc>
         // -->
-        QueueTag.tagProcessor.registerMechanism("linked_npc", false, NPCTag.class, (queue, mechanism, npc) -> {
-            for (ScriptEntry entry : queue.queue.getEntries()) {
-                BukkitScriptEntryData data = (BukkitScriptEntryData) entry.entryData;
-                data.setNPC(npc);
-            }
-        });
+        //todo
+//        QueueTag.tagProcessor.registerMechanism("linked_npc", false, NPCTag.class, (queue, mechanism, npc) -> {
+//            for (ScriptEntry entry : queue.queue.getEntries()) {
+//                BukkitScriptEntryData data = (BukkitScriptEntryData) entry.entryData;
+//                data.setNPC(npc);
+//            }
+//        });
     }
 }

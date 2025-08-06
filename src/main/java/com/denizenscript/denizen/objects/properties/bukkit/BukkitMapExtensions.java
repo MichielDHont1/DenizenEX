@@ -4,8 +4,6 @@ import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
 import com.denizenscript.denizencore.objects.core.BinaryTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
-import net.kyori.adventure.nbt.BinaryTagIO;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 
 import java.io.ByteArrayOutputStream;
 
@@ -27,16 +25,17 @@ public class BukkitMapExtensions {
         // - define data <[playerdata].map_to_nbt.gzip_compress>
         // - ~filewrite path:data/<player.uuid>.dat data:<[data]>
         // -->
-        MapTag.tagProcessor.registerStaticTag(BinaryTag.class, "map_to_nbt", (attribute, object) -> {
-            try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-                CompoundBinaryTag tag = (CompoundBinaryTag) ItemRawNBT.convertObjectToNbt(object, attribute.context, "(root).");
-                BinaryTagIO.writer().write(tag, output);
-                return new BinaryTag(output.toByteArray());
-            }
-            catch (Throwable ex) {
-                Debug.echoError(ex);
-                return null;
-            }
-        });
+        //todo
+//        MapTag.tagProcessor.registerStaticTag(BinaryTag.class, "map_to_nbt", (attribute, object) -> {
+//            try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+//                CompoundBinaryTag tag = (CompoundBinaryTag) ItemRawNBT.convertObjectToNbt(object, attribute.context, "(root).");
+//                BinaryTagIO.writer().write(tag, output);
+//                return new BinaryTag(output.toByteArray());
+//            }
+//            catch (Throwable ex) {
+//                Debug.echoError(ex);
+//                return null;
+//            }
+//        });
     }
 }

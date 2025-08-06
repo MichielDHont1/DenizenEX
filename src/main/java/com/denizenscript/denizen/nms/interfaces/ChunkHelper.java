@@ -4,12 +4,12 @@ package com.denizenscript.denizen.nms.interfaces;
 import net.minecraft.world.level.Level;
 
 public interface ChunkHelper {
+//todo chunkloading
+//    default void refreshChunkSections(Chunk chunk) {
+//        throw new UnsupportedOperationException();
+//    }
 
-    default void refreshChunkSections(Chunk chunk) {
-        throw new UnsupportedOperationException();
-    }
-
-    int[] getHeightMap(Chunk chunk);
+//    int[] getHeightMap(Chunk chunk);
 
     default void changeChunkServerThread(Level world) {
         // Do nothing by default.
@@ -19,7 +19,7 @@ public interface ChunkHelper {
         // Do nothing by default.
     }
 
-    default void setAllBiomes(Chunk chunk, BiomeNMS biome) {
-        throw new UnsupportedOperationException();
-    }
+//    default void setAllBiomes(Chunk chunk, BiomeNMS biome) {
+//        throw new UnsupportedOperationException();
+//    }
 }

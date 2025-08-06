@@ -22,13 +22,19 @@ import com.denizenscript.denizencore.tags.TagRunnable;
 import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.end.EndDragonFight;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.lang.reflect.Field;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -118,8 +124,8 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         return "is the world loaded?";
     }
 
-    public Level getWorld() {
-        for (Level level : ServerLifecycleHooks.getCurrentServer().getAllLevels())
+    public ServerLevel getWorld() {
+        for (ServerLevel level : ServerLifecycleHooks.getCurrentServer().getAllLevels())
         {
             if (level.toString().equals(world_name))
             {
@@ -138,24 +144,27 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
 //    }
 
     public List<Entity> getEntitiesForTag() {
-        NMSHandler.chunkHelper.changeChunkServerThread(getWorld());
-        try {
-            return getWorld().getEntities();
-        }
-        finally {
-            NMSHandler.chunkHelper.restoreServerThread(getWorld());
-        }
+        //todo all entities
+//        NMSHandler.chunkHelper.changeChunkServerThread(getWorld());
+//        try {
+//            return getWorld().getEntities();
+//        }
+//        finally {
+//            NMSHandler.chunkHelper.restoreServerThread(getWorld());
+//        }
+        return null;
     }
 
     public final Collection<Entity> getPossibleEntitiesForBoundary(AABB box) {
         // Bork-prevention: getNearbyEntities loops over chunks, so for large boxes just get the direct entity list, as that's probably better than a loop over unloaded chunks
-        if (box.getWidthX() > 512 || box.getWidthZ() > 512) {
-            return getWorld().getEntities();
-        }
-        return getWorld().getNear-byEntities(box);
+//todo all entities
+//        if (box.getWidthX() > 512 || box.getWidthZ() > 512) {
+//            return getWorld().getEntities();
+//        }
+        return getWorld().getEntities(null,box);
     }
 
-    public Collection<Entity> getPossibleEntitiesForBoundaryForTag(BoundingBox box) {
+    public Collection<Entity> getPossibleEntitiesForBoundaryForTag(AABB box) {
         NMSHandler.chunkHelper.changeChunkServerThread(getWorld());
         try {
             return getPossibleEntitiesForBoundary(box);
@@ -166,13 +175,15 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
     }
 
     public List<LivingEntity> getLivingEntitiesForTag() {
-        NMSHandler.chunkHelper.changeChunkServerThread(getWorld());
-        try {
-            return getWorld().getLivingEntities();
-        }
-        finally {
-            NMSHandler.chunkHelper.restoreServerThread(getWorld());
-        }
+        //todo all entities
+//        NMSHandler.chunkHelper.changeChunkServerThread(getWorld());
+//        try {
+//            return getWorld().getLivingEntities();
+//        }
+//        finally {
+//            NMSHandler.chunkHelper.restoreServerThread(getWorld());
+//        }
+        return null;
     }
 
     public <T extends GameRules.Value<T>> T getGameRuleOrDefault(GameRules.Key<T> gameRule) {
@@ -290,10 +301,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // -->
         registerTag(ListTag.class, "players", (attribute, object) -> {
             ListTag players = new ListTag();
-            for (Player player : object.getWorld().getPlayers()) {
-                if (!EntityTag.isNPC(player)) {
+            for (Player player : object.getWorld().players()) {
+//                if (!EntityTag.isNPC(player)) {
                     players.addObject(new PlayerTag(player));
-                }
+//                }
             }
             return players;
         });
@@ -304,16 +315,16 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns a list of spawned NPCs in this world.
         // -->
-        registerTag(ListTag.class, "spawned_npcs", (attribute, object) -> {
-            ListTag npcs = new ListTag();
-            World thisWorld = object.getWorld();
-            for (NPC npc : CitizensAPI.getNPCRegistry()) {
-                if (npc.isSpawned() && npc.getStoredLocation().getWorld().equals(thisWorld)) {
-                    npcs.addObject(new NPCTag(npc));
-                }
-            }
-            return npcs;
-        });
+//        registerTag(ListTag.class, "spawned_npcs", (attribute, object) -> {
+//            ListTag npcs = new ListTag();
+//            Level thisWorld = object.getWorld();
+//            for (NPC npc : CitizensAPI.getNPCRegistry()) {
+//                if (npc.isSpawned() && npc.getStoredLocation().getWorld().equals(thisWorld)) {
+//                    npcs.addObject(new NPCTag(npc));
+//                }
+//            }
+//            return npcs;
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.npcs>
@@ -321,20 +332,20 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns a list of all NPCs in this world.
         // -->
-        registerTag(ListTag.class, "npcs", (attribute, object) -> {
-            ListTag npcs = new ListTag();
-            World thisWorld = object.getWorld();
-            for (NPC npc : CitizensAPI.getNPCRegistry()) {
-                Location location = npc.getStoredLocation();
-                if (location != null) {
-                    World world = location.getWorld();
-                    if (world != null && world.equals(thisWorld)) {
-                        npcs.addObject(new NPCTag(npc));
-                    }
-                }
-            }
-            return npcs;
-        });
+//        registerTag(ListTag.class, "npcs", (attribute, object) -> {
+//            ListTag npcs = new ListTag();
+//            World thisWorld = object.getWorld();
+//            for (NPC npc : CitizensAPI.getNPCRegistry()) {
+//                Location location = npc.getStoredLocation();
+//                if (location != null) {
+//                    World world = location.getWorld();
+//                    if (world != null && world.equals(thisWorld)) {
+//                        npcs.addObject(new NPCTag(npc));
+//                    }
+//                }
+//            }
+//            return npcs;
+//        });
 
         /////////////////////
         //   GEOGRAPHY ATTRIBUTES
@@ -346,9 +357,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether the world will generate structures.
         // -->
-        registerTag(ElementTag.class, "can_generate_structures", (attribute, object) -> {
-            return new ElementTag(object.getWorld().canGenerateStructures());
-        });
+        //todo
+//        registerTag(ElementTag.class, "can_generate_structures", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.loaded_chunks>
@@ -356,14 +368,15 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns a list of all the currently loaded chunks.
         // -->
-        registerTag(ListTag.class, "loaded_chunks", (attribute, object) -> {
-            ListTag chunks = new ListTag();
-            for (Chunk ent : object.getWorld().getLoadedChunks()) {
-                chunks.addObject(new ChunkTag(ent));
-            }
-
-            return chunks;
-        });
+        //todo chunkloading
+//        registerTag(ListTag.class, "loaded_chunks", (attribute, object) -> {
+//            ListTag chunks = new ListTag();
+//            for (Chunk ent : object.getWorld().getLoadedChunks()) {
+//                chunks.addObject(new ChunkTag(ent));
+//            }
+//
+//            return chunks;
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.sea_level>
@@ -382,7 +395,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the maximum block height of the world.
         // -->
         registerTag(ElementTag.class, "max_height", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getMaxHeight());
+            return new ElementTag(object.getWorld().getMaxBuildHeight());
         });
 
         // <--[tag]
@@ -392,7 +405,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the minimum block height of the world.
         // -->
         registerTag(ElementTag.class, "min_height", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getMinHeight());
+            return new ElementTag(object.getWorld().getMinBuildHeight());
         });
 
         // <--[tag]
@@ -403,7 +416,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the spawn location of the world.
         // -->
         registerTag(LocationTag.class, "spawn_location", (attribute, object) -> {
-            return new LocationTag(object.getWorld().getSpawnLocation());
+            return new LocationTag(object.getWorld().getSharedSpawnPos());
         });
 
         // <--[tag]
@@ -414,7 +427,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Can return any enum from: <@link url https://hub.spigotmc.org/javadocs/spigot/org/bukkit/WorldType.html>
         // -->
         registerTag(ElementTag.class, "world_type", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getWorldType().getName());
+            return new ElementTag(object.getWorld().dimensionType().toString());
         });
 
         /////////////////////
@@ -451,9 +464,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether animals can spawn in this world.
         // -->
-        registerTag(ElementTag.class, "allows_animals", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getAllowAnimals());
-        });
+        //todo
+//        registerTag(ElementTag.class, "allows_animals", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getAllowAnimals());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.allows_monsters>
@@ -461,9 +475,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether monsters can spawn in this world.
         // -->
-        registerTag(ElementTag.class, "allows_monsters", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getAllowMonsters());
-        });
+        //todo
+//        registerTag(ElementTag.class, "allows_monsters", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getAllowMonsters());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.allows_pvp>
@@ -471,9 +486,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether player versus player combat is allowed in this world.
         // -->
-        registerTag(ElementTag.class, "allows_pvp", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getPVP());
-        });
+        //todo
+//        registerTag(ElementTag.class, "allows_pvp", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getPVP());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.auto_save>
@@ -482,9 +498,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether the world automatically saves.
         // -->
-        registerTag(ElementTag.class, "auto_save", (attribute, object) -> {
-            return new ElementTag(object.getWorld().isAutoSave());
-        });
+        //todo
+//        registerTag(ElementTag.class, "auto_save", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().isAutoSave());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.ambient_spawn_limit>
@@ -493,9 +510,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the number of ambient mobs that can spawn in a chunk in this world.
         // -->
-        registerTag(ElementTag.class, "ambient_spawn_limit", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getAmbientSpawnLimit());
-        });
+        //todo
+//        registerTag(ElementTag.class, "ambient_spawn_limit", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getAmbientSpawnLimit());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.animal_spawn_limit>
@@ -504,9 +522,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the number of animals that can spawn in a chunk in this world.
         // -->
-        registerTag(ElementTag.class, "animal_spawn_limit", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getAnimalSpawnLimit());
-        });
+        //todo
+//        registerTag(ElementTag.class, "animal_spawn_limit", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getAnimalSpawnLimit());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.monster_spawn_limit>
@@ -515,9 +534,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the number of monsters that can spawn in a chunk in this world.
         // -->
-        registerTag(ElementTag.class, "monster_spawn_limit", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getMonsterSpawnLimit());
-        });
+        //todo
+//        registerTag(ElementTag.class, "monster_spawn_limit", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getMonsterSpawnLimit());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.water_animal_spawn_limit>
@@ -526,9 +546,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the number of water animals that can spawn in a chunk in this world.
         // -->
-        registerTag(ElementTag.class, "water_animal_spawn_limit", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getWaterAnimalSpawnLimit());
-        });
+        //todo
+//        registerTag(ElementTag.class, "water_animal_spawn_limit", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getWaterAnimalSpawnLimit());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.difficulty>
@@ -548,9 +569,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether the world is in hardcore mode.
         // -->
-        registerTag(ElementTag.class, "hardcore", (attribute, object) -> {
-            return new ElementTag(object.getWorld().isHardcore());
-        });
+        //todo
+//        registerTag(ElementTag.class, "hardcore", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().isHardcore());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.keep_spawn>
@@ -559,9 +581,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns whether the world's spawn area should be kept loaded into memory.
         // -->
-        registerTag(ElementTag.class, "keep_spawn", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getKeepSpawnInMemory());
-        });
+        //todo
+//        registerTag(ElementTag.class, "keep_spawn", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().getKeepSpawnInMemory());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.ticks_per_animal_spawn>
@@ -570,9 +593,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the world's ticks per animal spawn value.
         // -->
-        registerTag(DurationTag.class, "ticks_per_animal_spawn", (attribute, object) -> {
-            return new DurationTag(object.getWorld().getTicksPerAnimalSpawns());
-        });
+        //todo
+//        registerTag(DurationTag.class, "ticks_per_animal_spawn", (attribute, object) -> {
+//            return new DurationTag(object.getWorld().getTicksPerAnimalSpawns());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.ticks_per_monster_spawn>
@@ -581,9 +605,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the world's ticks per monster spawn value.
         // -->
-        registerTag(DurationTag.class, "ticks_per_monster_spawn", (attribute, object) -> {
-            return new DurationTag(object.getWorld().getTicksPerMonsterSpawns());
-        });
+        //todo
+//        registerTag(DurationTag.class, "ticks_per_monster_spawn", (attribute, object) -> {
+//            return new DurationTag(object.getWorld().getTicksPerMonsterSpawns());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.duration_since_created>
@@ -616,7 +641,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
             // -->
             if (attribute.startsWith("duration", 2)) {
                 attribute.fulfill(1);
-                return new DurationTag(object.getWorld().getTime());
+                return new DurationTag(object.getWorld().getDayTime());
             }
 
             // <--[tag]
@@ -627,7 +652,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
             // -->
             else if (attribute.startsWith("full", 2)) {
                 attribute.fulfill(1);
-                return new DurationTag(object.getWorld().getFullTime());
+                return new DurationTag(object.getWorld().getGameTime());
             }
 
             // <--[tag]
@@ -639,7 +664,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
             else if (attribute.startsWith("period", 2)) {
                 attribute.fulfill(1);
 
-                long time = object.getWorld().getTime();
+                long time = object.getWorld().getDayTime();
                 String period;
 
                 if (time >= 23000) {
@@ -658,7 +683,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
                 return new ElementTag(period);
             }
             else {
-                return new ElementTag(object.getWorld().getTime());
+                return new ElementTag(object.getWorld().getDayTime());
             }
         });
 
@@ -669,7 +694,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the current phase of the moon, as a number from 1 to 8.
         // -->
         registerTag(ElementTag.class, "moon_phase", (attribute, object) -> {
-            return new ElementTag((int) ((object.getWorld().getFullTime() / 24000) % 8) + 1);
+            return new ElementTag((int) ((object.getWorld().getGameTime() / 24000) % 8) + 1);
         }, "moonphase");
 
         /////////////////////
@@ -683,9 +708,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns whether there is currently a storm in this world.
         // ie, whether it is raining. To check for thunder, use <@link tag WorldTag.thundering>.
         // -->
-        registerTag(ElementTag.class, "has_storm", (attribute, object) -> {
-            return new ElementTag(object.getWorld().hasStorm());
-        });
+        //todo
+//        registerTag(ElementTag.class, "has_storm", (attribute, object) -> {
+//            return new ElementTag(object.getWorld().rain());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.thunder_duration>
@@ -694,9 +720,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the duration of thunder.
         // -->
-        registerTag(DurationTag.class, "thunder_duration", (attribute, object) -> {
-            return new DurationTag((long) object.getWorld().getThunderDuration());
-        });
+        //todo
+//        registerTag(DurationTag.class, "thunder_duration", (attribute, object) -> {
+//            return new DurationTag((long) object.getWorld().getThunderDuration());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.thundering>
@@ -716,9 +743,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the duration of storms.
         // -->
-        registerTag(DurationTag.class, "weather_duration", (attribute, object) -> {
-            return new DurationTag((long) object.getWorld().getWeatherDuration());
-        });
+        //todo
+//        registerTag(DurationTag.class, "weather_duration", (attribute, object) -> {
+//            return new DurationTag((long) object.getWorld().getWeatherDuration());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.environment>
@@ -727,7 +755,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the environment of the world: NORMAL, NETHER, or THE_END.
         // -->
         registerTag(ElementTag.class, "environment", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getEnvironment());
+            return new ElementTag(object.getWorld().dimensionType().toString());
         });
 
         /////////////////////
@@ -751,7 +779,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the center of the world border in this world.
         // -->
         registerTag(LocationTag.class, "border_center", (attribute, object) -> {
-            return new LocationTag(object.getWorld().getWorldBorder().getCenter());
+            return new LocationTag(object.getWorld().getWorldBorder().getCenterX(), object.getWorld().getWorldBorder().getCenterZ());
         });
 
         // <--[tag]
@@ -761,7 +789,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the amount of damage caused by crossing the world border in this world.
         // -->
         registerTag(ElementTag.class, "border_damage", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getWorldBorder().getDamageAmount());
+            return new ElementTag(object.getWorld().getWorldBorder().getDamagePerBlock());
         });
 
         // <--[tag]
@@ -771,7 +799,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the damage buffer of the world border in this world.
         // -->
         registerTag(ElementTag.class, "border_damage_buffer", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getWorldBorder().getDamageBuffer());
+            return new ElementTag(object.getWorld().getWorldBorder().getDamageSafeZone());
         });
 
         // <--[tag]
@@ -781,7 +809,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the warning distance of the world border in this world.
         // -->
         registerTag(ElementTag.class, "border_warning_distance", (attribute, object) -> {
-            return new ElementTag(object.getWorld().getWorldBorder().getWarningDistance());
+            return new ElementTag(object.getWorld().getWorldBorder().getWarningBlocks());
         });
 
         // <--[tag]
@@ -801,15 +829,24 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the current value of the specified gamerule in the world.
         // Note that the name is case-sensitive... so "doFireTick" is correct, but "dofiretick" is not.
         // -->
-        registerTag(ElementTag.class, "gamerule", (attribute, object) -> {
-            if (!attribute.hasParam()) {
-                attribute.echoError("The tag 'worldtag.gamerule[...]' must have an input value.");
-                return null;
-            }
-            GameRule rule = GameRule.getByName(attribute.getParam());
-            Object result = object.getWorld().getGameRuleValue(rule);
-            return new ElementTag(result == null ? "null" : result.toString());
-        });
+        //todo
+//        registerTag(ElementTag.class, "gamerule", (attribute, object) -> {
+//            if (!attribute.hasParam()) {
+//                attribute.echoError("The tag 'worldtag.gamerule[...]' must have an input value.");
+//                return null;
+//            }
+//            GameRules.Key<GameRules.BooleanValue> ruleObj = null;
+//
+//            try {
+//                Class<?> clazz = Class.forName("GameRules");
+//                Field field = clazz.getDeclaredField(attribute.getParam());
+//                ruleObj = (GameRules.Key<GameRules.BooleanValue>)field.get(null);
+//            } catch(Exception ex) {
+//                return null;
+//            }
+//            GameRules.Value<T> result = object.getWorld().getGameRules().getRule(GameRules.RULE_DAYLIGHT);//ruleObj);
+//            return new ElementTag(result == null ? "null" : result.toString());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.gamerule_map>
@@ -817,16 +854,17 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns a map of all the current values of all gamerules in the world.
         // -->
-        registerTag(MapTag.class, "gamerule_map", (attribute, object) -> {
-            MapTag map = new MapTag();
-            for (GameRule rule : GameRule.values()) {
-                Object result = object.getWorld().getGameRuleValue(rule);
-                if (result != null) {
-                    map.putObject(rule.getName(), new ElementTag(result.toString()));
-                }
-            }
-            return map;
-        });
+        //todo
+//        registerTag(MapTag.class, "gamerule_map", (attribute, object) -> {
+//            MapTag map = new MapTag();
+//            for (GameRule rule : GameRule.values()) {
+//                Object result = object.getWorld().getGameRuleValue(rule);
+//                if (result != null) {
+//                    map.putObject(rule.getName(), new ElementTag(result.toString()));
+//                }
+//            }
+//            return map;
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.dragon_portal_location>
@@ -834,33 +872,34 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the location of the ender dragon exit portal, if any (only for end worlds).
         // -->
-        registerTag(LocationTag.class, "dragon_portal_location", (attribute, object) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
-            if (battle == null) {
-                attribute.echoError("Provided world is not an end world!");
-                return null;
-            }
-            if (battle.getEndPortalLocation() == null) {
-                return null;
-            }
-            return new LocationTag(battle.getEndPortalLocation());
-        });
+//        registerTag(LocationTag.class, "dragon_portal_location", (attribute, object) -> {
+//            EndDragonFight battle = object.getWorld().dragonFight();
+//            if (battle == null) {
+//                attribute.echoError("Provided world is not an end world!");
+//                return null;
+//            }
+//            if (battle.getEndPortalLocation() == null) {
+//                return null;
+//            }
+//            return new LocationTag(battle.getEndPortalLocation());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.ender_dragon>
         // @returns EntityTag
         // @description
-        // Returns the ender dragon entity currently fighting in this world, if any (only for end worlds).
+        // Returns the first found ender dragon entity currently fighting in this world, if any.
         // -->
         registerTag(EntityTag.class, "ender_dragon", (attribute, object) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
+            EndDragonFight battle = object.getWorld().dragonFight();
             if (battle == null) {
                 return null;
             }
-            if (battle.getEnderDragon() == null) {
+            if (object.getWorld().getDragons().isEmpty()) {
                 return null;
             }
-            return new EntityTag(battle.getEnderDragon());
+            List<EnderDragon> dragons = (List<EnderDragon>)object.getWorld().getDragons();
+            return new EntityTag(dragons.get(0));
         });
 
         // <--[tag]
@@ -872,7 +911,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // In current implementation, this is a list of exactly 20 locations in a circle around the world origin (with radius of 96 blocks).
         // -->
         registerTag(ListTag.class, "gateway_locations", (attribute, object) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
+            EndDragonFight battle = object.getWorld().dragonFight();
             if (battle == null) {
                 return null;
             }
@@ -892,13 +931,14 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns a list of all biomes in this world (including custom biomes).
         // -->
-        registerTag(ListTag.class, "biomes", (attribute, object) -> {
-            ListTag output = new ListTag();
-            for (BiomeNMS biome : NMSHandler.instance.getBiomes(object.getWorld())) {
-                output.addObject(new BiomeTag(biome));
-            }
-            return output;
-        });
+        //todo
+//        registerTag(ListTag.class, "biomes", (attribute, object) -> {
+//            ListTag output = new ListTag();
+//            for (BiomeNMS biome : NMSHandler.instance.getBiomes(object.getWorld())) {
+//                output.addObject(new BiomeTag(biome));
+//            }
+//            return output;
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.view_distance>
@@ -909,10 +949,11 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the view distance of this world. Chunks are visible to players inside this radius.
         // See also <@link tag WorldTag.simulation_distance>
         // -->
-        registerTag(ElementTag.class, "view_distance", (attribute, world) -> {
-            // Note: mechanism is paper-only, in PaperWorldProperties
-            return new ElementTag(world.getWorld().getViewDistance());
-        });
+        //todo
+//        registerTag(ElementTag.class, "view_distance", (attribute, world) -> {
+//            // Note: mechanism is paper-only, in PaperWorldProperties
+//            return new ElementTag(world.getWorld().getViewDistance());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.simulation_distance>
@@ -923,10 +964,11 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the simulation distance of this world. Chunks inside of this radius to players are ticked and processed.
         // See also <@link tag WorldTag.view_distance>
         // -->
-        registerTag(ElementTag.class, "simulation_distance", (attribute, world) -> {
-            // Note: mechanism is paper-only, in PaperWorldProperties
-            return new ElementTag(world.getWorld().getSimulationDistance());
-        });
+        //todo
+//        registerTag(ElementTag.class, "simulation_distance", (attribute, world) -> {
+//            // Note: mechanism is paper-only, in PaperWorldProperties
+//            return new ElementTag(world.getWorld().getSimulationDistance());
+//        });
 
         // <--[tag]
         // @attribute <WorldTag.enough_sleeping[(<#>)]>
@@ -944,7 +986,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
                 percentage = attribute.getIntParam();
             }
             else {
-                percentage = world.getGameRuleOrDefault(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
+                percentage = world.getGameRuleOrDefault(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE).get();
             }
             return new ElementTag(NMSHandler.worldHelper.areEnoughSleeping(world.getWorld(), percentage));
         });
@@ -965,7 +1007,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
                 percentage = attribute.getIntParam();
             }
             else {
-                percentage = world.getGameRuleOrDefault(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
+                percentage = world.getGameRuleOrDefault(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE).get();
             }
             return new ElementTag(NMSHandler.worldHelper.areEnoughDeepSleeping(world.getWorld(), percentage));
         });
@@ -1017,12 +1059,12 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Only works if the world is an end world.
         // -->
         registerTag(ElementTag.class, "first_dragon_killed", (attribute, object) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
+            EndDragonFight battle = object.getWorld().dragonFight();
             if (battle == null) {
                 attribute.echoError("Provided world is not an end world!");
                 return null;
             }
-            return new ElementTag(battle.hasBeenPreviouslyKilled());
+            return new ElementTag(battle.hasPreviouslyKilledDragon());
         });
 
         // <--[mechanism]
@@ -1034,12 +1076,12 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Only works if the world is an end world.
         // -->
         tagProcessor.registerMechanism("respawn_dragon", false, (object, mechanism) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
+            EndDragonFight battle = object.getWorld().dragonFight();
             if (battle == null) {
                 mechanism.echoError("Provided world is not an end world!");
                 return;
             }
-            battle.initiateRespawn();
+            battle.tryRespawn();
         });
 
         // <--[mechanism]
@@ -1051,12 +1093,12 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Only works if the world is an end world.
         // -->
         tagProcessor.registerMechanism("reset_crystals", false, (object, mechanism) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
+            EndDragonFight battle = object.getWorld().dragonFight();
             if (battle == null) {
                 mechanism.echoError("Provided world is not an end world!");
                 return;
             }
-            battle.resetCrystals();
+            battle.resetSpikeCrystals();
         });
 
         // <--[mechanism]
@@ -1067,16 +1109,17 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Set the current respawn phase of the ender dragon. Valid phases can be found at <@link url https://jd.papermc.io/paper/1.21.3/org/bukkit/boss/DragonBattle.RespawnPhase.html>
         // Only works if the world is an end world.
         // -->
-        tagProcessor.registerMechanism("respawn_phase", false, ElementTag.class, (object, mechanism, input) -> {
-            DragonBattle battle = object.getWorld().getEnderDragonBattle();
-            if (battle == null) {
-                mechanism.echoError("Provided world is not an end world!");
-                return;
-            }
-            if (mechanism.requireEnum(DragonBattle.RespawnPhase.class)) {
-                battle.setRespawnPhase(input.asEnum(DragonBattle.RespawnPhase.class));
-            }
-        });
+        //todo private
+//        tagProcessor.registerMechanism("respawn_phase", false, ElementTag.class, (object, mechanism, input) -> {
+//            EndDragonFight battle = object.getWorld().dragonFight();
+//            if (battle == null) {
+//                mechanism.echoError("Provided world is not an end world!");
+//                return;
+//            }
+//            if (mechanism.requireEnum(EndDragonFight.respawnStage.class)) {
+//                battle.setRespawnStage(input.asEnum(EndDragonFight.respawnStage.class));
+//            }
+//        });
 
         if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_20)) {
 
@@ -1091,16 +1134,17 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
             // @tags
             // <WorldTag.first_dragon_killed>
             // -->
-            tagProcessor.registerMechanism("first_dragon_killed", false, ElementTag.class, (object, mechanism, input) -> {
-                DragonBattle battle = object.getWorld().getEnderDragonBattle();
-                if (battle == null) {
-                    mechanism.echoError("Provided world is not an end world!");
-                    return;
-                }
-                if (mechanism.requireBoolean()) {
-                    battle.setPreviouslyKilled(input.asBoolean());
-                }
-            });
+            //todo
+//            tagProcessor.registerMechanism("first_dragon_killed", false, ElementTag.class, (object, mechanism, input) -> {
+//                EndDragonFight battle = object.getWorld().dragonFight();
+//                if (battle == null) {
+//                    mechanism.echoError("Provided world is not an end world!");
+//                    return;
+//                }
+//                if (mechanism.requireBoolean()) {
+//                    battle.setPreviouslyKilled(input.asBoolean());
+//                }
+//            });
         }
 
     }
@@ -1138,10 +1182,11 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.ambient_spawn_limit>
         // -->
-        if (mechanism.matches("ambient_spawn_limit")
-                && mechanism.requireInteger()) {
-            getWorld().setAmbientSpawnLimit(mechanism.getValue().asInt());
-        }
+        //todo
+//        if (mechanism.matches("ambient_spawn_limit")
+//                && mechanism.requireInteger()) {
+//            getWorld().setAmbientSpawnLimit(mechanism.getValue().asInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1152,10 +1197,11 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.animal_spawn_limit>
         // -->
-        if (mechanism.matches("animal_spawn_limit")
-                && mechanism.requireInteger()) {
-            getWorld().setAnimalSpawnLimit(mechanism.getValue().asInt());
-        }
+        //todo
+//        if (mechanism.matches("animal_spawn_limit")
+//                && mechanism.requireInteger()) {
+//            getWorld().setAnimalSpawnLimit(mechanism.getValue().asInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1166,10 +1212,11 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.auto_save>
         // -->
-        if (mechanism.matches("auto_save")
-                && mechanism.requireBoolean()) {
-            getWorld().setAutoSave(mechanism.getValue().asBoolean());
-        }
+        //todo
+//        if (mechanism.matches("auto_save")
+//                && mechanism.requireBoolean()) {
+//            getWorld().setAutoSave(mechanism.getValue().asBoolean());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1181,12 +1228,13 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.difficulty>
         // -->
-        if (mechanism.matches("difficulty") && mechanism.requireEnum(Difficulty.class)) {
-            Difficulty diff = mechanism.getValue().asEnum(Difficulty.class);
-            if (diff != null) {
-                getWorld().setDifficulty(diff);
-            }
-        }
+        //todo
+//        if (mechanism.matches("difficulty") && mechanism.requireEnum(Difficulty.class)) {
+//            Difficulty diff = mechanism.getValue().asEnum(Difficulty.class);
+//            if (diff != null) {
+//                getWorld().setDifficulty(diff);
+//            }
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1197,9 +1245,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.hardcore>
         // -->
-        if (mechanism.matches("hardcore") && mechanism.requireBoolean()) {
-            getWorld().setHardcore(mechanism.getValue().asBoolean());
-        }
+        //todo
+//        if (mechanism.matches("hardcore") && mechanism.requireBoolean()) {
+//            getWorld().setHardcore(mechanism.getValue().asBoolean());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1208,9 +1257,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Saves the world to file.
         // -->
-        if (mechanism.matches("save")) {
-            getWorld().save();
-        }
+        //todo
+//        if (mechanism.matches("save")) {
+//            getWorld().save();
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1220,24 +1270,25 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Unloads the world from the server without saving chunks, then destroys all data that is part of the world.
         // Require config setting 'Commands.Delete.Allow file deletion'.
         // -->
-        if (mechanism.matches("destroy")) {
-            File folder = getWorld().getWorldFolder();
-            unloadWorldClean(mechanism, false);
-            if (getWorld() != null) {
-                return;
-            }
-            if (!CoreConfiguration.allowFileDeletion) {
-                mechanism.echoError("Unable to destroy world due to config setting, refer to 'WorldTag.destroy' meta documentation.");
-                return;
-            }
-            try {
-                CoreUtilities.deleteDirectory(folder);
-            }
-            catch (Exception ex) {
-                Debug.echoError(ex);
-            }
-            return;
-        }
+        //todo
+//        if (mechanism.matches("destroy")) {
+//            File folder = getWorld().getWorldFolder();
+//            unloadWorldClean(mechanism, false);
+//            if (getWorld() != null) {
+//                return;
+//            }
+//            if (!CoreConfiguration.allowFileDeletion) {
+//                mechanism.echoError("Unable to destroy world due to config setting, refer to 'WorldTag.destroy' meta documentation.");
+//                return;
+//            }
+//            try {
+//                CoreUtilities.deleteDirectory(folder);
+//            }
+//            catch (Exception ex) {
+//                Debug.echoError(ex);
+//            }
+//            return;
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1260,9 +1311,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.time.full>
         // -->
-        if (mechanism.matches("full_time") && mechanism.requireInteger()) {
-            getWorld().setFullTime(mechanism.getValue().asInt());
-        }
+        //todo
+//        if (mechanism.matches("full_time") && mechanism.requireInteger()) {
+//            getWorld().setFullTime(mechanism.getValue().asInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1273,9 +1325,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.keep_spawn>
         // -->
-        if (mechanism.matches("keep_spawn") && mechanism.requireBoolean()) {
-            getWorld().setKeepSpawnInMemory(mechanism.getValue().asBoolean());
-        }
+        //todo
+//        if (mechanism.matches("keep_spawn") && mechanism.requireBoolean()) {
+//            getWorld().setKeepSpawnInMemory(mechanism.getValue().asBoolean());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1286,9 +1339,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.monster_spawn_limit>
         // -->
-        if (mechanism.matches("monster_spawn_limit") && mechanism.requireInteger()) {
-            getWorld().setMonsterSpawnLimit(mechanism.getValue().asInt());
-        }
+        //todo
+//        if (mechanism.matches("monster_spawn_limit") && mechanism.requireInteger()) {
+//            getWorld().setMonsterSpawnLimit(mechanism.getValue().asInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1299,9 +1353,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.allows_pvp>
         // -->
-        if (mechanism.matches("allow_pvp") && mechanism.requireBoolean()) {
-            getWorld().setPVP(mechanism.getValue().asBoolean());
-        }
+        //todo
+//        if (mechanism.matches("allow_pvp") && mechanism.requireBoolean()) {
+//            getWorld().setPVP(mechanism.getValue().asBoolean());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1314,7 +1369,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // -->
         if (mechanism.matches("spawn_location") && mechanism.requireObject(LocationTag.class)) {
             LocationTag loc = mechanism.valueAsType(LocationTag.class);
-            getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getYaw());
+            getWorld().setDefaultSpawnPos(loc.getBlockPos(), loc.getYaw());
         }
 
         // <--[mechanism]
@@ -1326,9 +1381,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.has_storm>
         // -->
-        if (mechanism.matches("storming") && mechanism.requireBoolean()) {
-            getWorld().setStorm(mechanism.getValue().asBoolean());
-        }
+        //todo
+//        if (mechanism.matches("storming") && mechanism.requireBoolean()) {
+//            getWorld().setStorm(mechanism.getValue().asBoolean());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1339,9 +1395,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.thunder_duration>
         // -->
-        if (mechanism.matches("thunder_duration") && mechanism.requireObject(DurationTag.class)) {
-            getWorld().setThunderDuration(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
-        }
+        //todo
+//        if (mechanism.matches("thunder_duration") && mechanism.requireObject(DurationTag.class)) {
+//            getWorld().setThunderDuration(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1467,38 +1524,40 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Skips to the next day as if enough players slept through the night.
         // NOTE: This ignores the doDaylightCycle gamerule!
         // -->
-        if (mechanism.matches("skip_night")) {
-            // general logic from NMS world tick
-            World world = getWorld();
-            long worldTime = world.getFullTime();
-            long nextDay = worldTime + 24000L;
-            TimeSkipEvent event = new TimeSkipEvent(world, TimeSkipEvent.SkipReason.NIGHT_SKIP, nextDay - nextDay % 24000L - worldTime);
-            Bukkit.getPluginManager().callEvent(event);
-            if (!event.isCancelled()) {
-                NMSHandler.worldHelper.setDayTime(world, worldTime + event.getSkipAmount());
-            }
-            if (!event.isCancelled()) {
-                NMSHandler.worldHelper.wakeUpAllPlayers(world);
-            }
-            // minor change: prior to 1.18, hasStorm/isRaining was not checked
-            if (getGameRuleOrDefault(GameRule.DO_WEATHER_CYCLE) && world.hasStorm()) {
-                NMSHandler.worldHelper.clearWeather(world);
-            }
-        }
+        //todo
+//        if (mechanism.matches("skip_night")) {
+//            // general logic from NMS world tick
+//            Level world = getWorld();
+//            long worldTime = world.getGameTime();
+//            long nextDay = worldTime + 24000L;
+//            TimeSkipEvent event = new TimeSkipEvent(world, TimeSkipEvent.SkipReason.NIGHT_SKIP, nextDay - nextDay % 24000L - worldTime);
+//            Bukkit.getPluginManager().callEvent(event);
+//            if (!event.isCancelled()) {
+//                NMSHandler.worldHelper.setDayTime(world, worldTime + event.getSkipAmount());
+//            }
+//            if (!event.isCancelled()) {
+//                NMSHandler.worldHelper.wakeUpAllPlayers(world);
+//            }
+//            // minor change: prior to 1.18, hasStorm/isRaining was not checked
+//            if (getGameRuleOrDefault(GameRules.RULE_WEATHER_CYCLE) && world.hasStorm()) {
+//                NMSHandler.worldHelper.clearWeather(world);
+//            }
+//        }
 
         tagProcessor.processMechanism(this, mechanism);
     }
 
     public void unloadWorldClean(Mechanism mechanism, boolean doSave) {
-        for (Player pl : new ArrayList<>(getWorld().getPlayers())) {
-            if (pl.isOnline()) {
-                mechanism.echoError("For WorldTag." + mechanism.getName() + " mechanism, Player " + pl.getUniqueId() + "/" + pl.getName() + " is inside world and will be kicked.");
-                pl.kickPlayer("World being destroyed.");
-            }
+        for (Player pl : getWorld().players()) {
+            //todo
+//            if (pl.isOnline()) {
+                mechanism.echoError("For WorldTag." + mechanism.getName() + " mechanism, Player " + pl.getUUID() + "/" + pl.getName() + " is inside world and will be kicked.");
+//                pl.kickPlayer("World being destroyed.");
+//            }
         }
-        if (!Bukkit.getServer().unloadWorld(getWorld(), doSave)) {
-            mechanism.echoError("WorldTag." + mechanism.getName() + " for world " + world_name + " was refused by the System. Are you sure (A) this world is even loaded, (B) all players have been removed, and (C) this is not the default world?");
-        }
+//        if (!Bukkit.getServer().unloadWorld(getWorld(), doSave)) {
+//            mechanism.echoError("WorldTag." + mechanism.getName() + " for world " + world_name + " was refused by the System. Are you sure (A) this world is even loaded, (B) all players have been removed, and (C) this is not the default world?");
+//        }
     }
 
     @Override

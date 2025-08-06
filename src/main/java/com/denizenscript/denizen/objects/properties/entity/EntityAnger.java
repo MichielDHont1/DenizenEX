@@ -3,8 +3,8 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import org.bukkit.entity.Bee;
-import org.bukkit.entity.PigZombie;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 
 public class EntityAnger extends EntityProperty<DurationTag> {
 
@@ -17,17 +17,17 @@ public class EntityAnger extends EntityProperty<DurationTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-        return entity.getBukkitEntity() instanceof PigZombie
+        return entity.getBukkitEntity() instanceof ZombifiedPiglin
                 || entity.getBukkitEntity() instanceof Bee;
     }
 
     @Override
     public DurationTag getPropertyValue() {
-        if (getEntity() instanceof PigZombie entity) {
-            return new DurationTag((long) entity.getAnger());
+        if (getEntity() instanceof ZombifiedPiglin entity) {
+            return new DurationTag((long) entity.getRemainingPersistentAngerTime());
         }
         else if (getEntity() instanceof Bee entity) {
-            return new DurationTag((long) entity.getAnger());
+            return new DurationTag((long) entity.getRemainingPersistentAngerTime());
         }
         else {
             return null;
@@ -39,11 +39,11 @@ public class EntityAnger extends EntityProperty<DurationTag> {
         if (mechanism.getValue().isInt()) { // Soft-deprecated - backwards compatibility, as this used to use a tick count
             param = new DurationTag(mechanism.getValue().asLong());
         }
-        if (getEntity() instanceof PigZombie entity) {
-            entity.setAnger(param.getTicksAsInt());
+        if (getEntity() instanceof ZombifiedPiglin entity) {
+            entity.setRemainingPersistentAngerTime(param.getTicksAsInt());
         }
         else {
-            as(Bee.class).setAnger(param.getTicksAsInt());
+            as(Bee.class).setRemainingPersistentAngerTime(param.getTicksAsInt());
         }
     }
 

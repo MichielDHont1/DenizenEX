@@ -3,8 +3,8 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import net.citizensnpcs.trait.Age;
-import org.bukkit.entity.Breedable;
+import net.minecraft.world.entity.AgeableMob;
+
 
 public class EntityAgeLocked extends EntityProperty<ElementTag> {
 
@@ -17,7 +17,7 @@ public class EntityAgeLocked extends EntityProperty<ElementTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-        return entity.getBukkitEntity() instanceof Breedable;
+        return entity.getBukkitEntity() instanceof AgeableMob;
     }
 
     @Override
@@ -25,21 +25,23 @@ public class EntityAgeLocked extends EntityProperty<ElementTag> {
         return !val.asBoolean();
     }
 
+    //todo
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(Breedable.class).getAgeLock());
+//        return new ElementTag(as(AgeableMob.class).getAgeLock());
+        return null;
     }
-
+//
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
-        if (mechanism.requireBoolean()) {
-            if (object.isCitizensNPC()) {
-                object.getDenizenNPC().getCitizen().getOrAddTrait(Age.class).setLocked(param.asBoolean());
-            }
-            else {
-                as(Breedable.class).setAgeLock(param.asBoolean());
-            }
-        }
+//        if (mechanism.requireBoolean()) {
+//            if (object.isCitizensNPC()) {
+//                object.getDenizenNPC().getCitizen().getOrAddTrait(Age.class).setLocked(param.asBoolean());
+//            }
+//            else {
+//                as(Breedable.class).setAgeLock(param.asBoolean());
+//            }
+//        }
     }
 
     @Override

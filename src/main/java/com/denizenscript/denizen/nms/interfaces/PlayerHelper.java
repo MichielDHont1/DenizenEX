@@ -3,11 +3,13 @@ package com.denizenscript.denizen.nms.interfaces;
 import com.denizenscript.denizen.nms.abstracts.ImprovedOfflinePlayer;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizen.objects.PlayerTag;
+import com.denizenscript.denizen.utilities.NamespacedKey;
 import com.denizenscript.denizen.utilities.entity.DenizenEntityType;
 import com.denizenscript.denizen.utilities.entity.FakeEntity;
 import com.denizenscript.denizencore.objects.Mechanism;
 import net.minecraft.server.level.ServerPlayer;
 import com.denizenscript.denizen.utilities.Location;
+import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import java.util.ArrayList;
@@ -16,8 +18,8 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class PlayerHelper {
-
-    public abstract void stopSound(Player player, NamespacedKey sound, SoundCategory category); // TODO: remove the category param once 1.19 is the minimum version
+//todo
+//    public abstract void stopSound(Player player, NamespacedKey sound, SoundCategory category); // TODO: remove the category param once 1.19 is the minimum version
 
     public abstract FakeEntity sendEntitySpawn(List<PlayerTag> players, DenizenEntityType entityType, LocationTag location, ArrayList<Mechanism> mechanisms, int customId, UUID customUUID, boolean autoTrack);
 
@@ -34,8 +36,8 @@ public abstract class PlayerHelper {
     public abstract float getMaxAttackCooldownTicks(Player player);
 
     public abstract void setAttackCooldown(Player player, int ticks);
-
-    public abstract boolean hasChunkLoaded(Player player, Chunk chunk);
+//todo chunkloading
+//    public abstract boolean hasChunkLoaded(Player player, Chunk chunk);
 
     public abstract void setTemporaryOp(Player player, boolean op);
 
@@ -83,7 +85,7 @@ public abstract class PlayerHelper {
 
     public enum ProfileEditMode { ADD, UPDATE_DISPLAY, UPDATE_LATENCY, UPDATE_GAME_MODE, UPDATE_LISTED }
 
-    public void sendPlayerInfoAddPacket(Player player, EnumSet<ProfileEditMode> editModes, String name, String display, UUID id, String texture, String signature, int latency, GameMode gameMode, boolean listed) { // TODO: once 1.19 is the minimum supported version, rename to 'sendPlayerInfoUpdatePacket'
+    public void sendPlayerInfoAddPacket(Player player, EnumSet<ProfileEditMode> editModes, String name, String display, UUID id, String texture, String signature, int latency, ServerPlayerGameMode gameMode, boolean listed) { // TODO: once 1.19 is the minimum supported version, rename to 'sendPlayerInfoUpdatePacket'
         throw new UnsupportedOperationException();
     }
 
@@ -91,9 +93,10 @@ public abstract class PlayerHelper {
         throw new UnsupportedOperationException();
     }
 
-    public void sendClimbableMaterials(Player player, List<Material> materials) {
-        throw new UnsupportedOperationException();
-    }
+    //todo
+//    public void sendClimbableMaterials(Player player, List<Material> materials) {
+//        throw new UnsupportedOperationException();
+//    }
 
     public void addFakePassenger(List<PlayerTag> players, Entity entity, FakeEntity fakeEntity) {
         throw new UnsupportedOperationException();

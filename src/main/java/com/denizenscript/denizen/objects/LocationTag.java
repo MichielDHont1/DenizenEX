@@ -278,6 +278,10 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         backupWorld = worldName;
     }
 
+    public LocationTag(double x, double y) {
+        super(null , x, y, 0);
+    }
+
     public LocationTag(Level world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, EntityHelper.normalizeYaw(yaw), pitch);
         if (world != null) {

@@ -1,40 +1,40 @@
 package com.denizenscript.denizen.nms.interfaces;
 
-import com.denizenscript.denizen.objects.BiomeTag;
+//import com.denizenscript.denizen.objects.BiomeTag;
 import com.denizenscript.denizen.utilities.Location;
-import org.bukkit.World;
+import net.minecraft.world.level.Level;
 
 public interface WorldHelper {
 
-    boolean isStatic(World world);
+    boolean isStatic(Level world);
 
-    void setStatic(World world, boolean isStatic);
+    void setStatic(Level world, boolean isStatic);
 
     float getLocalDifficulty(Location location);
+//todo
+//    default Location getNearestBiomeLocation(Location start, BiomeTag biome) {
+//        throw new UnsupportedOperationException();
+//    }
 
-    default Location getNearestBiomeLocation(Location start, BiomeTag biome) {
-        throw new UnsupportedOperationException();
-    }
+    boolean areEnoughSleeping(Level world, int percentage);
 
-    boolean areEnoughSleeping(World world, int percentage);
+    boolean areEnoughDeepSleeping(Level world, int percentage);
 
-    boolean areEnoughDeepSleeping(World world, int percentage);
+    int getSkyDarken(Level world);
 
-    int getSkyDarken(World world);
+    boolean isDay(Level world);
 
-    boolean isDay(World world);
-
-    boolean isNight(World world);
+    boolean isNight(Level world);
 
     /** for setting the time without firing a CUSTOM TimeSkipEvent */
-    void setDayTime(World world, long time);
+    void setDayTime(Level world, long time);
 
-    void wakeUpAllPlayers(World world);
+    void wakeUpAllPlayers(Level world);
 
     /** for clearing weather without ignoring possible raised event results */
-    void clearWeather(World world);
+    void clearWeather(Level world);
 
-    default void setGameTime(World world, long time) {
+    default void setGameTime(Level world, long time) {
         throw new UnsupportedOperationException();
     }
 }

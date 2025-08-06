@@ -969,10 +969,10 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         return getLivingEntity().isAddedToWorld();
     }
 //todo
-//    public boolean isValid() {
+    public boolean isValid() {
 //        Entity entity = getBukkitEntity();
 //        return entity != null && (entity.isValid() || (isFake && isFakeValid));
-//    }
+    }
 
     public void remove() {
         entity.remove(DISCARDED);
@@ -1484,9 +1484,10 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // The map also contains "map" as the ID of the targeted map.
         // Returns null if the entity is not looking at an item_frame holding a filled_map.
         // -->
-        registerSpawnedOnlyTag(MapTag.class, "trace_framed_map", (attribute, object) -> {
-            return NMSHandler.entityHelper.mapTrace(object.getLivingEntity());
-        });
+        //todo
+//        registerSpawnedOnlyTag(MapTag.class, "trace_framed_map", (attribute, object) -> {
+//            return NMSHandler.entityHelper.mapTrace(object.getLivingEntity());
+//        });
 
         // <--[tag]
         // @attribute <EntityTag.map_trace>
@@ -1496,14 +1497,15 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // @description
         // Deprecated in favor of <@link tag EntityTag.trace_framed_map>
         // -->
-        registerSpawnedOnlyTag(LocationTag.class, "map_trace", (attribute, object) -> {
-            BukkitImplDeprecations.entityMapTraceTag.warn(attribute.context);
-            MapTag result = NMSHandler.entityHelper.mapTrace(object.getLivingEntity());
-            if (result == null) {
-                return null;
-            }
-            return new LocationTag(null, result.getElement("x").asDouble(), result.getElement("y").asDouble());
-        });
+        //todo
+//        registerSpawnedOnlyTag(LocationTag.class, "map_trace", (attribute, object) -> {
+//            BukkitImplDeprecations.entityMapTraceTag.warn(attribute.context);
+//            MapTag result = NMSHandler.entityHelper.mapTrace(object.getLivingEntity());
+//            if (result == null) {
+//                return null;
+//            }
+//            return new LocationTag(null, result.getElement("x").asDouble(), result.getElement("y").asDouble());
+//        });
 
         // <--[tag]
         // @attribute <EntityTag.can_see[<entity>]>
@@ -4557,19 +4559,20 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // This technically also works with any entity type.
         // Note that the original entity doesn't actually get picked up, it's still there, just invisible now.
         // -->
-        if (mechanism.matches("fake_pickup") && mechanism.requireObject(EntityTag.class)) {
-            Entity ent = mechanism.valueAsType(EntityTag.class).getBukkitEntity();
-            int amount = 1;
-            if (ent instanceof ItemEntity) {
-                amount = ((ItemEntity) ent).getItem().getCount();
-            }
-            for (Player player : NMSHandler.entityHelper.getPlayersThatSee(getBukkitEntity())) {
-                NMSHandler.packetHelper.sendCollectItemEntity(player, getBukkitEntity(), ent, amount);
-            }
-            if (isPlayer()) {
-                NMSHandler.packetHelper.sendCollectItemEntity((Player) getBukkitEntity(), getBukkitEntity(), ent, amount);
-            }
-        }
+        //todo
+//        if (mechanism.matches("fake_pickup") && mechanism.requireObject(EntityTag.class)) {
+//            Entity ent = mechanism.valueAsType(EntityTag.class).getBukkitEntity();
+//            int amount = 1;
+//            if (ent instanceof ItemEntity) {
+//                amount = ((ItemEntity) ent).getItem().getCount();
+//            }
+//            for (Player player : NMSHandler.entityHelper.getPlayersThatSee(getBukkitEntity())) {
+//                NMSHandler.packetHelper.sendCollectItemEntity(player, getBukkitEntity(), ent, amount);
+//            }
+//            if (isPlayer()) {
+//                NMSHandler.packetHelper.sendCollectItemEntity((Player) getBukkitEntity(), getBukkitEntity(), ent, amount);
+//            }
+//        }
 
         // <--[mechanism]
         // @object EntityTag
