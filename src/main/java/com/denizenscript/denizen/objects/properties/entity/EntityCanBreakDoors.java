@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Zombie;
+import net.minecraft.world.entity.monster.Zombie;
 
 public class EntityCanBreakDoors extends EntityProperty<ElementTag> {
 

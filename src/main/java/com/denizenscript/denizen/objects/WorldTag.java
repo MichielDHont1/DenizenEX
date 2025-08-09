@@ -1409,9 +1409,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.thundering>
         // -->
-        if (mechanism.matches("thundering") && mechanism.requireBoolean()) {
-            getWorld().setThundering(mechanism.getValue().asBoolean());
-        }
+        //todo
+//        if (mechanism.matches("thundering") && mechanism.requireBoolean()) {
+//            getWorld().setThundering(mechanism.getValue().asBoolean());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1422,9 +1423,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.ticks_per_animal_spawn>
         // -->
-        if (mechanism.matches("ticks_per_animal_spawns") && mechanism.requireObject(DurationTag.class)) {
-            getWorld().setTicksPerAnimalSpawns(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
-        }
+        //todo
+//        if (mechanism.matches("ticks_per_animal_spawns") && mechanism.requireObject(DurationTag.class)) {
+//            getWorld().setTicksPerAnimalSpawns(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1435,9 +1437,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.ticks_per_monster_spawn>
         // -->
-        if (mechanism.matches("ticks_per_monster_spawns") && mechanism.requireObject(DurationTag.class)) {
-            getWorld().setTicksPerMonsterSpawns(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
-        }
+        //todo
+//        if (mechanism.matches("ticks_per_monster_spawns") && mechanism.requireObject(DurationTag.class)) {
+//            getWorld().setTicksPerMonsterSpawns(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1449,7 +1452,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // <WorldTag.time>
         // -->
         if (mechanism.matches("time") && mechanism.requireInteger()) {
-            getWorld().setTime(mechanism.getValue().asInt());
+            getWorld().setDayTime(mechanism.getValue().asInt());
         }
 
         // <--[mechanism]
@@ -1473,9 +1476,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.water_animal_spawn_limit>
         // -->
-        if (mechanism.matches("water_animal_spawn_limit") && mechanism.requireInteger()) {
-            getWorld().setWaterAnimalSpawnLimit(mechanism.getValue().asInt());
-        }
+        //todo
+//        if (mechanism.matches("water_animal_spawn_limit") && mechanism.requireInteger()) {
+//            getWorld().setWaterAnimalSpawnLimit(mechanism.getValue().asInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1486,9 +1490,10 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // @tags
         // <WorldTag.weather_duration>
         // -->
-        if (mechanism.matches("weather_duration") && mechanism.requireObject(DurationTag.class)) {
-            getWorld().setWeatherDuration(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
-        }
+        //todo
+//        if (mechanism.matches("weather_duration") && mechanism.requireObject(DurationTag.class)) {
+//            getWorld().setWeatherDuration(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag
@@ -1498,10 +1503,11 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // Advances this world's day the specified number of ticks WITHOUT firing any events.
         // Useful for manually adjusting the daylight cycle without firing an event every tick, for example.
         // -->
-        if (mechanism.matches("advance_ticks") && mechanism.requireInteger()) {
-            World world = getWorld();
-            NMSHandler.worldHelper.setDayTime(world, world.getFullTime() + mechanism.getValue().asInt());
-        }
+        //todo
+//        if (mechanism.matches("advance_ticks") && mechanism.requireInteger()) {
+//            World world = getWorld();
+//            NMSHandler.worldHelper.setDayTime(world, world.getFullTime() + mechanism.getValue().asInt());
+//        }
 
         // <--[mechanism]
         // @object WorldTag

@@ -5,8 +5,6 @@ import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Interaction;
-import org.bukkit.entity.Mob;
 
 public class EntityAware extends EntityProperty<ElementTag> {
 

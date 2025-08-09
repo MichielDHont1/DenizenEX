@@ -154,24 +154,23 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
                 Debug.echoError(ex);
             }
         }
-        //todo material
-//        try {
-//            MaterialTag mat = MaterialTag.valueOf(string, context);
-//            if (mat != null) {
-//                stack = new ItemTag(mat.getMaterial());
-//            }
-//            if (stack != null) {
-//                return stack;
-//            }
-//        }
-//        catch (Exception ex) {
-//            if (!string.equalsIgnoreCase("none") && (context == null || context.showErrors())) {
-//                Debug.log("Does not match a valid item ID or material: " + string);
-//            }
-//            if (CoreConfiguration.debugVerbose) {
-//                Debug.echoError(ex);
-//            }
-//        }
+        try {
+            MaterialTag mat = MaterialTag.valueOf(string, context);
+            if (mat != null) {
+                stack = new ItemTag(mat.getItem());
+            }
+            if (stack != null) {
+                return stack;
+            }
+        }
+        catch (Exception ex) {
+            if (!string.equalsIgnoreCase("none") && (context == null || context.showErrors())) {
+                Debug.log("Does not match a valid item ID or material: " + string);
+            }
+            if (CoreConfiguration.debugVerbose) {
+                Debug.echoError(ex);
+            }
+        }
         if (context == null || context.showErrors()) {
             Debug.log("valueOf ItemTag returning null: " + string);
         }
@@ -217,10 +216,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
     public ItemTag(Item material, int qty) {
         this(new ItemStack(material, qty));
     }
-//todo material
-//    public ItemTag(MaterialTag material, int qty) {
-//        this.item = new ItemStack(material.getMaterial(), qty);
-//    }
+
+    public ItemTag(MaterialTag material, int qty) {
+        this.item = new ItemStack(material.getItem(), qty);
+    }
 
     public ItemTag(ItemStack item) {
         if (item == null || item.isEmpty()) {
@@ -604,21 +603,20 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the MaterialTag that is the basis of the item.
         // EG, a stone with lore and a display name, etc. will return only "m@stone".
         // -->
-        //todo material
-//        tagProcessor.registerTag(ObjectTag.class, "material", (attribute, object) -> {
-//            if (attribute.getAttribute(2).equals("formatted")) {
-//                return object;
-//            }
-//            if (object.getItemMeta() instanceof BlockStateMeta) {
-//                if (object.getBukkitMaterial() == Material.SHIELD) {
-//                    MaterialTag material = new MaterialTag(Material.SHIELD);
-//                    material.setModernData(((BlockStateMeta) object.getItemMeta()).getBlockState().getBlockData());
-//                    return material;
-//                }
-//                return new MaterialTag(((BlockStateMeta) object.getItemMeta()).getBlockState());
-//            }
-//            return object.getMaterial();
-//        });
+        tagProcessor.registerTag(ObjectTag.class, "material", (attribute, object) -> {
+            if (attribute.getAttribute(2).equals("formatted")) {
+                return object;
+            }
+            if (object.getItemMeta() instanceof BlockStateMeta) {
+                if (object.getBukkitMaterial() == Material.SHIELD) {
+                    MaterialTag material = new MaterialTag(Material.SHIELD);
+                    material.setModernData(((BlockStateMeta) object.getItemMeta()).getBlockState().getBlockData());
+                    return material;
+                }
+                return new MaterialTag(((BlockStateMeta) object.getItemMeta()).getBlockState());
+            }
+            return object.getMaterial();
+        });
 
         // <--[tag]
         // @attribute <ItemTag.placed_material>

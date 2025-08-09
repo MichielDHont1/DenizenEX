@@ -3,8 +3,6 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.Interaction;
 
 public class EntityHeight extends EntityProperty<ElementTag> {
 

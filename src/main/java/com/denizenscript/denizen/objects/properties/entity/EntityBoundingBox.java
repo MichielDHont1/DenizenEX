@@ -8,7 +8,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.util.BoundingBox;
+import net.minecraft.world.phys.AABB;
 
 import java.util.HashSet;
 import java.util.List;
@@ -47,18 +47,18 @@ public class EntityBoundingBox implements Property {
     EntityTag entity;
 
     public ListTag getBoundingBox() {
-        BoundingBox boundingBox = entity.getBukkitEntity().getBoundingBox();
+        AABB boundingBox = entity.getBukkitEntity().getBoundingBox();
         ListTag list = new ListTag();
-        list.addObject(new LocationTag(entity.getWorld(), boundingBox.getMin()));
-        list.addObject(new LocationTag(entity.getWorld(), boundingBox.getMax()));
+        list.addObject(new LocationTag(entity.getWorld(), boundingBox.minX, boundingBox.minZ));
+        list.addObject(new LocationTag(entity.getWorld(), boundingBox.minX, boundingBox.minZ));
         return list;
     }
 
     @Override
     public String getPropertyString() {
-        if (entity.isCitizensNPC()) {
-            return null;
-        }
+//        if (entity.isCitizensNPC()) {
+//            return null;
+//        }
         if (modifiedBoxes.contains(entity.getUUID())) {
             return getBoundingBox().identify();
         }
@@ -98,18 +98,19 @@ public class EntityBoundingBox implements Property {
         // <EntityTag.bounding_box>
         // -->
         if (mechanism.matches("bounding_box") && mechanism.requireObject(ListTag.class)) {
-            if (entity.isCitizensNPC()) {
-                // TODO: Allow editing NPC boxes properly?
-                return;
-            }
-            List<LocationTag> locations = mechanism.valueAsType(ListTag.class).filter(LocationTag.class, mechanism.context);
-            if (locations.size() == 2) {
-                NMSHandler.entityHelper.setBoundingBox(entity.getBukkitEntity(), BoundingBox.of(locations.get(0), locations.get(1)));
-                modifiedBoxes.add(entity.getUUID());
-            }
-            else {
+            //todo
+//            if (entity.isCitizensNPC()) {
+//                // TODO: Allow editing NPC boxes properly?
+//                return;
+////            }
+//            List<LocationTag> locations = mechanism.valueAsType(ListTag.class).filter(LocationTag.class, mechanism.context);
+//            if (locations.size() == 2) {
+//                NMSHandler.entityHelper.setBoundingBox(entity.getBukkitEntity(), BoundingBox.of(locations.get(0), locations.get(1)));
+//                modifiedBoxes.add(entity.getUUID());
+//            }
+//            else {
                 mechanism.echoError("Must specify exactly 2 LocationTags in the format '<low>|<high>'!");
-            }
+//            }
         }
     }
 }

@@ -9,6 +9,8 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,52 +44,47 @@ public class ItemCanPlaceOn implements Property {
 
     ItemTag item;
 
-    //todo material
-//    public ListTag getMaterials() {
-//        ItemStack itemStack = item.getItemStack();
-//        List<Material> materials = NMSHandler.itemHelper.getCanPlaceOn(itemStack);
-//        if (materials != null && !materials.isEmpty()) {
-//            ListTag list = new ListTag();
-//            for (Material material : materials) {
-//                list.addObject(new MaterialTag(material));
-//            }
-//            return list;
-//        }
-//        return null;
-//    }
+    public ListTag getMaterials() {
+        ItemStack itemStack = item.getItemStack();
+        List<Block> materials = NMSHandler.itemHelper.getCanPlaceOn(itemStack);
+        if (materials != null && !materials.isEmpty()) {
+            ListTag list = new ListTag();
+            for (Block material : materials) {
+                list.addObject(new MaterialTag(material));
+            }
+            return list;
+        }
+        return null;
+    }
 
     @Override
     public ObjectTag getObjectAttribute(Attribute attribute) {
-        //todo material
-//
-//        if (attribute == null) {
-//            return null;
-//        }
-//
-//        // <--[tag]
-//        // @attribute <ItemTag.can_place_on>
-//        // @returns ListTag(MaterialTag)
-//        // @group properties
-//        // @mechanism ItemTag.can_place_on
-//        // @description
-//        // Returns a list of materials this item can be placed on while in adventure mode, if any.
-//        // -->
-//        if (attribute.startsWith("can_place_on")) {
-//            ListTag materials = getMaterials();
-//            if (materials != null) {
-//                return materials.getObjectAttribute(attribute.fulfill(1));
-//            }
-//        }
+        if (attribute == null) {
+            return null;
+        }
+
+        // <--[tag]
+        // @attribute <ItemTag.can_place_on>
+        // @returns ListTag(MaterialTag)
+        // @group properties
+        // @mechanism ItemTag.can_place_on
+        // @description
+        // Returns a list of materials this item can be placed on while in adventure mode, if any.
+        // -->
+        if (attribute.startsWith("can_place_on")) {
+            ListTag materials = getMaterials();
+            if (materials != null) {
+                return materials.getObjectAttribute(attribute.fulfill(1));
+            }
+        }
 
         return null;
     }
 
     @Override
     public String getPropertyString() {
-        //todo material
-//        ListTag materials = getMaterials();
-//        return materials != null ? materials.identify() : null;
-        return null;
+        ListTag materials = getMaterials();
+        return materials != null ? materials.identify() : null;
     }
 
     @Override
@@ -108,25 +105,24 @@ public class ItemCanPlaceOn implements Property {
         // @tags
         // <ItemTag.can_place_on>
         // -->
-        //todo
-//        if (mechanism.matches("can_place_on")) {
-//            if (item.getMaterial().getMaterial() == Material.AIR) {
-//                mechanism.echoError("Cannot apply NBT to AIR!");
-//                return;
-//            }
-//
-//            ItemStack itemStack = item.getItemStack();
-//
-//            if (mechanism.hasValue()) {
-//                List<Material> materials = mechanism.valueAsType(ListTag.class).filter(MaterialTag.class, mechanism.context)
-//                        .stream().map(MaterialTag::getMaterial).collect(Collectors.toList());
-//                itemStack = NMSHandler.itemHelper.setCanPlaceOn(itemStack, materials);
-//            }
-//            else {
-//                itemStack = NMSHandler.itemHelper.setCanPlaceOn(itemStack, null);
-//            }
-//
-//            item.setItemStack(itemStack);
-//        }
+        if (mechanism.matches("can_place_on")) {
+            if (item.getMaterial().getItem() == Items.AIR) {
+                mechanism.echoError("Cannot apply NBT to AIR!");
+                return;
+            }
+
+            ItemStack itemStack = item.getItemStack();
+
+            if (mechanism.hasValue()) {
+                List<Block> materials = mechanism.valueAsType(ListTag.class).filter(MaterialTag.class, mechanism.context)
+                        .stream().map(MaterialTag::getBlock).collect(Collectors.toList());
+                itemStack = NMSHandler.itemHelper.setCanPlaceOn(itemStack, materials);
+            }
+            else {
+                itemStack = NMSHandler.itemHelper.setCanPlaceOn(itemStack, null);
+            }
+
+            item.setItemStack(itemStack);
+        }
     }
 }

@@ -24,6 +24,8 @@ import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -529,12 +531,13 @@ public class Utilities {
 //        }
 //        return y >= world.getMinHeight() && y <= world.getMaxHeight();
 //    }
-//todo material
-//    public static ArrayList<Material> allMaterialsThatMatch(String matcherText) {
+//todo get all items and rewrite this to use a hashmap
+//    public static ArrayList<Item> allMaterialsThatMatch(String matcherText) {
 //        ScriptEvent.MatchHelper matcher = ScriptEvent.createMatcher(matcherText);
-//        ArrayList<Material> mats = new ArrayList<>();
-//        for (Material material : Material.values()) {
-//            if (matcher.doesMatch(material.name()) && !material.name().startsWith("LEGACY_")) {
+//        ArrayList<Item> mats = new ArrayList<>();
+//        for (Item material : Item.values()) {
+//            String name = material.getName(new ItemStack(material)).getString();
+//            if (matcher.doesMatch(name) && name.startsWith("LEGACY_")) {
 //                mats.add(material);
 //            }
 //        }

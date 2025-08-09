@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 
 public class EntityArrowDamage extends EntityProperty<ElementTag> {
 
@@ -22,13 +22,13 @@ public class EntityArrowDamage extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(AbstractArrow.class).getDamage());
+        return new ElementTag(as(AbstractArrow.class).getBaseDamage());
     }
 
     @Override
     public void setPropertyValue(ElementTag value, Mechanism mechanism) {
         if (mechanism.requireDouble()) {
-            as(AbstractArrow.class).setDamage(value.asDouble());
+            as(AbstractArrow.class).setBaseDamage(value.asDouble());
         }
     }
 

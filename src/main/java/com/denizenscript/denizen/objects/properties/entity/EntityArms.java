@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import org.bukkit.entity.ArmorStand;
+import net.minecraft.world.entity.decoration.ArmorStand;
 
 public class EntityArms extends EntityProperty<ElementTag> {
 
@@ -26,14 +26,15 @@ public class EntityArms extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(ArmorStand.class).hasArms());
+        return new ElementTag(as(ArmorStand.class).isShowArms());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
-        if (mechanism.requireBoolean()) {
-            as(ArmorStand.class).setArms(param.asBoolean());
-        }
+        //todo
+//        if (mechanism.requireBoolean()) {
+//            as(ArmorStand.class).setShowArms(param.asBoolean());
+//        }
     }
 
     @Override

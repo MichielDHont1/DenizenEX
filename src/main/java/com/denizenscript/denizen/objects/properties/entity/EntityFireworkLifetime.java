@@ -7,12 +7,12 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.Firework;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 
 public class EntityFireworkLifetime implements Property {
 
     public static boolean describes(ObjectTag entity) {
-        return entity instanceof EntityTag && ((EntityTag) entity).getBukkitEntity() instanceof Firework;
+        return entity instanceof EntityTag && ((EntityTag) entity).getBukkitEntity() instanceof FireworkRocketEntity;
     }
 
     public static EntityFireworkLifetime getFrom(ObjectTag entity) {
@@ -34,13 +34,14 @@ public class EntityFireworkLifetime implements Property {
 
     EntityTag entity;
 
-    public DurationTag getDuration() {
-        return new DurationTag((long) NMSHandler.entityHelper.getFireworkLifetime((Firework) entity.getBukkitEntity()));
-    }
-
+//    public DurationTag getDuration() {
+//        return new DurationTag((long) NMSHandler.entityHelper.getFireworkLifetime((Firework) entity.getBukkitEntity()));
+//    }
+//todo
     @Override
     public String getPropertyString() {
-        return getDuration().identify();
+//        return getDuration().identify();
+        return null;
     }
 
     @Override
@@ -58,9 +59,10 @@ public class EntityFireworkLifetime implements Property {
         // @description
         // Returns the duration that a firework will live for (before detonating).
         // -->
-        PropertyParser.registerTag(EntityFireworkLifetime.class, DurationTag.class, "firework_lifetime", (attribute, object) -> {
-            return object.getDuration();
-        });
+        //todo
+//        PropertyParser.registerTag(EntityFireworkLifetime.class, DurationTag.class, "firework_lifetime", (attribute, object) -> {
+//            return object.getDuration();
+//        });
     }
 
     @Override
@@ -75,8 +77,9 @@ public class EntityFireworkLifetime implements Property {
         // @tags
         // <EntityTag.firework_lifetime>
         // -->
-        if (mechanism.matches("firework_lifetime") && mechanism.requireObject(DurationTag.class)) {
-            NMSHandler.entityHelper.setFireworkLifetime((Firework) entity.getBukkitEntity(), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
-        }
+        //todo
+//        if (mechanism.matches("firework_lifetime") && mechanism.requireObject(DurationTag.class)) {
+//            NMSHandler.entityHelper.setFireworkLifetime((Firework) entity.getBukkitEntity(), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+//        }
     }
 }

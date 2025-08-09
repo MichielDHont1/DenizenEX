@@ -1,6 +1,6 @@
 package com.denizenscript.denizen.utilities.implementation;
 
-//import com.denizenscript.denizen.objects.EntityTag;
+import com.denizenscript.denizen.objects.EntityTag;
 //import com.denizenscript.denizen.objects.NPCTag;
 import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizen.tags.BukkitTagContext;
@@ -19,21 +19,21 @@ public class BukkitScriptEntryData extends ScriptEntryData {
 //        this.npc = npc;
     }
 
-//    public BukkitScriptEntryData(EntityTag entity) {
-//        if (entity == null) {
-//            return;
-//        }
+    public BukkitScriptEntryData(EntityTag entity) {
+        if (entity == null) {
+            return;
+        }
 //        if (entity.isCitizensNPC()) {
 //            this.npc = entity.getDenizenNPC();
 //        }
-//        if (entity.isPlayer()) {
-//            this.player = entity.getDenizenPlayer();
-//        }
-//    }
+        if (entity.isPlayer()) {
+            this.player = entity.getDenizenPlayer();
+        }
+    }
 
-//    public BukkitScriptEntryData(Entity entity) {
-//        this(entity == null ? null : new EntityTag(entity));
-//    }
+    public BukkitScriptEntryData(Entity entity) {
+        this(entity == null ? null : new EntityTag(entity));
+    }
 
     public PlayerTag getPlayer() {
         return player;
@@ -77,44 +77,43 @@ public class BukkitScriptEntryData extends ScriptEntryData {
                 scriptEntry != null ? scriptEntry.getScript() : null);
     }
 
-//    @Override
-//    public String toString() {
-//        if (/*npc == null &&*/ player == null) {
-//            return "";
-//        }/*
-//        else if (npc == null) {
-//            return "player=p@" + player.getName();
-//        }
-//        else if (player == null) {
-//            return "npc=n@" + npc.getId();
-//        }*/
-//        else {
-//            return "player=p@" + player.getName() /*+ "   npc=n@" + npc.getId()*/;
-//        }
-//    }
-//
+    @Override
+    public String toString() {
+        if (/*npc == null &&*/ player == null) {
+            return "";
+        }/*
+        else if (npc == null) {
+            return "player=p@" + player.getName();
+        }
+        else if (player == null) {
+            return "npc=n@" + npc.getId();
+        }*/
+        else {
+            return "player=p@" + player.getName() /*+ "   npc=n@" + npc.getId()*/;
+        }
+    }
+
     @Override
     public YamlConfiguration save() {
-//        YamlConfiguration out = new YamlConfiguration();
-//        if (hasPlayer()) {
-//            out.set("player", getPlayer().savable());
+        YamlConfiguration out = new YamlConfiguration();
+        if (hasPlayer()) {
+            out.set("player", getPlayer().savable());
+        }
+//        if (hasNPC()) {
+//            out.set("npc", getNPC().savable());
 //        }
-////        if (hasNPC()) {
-////            out.set("npc", getNPC().savable());
-////        }
-//        return out;
-        return null;
+        return out;
     }
 
     @Override
     public void load(YamlConfiguration config) {
-//        String player = config.getString("player", null);
-//        if (player != null) {
-//            setPlayer(PlayerTag.valueOf(player, CoreUtilities.errorButNoDebugContext));
+        String player = config.getString("player", null);
+        if (player != null) {
+            setPlayer(PlayerTag.valueOf(player, CoreUtilities.errorButNoDebugContext));
+        }
+        String npc = config.getString("npc", null);
+//        if (npc != null) {
+//            setNPC(NPCTag.valueOf(npc, CoreUtilities.errorButNoDebugContext));
 //        }
-//        String npc = config.getString("npc", null);
-////        if (npc != null) {
-////            setNPC(NPCTag.valueOf(npc, CoreUtilities.errorButNoDebugContext));
-////        }
     }
 }

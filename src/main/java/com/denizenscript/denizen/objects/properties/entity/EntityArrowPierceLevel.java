@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 
 public class EntityArrowPierceLevel extends EntityProperty<ElementTag> {
 
@@ -27,7 +27,7 @@ public class EntityArrowPierceLevel extends EntityProperty<ElementTag> {
     @Override
     public void setPropertyValue(ElementTag value, Mechanism mechanism) {
         if (mechanism.requireInteger()) {
-            as(AbstractArrow.class).setPierceLevel(value.asInt());
+            as(AbstractArrow.class).setPierceLevel((byte)value.asInt());
         }
     }
 

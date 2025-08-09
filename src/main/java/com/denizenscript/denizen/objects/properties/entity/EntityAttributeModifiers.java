@@ -17,13 +17,9 @@ import com.denizenscript.denizencore.tags.core.EscapeTagUtil;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attributable;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,28 +52,28 @@ public class EntityAttributeModifiers implements Property {
 
     EntityTag entity;
 
-    @Deprecated
-    public static String stringify(AttributeModifier modifier) {
-        return EscapeTagUtil.escape(modifier.getName()) + "/" + modifier.getAmount() + "/" + modifier.getOperation().name()
-                + "/" + (modifier.getSlot() == null ? "any" : modifier.getSlot().name());
-    }
-
-    @Deprecated
-    public ListTag getAttributes() {
-        ListTag list = new ListTag();
-        for (Attribute attribute : Attribute.values()) {
-            AttributeInstance instance = getAttributable().getAttribute(attribute);
-            if (instance == null) {
-                continue;
-            }
-            StringBuilder modifiers = new StringBuilder();
-            for (AttributeModifier modifier : instance.getModifiers()) {
-                modifiers.append("/").append(stringify(modifier));
-            }
-            list.add(EscapeTagUtil.escape(attribute.name()) + "/" + instance.getBaseValue() + modifiers);
-        }
-        return list;
-    }
+//    @Deprecated
+//    public static String stringify(AttributeModifier modifier) {
+//        return EscapeTagUtil.escape(modifier.getName()) + "/" + modifier.getAmount() + "/" + modifier.getOperation().name()
+//                + "/" + (modifier.getSlot() == null ? "any" : modifier.getSlot().name());
+//    }
+//
+//    @Deprecated
+//    public ListTag getAttributes() {
+//        ListTag list = new ListTag();
+//        for (Attribute attribute : Attribute.values()) {
+//            AttributeInstance instance = getAttributable().getAttribute(attribute);
+//            if (instance == null) {
+//                continue;
+//            }
+//            StringBuilder modifiers = new StringBuilder();
+//            for (AttributeModifier modifier : instance.getModifiers()) {
+//                modifiers.append("/").append(stringify(modifier));
+//            }
+//            list.add(EscapeTagUtil.escape(attribute.name()) + "/" + instance.getBaseValue() + modifiers);
+//        }
+//        return list;
+//    }
 
     public static MapTag mapify(AttributeModifier modifier) {
         MapTag result = new MapTag();

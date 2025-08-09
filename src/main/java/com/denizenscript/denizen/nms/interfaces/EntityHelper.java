@@ -12,6 +12,7 @@ import com.denizenscript.denizencore.objects.core.MapTag;
 import com.mongodb.Block;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -26,6 +27,7 @@ import java.util.UUID;
 
 public abstract class EntityHelper {
 //todo
+        public static Attribute ATTRIBUTE_ARMOR = Attributes.ARMOR;
 //    public static Attribute ATTRIBUTE_ARMOR = Utilities.findBestEnumlike(Attribute.class, "ARMOR", "GENERIC_ARMOR");
 //    public static Attribute ATTRIBUTE_STEP_HEIGHT = Utilities.findBestEnumlike(Attribute.class, "STEP_HEIGHT", "GENERIC_STEP_HEIGHT");
 //    public static Attribute ATTRIBUTE_MOVEMENT_SPEED = Utilities.findBestEnumlike(Attribute.class, "MOVEMENT_SPEED", "GENERIC_MOVEMENT_SPEED");

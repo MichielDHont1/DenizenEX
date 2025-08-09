@@ -6,8 +6,8 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Bee;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Bee;
 
 public class EntityFlower implements Property {
 
@@ -48,10 +48,12 @@ public class EntityFlower implements Property {
 
     @Override
     public String getPropertyString() {
-        if (getBee().getFlower() == null) {
+        if (!getBee().hasSavedFlowerPos()) {
             return null;
         }
-        return new LocationTag(getBee().getFlower()).identify();
+        else {
+            return new LocationTag(getBee().getSavedFlowerPos()).identify();
+        }
     }
 
     @Override
@@ -75,10 +77,10 @@ public class EntityFlower implements Property {
         // Returns the location of a bee's flower (if any).
         // -->
         if (attribute.startsWith("flower")) {
-            if (getBee().getFlower() == null) {
+            if (!getBee().hasSavedFlowerPos()) {
                 return null;
             }
-            return new LocationTag(getBee().getFlower())
+            return new LocationTag(getBee().getSavedFlowerPos())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -100,10 +102,10 @@ public class EntityFlower implements Property {
         // -->
         if (mechanism.matches("flower")) {
             if (mechanism.hasValue() && mechanism.requireObject(LocationTag.class)) {
-                getBee().setFlower(mechanism.valueAsType(LocationTag.class));
+                getBee().setSavedFlowerPos(mechanism.valueAsType(LocationTag.class).getBlockPos());
             }
             else {
-                getBee().setFlower(null);
+                getBee().setSavedFlowerPos(null);
             }
         }
     }

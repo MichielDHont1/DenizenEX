@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Bat;
+import net.minecraft.world.entity.ambient.Bat;
 
 public class EntityAwake extends EntityProperty<ElementTag> {
 
@@ -21,13 +21,13 @@ public class EntityAwake extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(Bat.class).isAwake());
+        return new ElementTag(!as(Bat.class).isSleeping());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireBoolean()) {
-            as(Bat.class).setAwake(param.asBoolean());
+            as(Bat.class).setResting(!param.asBoolean());
         }
     }
 

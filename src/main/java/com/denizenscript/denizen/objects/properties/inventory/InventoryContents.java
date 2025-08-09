@@ -113,7 +113,7 @@ public class InventoryContents extends ObjectProperty<InventoryTag, ListTag> {
             MapTag map = new MapTag();
             ItemStack[] items = prop.object.getContents();
             for (int i = 0; i < items.length; i++) {
-                if (items[i] == null || items[i].getType() == Material.AIR) {
+                if (items[i] == null || items[i].getItem() == Items.AIR) {
                     continue;
                 }
                 map.putObject(String.valueOf(i + 1), new ItemTag(items[i]));

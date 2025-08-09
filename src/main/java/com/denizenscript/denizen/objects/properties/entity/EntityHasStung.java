@@ -6,8 +6,8 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Bee;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Bee;
 
 public class EntityHasStung implements Property {
 
@@ -91,8 +91,9 @@ public class EntityHasStung implements Property {
         // @tags
         // <EntityTag.has_stung>
         // -->
-        if (mechanism.matches("has_stung") && mechanism.requireBoolean()) {
-            getBee().setHasStung(mechanism.getValue().asBoolean());
-        }
+        //todo private
+//        if (mechanism.matches("has_stung") && mechanism.requireBoolean()) {
+//            getBee().setHasStung(mechanism.getValue().asBoolean());
+//        }
     }
 }

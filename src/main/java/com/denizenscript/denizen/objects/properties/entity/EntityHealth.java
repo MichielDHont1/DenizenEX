@@ -1,6 +1,6 @@
 package com.denizenscript.denizen.objects.properties.entity;
 
-import com.denizenscript.denizen.npc.traits.HealthTrait;
+//import com.denizenscript.denizen.npc.traits.HealthTrait;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
@@ -54,7 +54,7 @@ public class EntityHealth implements Property {
 
     public static ElementTag getHealthFormatted(EntityTag entity, Double maxHealth) {
         if (maxHealth == null) {
-            maxHealth = entity.getLivingEntity().getMaxHealth();
+            maxHealth = (double)entity.getLivingEntity().getMaxHealth();
         }
         if ((float) entity.getLivingEntity().getHealth() / maxHealth < .10) {
             return new ElementTag("dying");
@@ -187,7 +187,7 @@ public class EntityHealth implements Property {
         // <EntityTag.health_max>
         // -->
         if (mechanism.matches("max_health") && mechanism.requireDouble()) {
-            if (entity.isCitizensNPC()) {
+            /*if (entity.isCitizensNPC()) {
                 if (entity.getDenizenNPC().getCitizen().hasTrait(HealthTrait.class)) {
                     entity.getDenizenNPC().getCitizen().getOrAddTrait(HealthTrait.class).setMaxhealth(mechanism.getValue().asInt());
                 }
@@ -195,12 +195,14 @@ public class EntityHealth implements Property {
                     mechanism.echoError("NPC doesn't have health trait!");
                 }
             }
-            else if (entity.isLivingEntity()) {
-                entity.getLivingEntity().setMaxHealth(mechanism.getValue().asDouble());
-            }
-            else {
+            else*/
+            //todo private
+            //if (entity.isLivingEntity()) {
+//                entity.getLivingEntity().setMaxHealth(mechanism.getValue().asDouble());
+//            }
+//            else {
                 mechanism.echoError("Entity is not alive!");
-            }
+//            }
         }
 
         // <--[mechanism]
@@ -214,16 +216,17 @@ public class EntityHealth implements Property {
         // <EntityTag.health>
         // <EntityTag.health_max>
         // -->
-        if (mechanism.matches("health_data")) {
-            if (entity.isLivingEntity()) {
-                List<String> values = CoreUtilities.split(mechanism.getValue().asString(), '/');
-                entity.getLivingEntity().setMaxHealth(Double.parseDouble(values.get(1)));
-                entity.getLivingEntity().setHealth(Double.parseDouble(values.get(0)));
-            }
-            else {
-                mechanism.echoError("Entity is not alive!");
-            }
-        }
+        //todo
+//        if (mechanism.matches("health_data")) {
+//            if (entity.isLivingEntity()) {
+//                List<String> values = CoreUtilities.split(mechanism.getValue().asString(), '/');
+//                entity.getLivingEntity().setMaxHealth(Double.parseDouble(values.get(1)));
+//                entity.getLivingEntity().setHealth(Double.parseDouble(values.get(0)));
+//            }
+//            else {
+//                mechanism.echoError("Entity is not alive!");
+//            }
+//        }
 
         // <--[mechanism]
         // @object EntityTag
@@ -238,7 +241,7 @@ public class EntityHealth implements Property {
         // -->
         if (mechanism.matches("health") && mechanism.requireDouble()) {
             if (entity.isLivingEntity()) {
-                entity.getLivingEntity().setHealth(mechanism.getValue().asDouble());
+                entity.getLivingEntity().setHealth((float) mechanism.getValue().asDouble());
             }
             else {
                 mechanism.echoError("Entity is not alive!");

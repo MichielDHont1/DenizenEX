@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import net.citizensnpcs.trait.Gravity;
+//import net.citizensnpcs.trait.Gravity;
 
 public class EntityGravity implements Property {
 
@@ -39,11 +39,11 @@ public class EntityGravity implements Property {
 
     @Override
     public String getPropertyString() {
-        if (dentity.getBukkitEntity().hasGravity()) {
-            return null;
+        if (dentity.getBukkitEntity().isNoGravity()) {
+            return "false";
         }
         else {
-            return "false";
+            return "true";
         }
     }
 
@@ -68,12 +68,12 @@ public class EntityGravity implements Property {
         // Returns whether the entity has gravity.
         // -->
         if (attribute.startsWith("gravity")) {
-            if (dentity.isCitizensNPC()) {
-                boolean gravityBlocked = dentity.getDenizenNPC().getCitizen().hasTrait(Gravity.class)
-                        && !dentity.getDenizenNPC().getCitizen().getOrAddTrait(Gravity.class).hasGravity();
-                return new ElementTag(!gravityBlocked);
-            }
-            return new ElementTag(dentity.getBukkitEntity().hasGravity())
+//            if (dentity.isCitizensNPC()) {
+//                boolean gravityBlocked = dentity.getDenizenNPC().getCitizen().hasTrait(Gravity.class)
+//                        && !dentity.getDenizenNPC().getCitizen().getOrAddTrait(Gravity.class).hasGravity();
+//                return new ElementTag(!gravityBlocked);
+//            }
+            return new ElementTag(!dentity.getBukkitEntity().isNoGravity())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -94,12 +94,12 @@ public class EntityGravity implements Property {
         // <EntityTag.gravity>
         // -->
         if (mechanism.matches("gravity") && mechanism.requireBoolean()) {
-            if (dentity.isCitizensNPC()) {
-                dentity.getDenizenNPC().getCitizen().getOrAddTrait(Gravity.class).setHasGravity(mechanism.getValue().asBoolean());
-            }
-            else {
-                dentity.getBukkitEntity().setGravity(mechanism.getValue().asBoolean());
-            }
+//            if (dentity.isCitizensNPC()) {
+//                dentity.getDenizenNPC().getCitizen().getOrAddTrait(Gravity.class).setHasGravity(mechanism.getValue().asBoolean());
+//            }
+//            else {
+                dentity.getBukkitEntity().setNoGravity(!mechanism.getValue().asBoolean());
+//            }
         }
     }
 }

@@ -7,11 +7,15 @@ import com.denizenscript.denizen.nms.util.jnbt.JNBTListTag;
 import com.denizenscript.denizen.nms.util.jnbt.StringTag;
 import com.denizenscript.denizen.objects.properties.entity.EntityDisabledSlots.Action;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.Material;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.inventory.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class CustomNBT {
@@ -25,12 +29,12 @@ public class CustomNBT {
 
     static {
         slotMap = new HashMap<>();
-        slotMap.put(EquipmentSlot.HAND, 0);
+        slotMap.put(EquipmentSlot.MAINHAND, 0);
         slotMap.put(EquipmentSlot.FEET, 1);
         slotMap.put(EquipmentSlot.LEGS, 2);
         slotMap.put(EquipmentSlot.CHEST, 3);
         slotMap.put(EquipmentSlot.HEAD, 4);
-        slotMap.put(EquipmentSlot.OFF_HAND, 5);
+        slotMap.put(EquipmentSlot.OFFHAND, 5);
     }
 
     /*
@@ -39,24 +43,32 @@ public class CustomNBT {
      */
 
     // TODO: once 1.20 is the minimum supported version, remove this
-    public static List<Material> getNBTMaterials(ItemStack itemStack, String key) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+    public static List<Block> getNBTMaterials(ItemStack itemStack, String key) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return null;
         }
         CompoundTag compoundTag = NMSHandler.itemHelper.getNbtData(itemStack);
-        List<Material> materials = new ArrayList<>();
+        List<Block> materials = new ArrayList<>();
         if (compoundTag.getValue().containsKey(key)) {
             List<StringTag> temp = (List<StringTag>) compoundTag.getValue().get(key).getValue();
             for (StringTag tag : temp) {
-                materials.add(Material.matchMaterial(tag.getValue()));
+                try {
+                    Field f = Blocks.class.getDeclaredField(tag.getValue().toUpperCase());
+                    materials.add((Block) f.get(null));
+                } catch (NoSuchFieldException e) {
+                    //todo debug msg
+                    //no further handling needed
+                } catch (IllegalAccessException e) {
+                    //todo debug
+                }
             }
         }
         return materials;
     }
 
     // TODO: once 1.20 is the minimum supported version, remove this
-    public static ItemStack setNBTMaterials(ItemStack itemStack, String key, List<Material> materials) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+    public static ItemStack setNBTMaterials(ItemStack itemStack, String key, List<Block> materials) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return null;
         }
         CompoundTag compoundTag = NMSHandler.itemHelper.getNbtData(itemStack);
@@ -65,8 +77,8 @@ public class CustomNBT {
             return NMSHandler.itemHelper.setNbtData(itemStack, compoundTag);
         }
         List<StringTag> internalMaterials = new ArrayList<>();
-        for (Material material : materials) {
-            internalMaterials.add(new StringTag(material.getKey().toString()));
+        for (Block material : materials) {
+            internalMaterials.add(new StringTag(material.getName().getString()));
         }
         JNBTListTag lt = new JNBTListTag(StringTag.class, internalMaterials);
         compoundTag = compoundTag.createBuilder().put(key, lt).build();
@@ -74,7 +86,7 @@ public class CustomNBT {
     }
 
     public static ItemStack addCustomNBT(ItemStack itemStack, String key, String value, String basekey) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return null;
         }
         CompoundTag customData = NMSHandler.itemHelper.getCustomData(itemStack);
@@ -86,7 +98,7 @@ public class CustomNBT {
 
     // TODO: once 1.20 is the minimum supported version, remove this
     public static ItemStack clearNBT(ItemStack itemStack, String key) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return null;
         }
         CompoundTag compoundTag = NMSHandler.itemHelper.getNbtData(itemStack);
@@ -96,7 +108,7 @@ public class CustomNBT {
     }
 
     public static ItemStack removeCustomNBT(ItemStack itemStack, String key, String basekey) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return null;
         }
         CompoundTag customData = NMSHandler.itemHelper.getCustomData(itemStack);
@@ -118,7 +130,7 @@ public class CustomNBT {
     }
 
     public static boolean hasCustomNBT(ItemStack itemStack, String key, String basekey) {
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return false;
         }
         CompoundTag customData = NMSHandler.itemHelper.getCustomData(itemStack);
@@ -130,7 +142,7 @@ public class CustomNBT {
     }
 
     public static String getCustomNBT(ItemStack itemStack, String key, String basekey) {
-        if (itemStack == null || itemStack.getType() == Material.AIR || key == null) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR || key == null) {
             return null;
         }
         CompoundTag customData = NMSHandler.itemHelper.getCustomData(itemStack);
@@ -147,7 +159,7 @@ public class CustomNBT {
 
     public static List<String> listNBT(ItemStack itemStack, String basekey) {
         List<String> nbt = new ArrayList<>();
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
             return nbt;
         }
         CompoundTag customData = NMSHandler.itemHelper.getCustomData(itemStack);

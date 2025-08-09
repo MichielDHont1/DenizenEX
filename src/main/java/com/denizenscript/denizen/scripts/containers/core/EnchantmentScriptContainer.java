@@ -20,6 +20,7 @@ import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.YamlConfiguration;
 import com.denizenscript.denizen.utilities.ChatColor;
 
+import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -229,15 +230,16 @@ public class EnchantmentScriptContainer extends ScriptContainer {
     public Enchantment enchantment;
 
     public void validateThread() {
-        if (!Bukkit.isPrimaryThread()) {
-            try {
-                throw new RuntimeException("Stack reference");
-            }
-            catch (RuntimeException ex) {
-                Debug.echoError("Warning: enchantment access from wrong thread, errors will result");
-                Debug.echoError(ex);
-            }
-        }
+        //todo
+//        if (!Bukkit.isPrimaryThread()) {
+//            try {
+//                throw new RuntimeException("Stack reference");
+//            }
+//            catch (RuntimeException ex) {
+//                Debug.echoError("Warning: enchantment access from wrong thread, errors will result");
+//                Debug.echoError(ex);
+//            }
+//        }
     }
 
     public String autoTag(String value, ContextSource src) {
@@ -258,9 +260,10 @@ public class EnchantmentScriptContainer extends ScriptContainer {
     }
 
     public boolean canEnchant(ItemStack item) {
-        if (!Bukkit.isPrimaryThread()) {
-            return false;
-        }
+        //todo
+//        if (!Bukkit.isPrimaryThread()) {
+//            return false;
+//        }
         ContextSource.SimpleMap src = new ContextSource.SimpleMap();
         src.contexts = new HashMap<>();
         src.contexts.put("item", new ItemTag(item));
@@ -269,26 +272,28 @@ public class EnchantmentScriptContainer extends ScriptContainer {
     }
 
     public boolean isCompatible(Enchantment enchantment) {
-        if (!Bukkit.isPrimaryThread()) {
-            return false; // NMS calls this method off-thread for level gen (mob equipment can have random enchants). Just say no to this for now.
-        }
+        //todo
+//        if (!Bukkit.isPrimaryThread()) {
+//            return false; // NMS calls this method off-thread for level gen (mob equipment can have random enchants). Just say no to this for now.
+//        }
         ContextSource.SimpleMap src = new ContextSource.SimpleMap();
         src.contexts = new HashMap<>();
-        src.contexts.put("enchantment_key", new ElementTag(enchantment.getKey().toString()));
+        src.contexts.put("enchantment_key", new ElementTag(enchantment.getFullname(1).toString()));
         String res = autoTag(isCompatibleTaggable, src);
         return CoreUtilities.toLowerCase(res).equals("true");
     }
 
-    public BaseComponent[] getFullName(int level) {
-        BaseComponent[] result = fullNamePerLevel.get(level);
-        if (result != null) {
-            return result;
-        }
-        String tagged = autoTagForLevel(fullNameTaggable, level);
-        result = FormattedTextHelper.parse(tagged, ChatColor.GRAY);
-        fullNamePerLevel.put(level, result);
-        return result;
-    }
+    //todo
+//    public BaseComponent[] getFullName(int level) {
+//        BaseComponent[] result = fullNamePerLevel.get(level);
+//        if (result != null) {
+//            return result;
+//        }
+//        String tagged = autoTagForLevel(fullNameTaggable, level);
+//        result = FormattedTextHelper.parse(tagged, ChatColor.GRAY);
+//        fullNamePerLevel.put(level, result);
+//        return result;
+//    }
 
     public int getDamageProtection(int level, String causeName, Entity attacker) {
         ContextSource.SimpleMap src = new ContextSource.SimpleMap();

@@ -27,10 +27,9 @@ public abstract class ItemHelper {
 
 
 
-    //todo materials
-//    public abstract void setMaxStackSize(Material material, int size);
-//
-//    public abstract Integer burnTime(Material material);
+    public abstract void setMaxStackSize(Item material, int size);
+
+    public abstract Integer burnTime(Item material);
 
     public abstract void registerStonecuttingRecipe(String keyName, String group, ItemStack result, ItemStack[] ingredient, boolean exact);
 
@@ -95,28 +94,27 @@ public abstract class ItemHelper {
         }
         return setNbtData(item, nbt);
     }
-//todo materials
-//    public List<Material> getCanPlaceOn(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
-//        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON);
-//    }
-//
-//    public ItemStack setCanPlaceOn(ItemStack item, List<Material> canPlaceOn) { // TODO: once 1.20 is the minimum supported version, remove default impl
-//        if (canPlaceOn == null) {
-//            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_PLACE_ON);
-//        }
-//        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON, canPlaceOn);
-//    }
-//
-//    public List<Material> getCanBreak(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
-//        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY);
-//    }
-//
-//    public ItemStack setCanBreak(ItemStack item, List<Material> canBreak) { // TODO: once 1.20 is the minimum supported version, remove default impl
-//        if (canBreak == null) {
-//            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_DESTROY);
-//        }
-//        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY, canBreak);
-//    }
+    public List<Block> getCanPlaceOn(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
+        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON);
+    }
+
+    public ItemStack setCanPlaceOn(ItemStack item, List<Block> canPlaceOn) { // TODO: once 1.20 is the minimum supported version, remove default impl
+        if (canPlaceOn == null) {
+            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_PLACE_ON);
+        }
+        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_PLACE_ON, canPlaceOn);
+    }
+
+    public List<Block> getCanBreak(ItemStack item) { // TODO: once 1.20 is the minimum supported version, remove default impl
+        return CustomNBT.getNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY);
+    }
+
+    public ItemStack setCanBreak(ItemStack item, List<Block> canBreak) { // TODO: once 1.20 is the minimum supported version, remove default impl
+        if (canBreak == null) {
+            return CustomNBT.clearNBT(item, CustomNBT.KEY_CAN_DESTROY);
+        }
+        return CustomNBT.setNBTMaterials(item, CustomNBT.KEY_CAN_DESTROY, canBreak);
+    }
 
     public MapTag getRawComponentsPatch(ItemStack item, boolean excludeHandled) {
         throw new UnsupportedOperationException();

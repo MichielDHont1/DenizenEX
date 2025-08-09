@@ -501,7 +501,7 @@ public class ItemScriptHelper {
 //        }
 //        for (int i = 0; i < items.length; i++) {
 //            ItemStack item = items[i];
-//            if (item == null || item.getType() == Material.AIR) {
+//            if (item == null || item.getItem() == Items.AIR) {
 //                continue;
 //            }
 //            ItemScriptContainer container = getItemScriptContainer(item);
@@ -607,7 +607,7 @@ public class ItemScriptHelper {
 //    }
 //
 //    public static boolean isAllowedToCraftWith(ItemStack item) {
-//        if (item == null || item.getType() == Material.AIR) {
+//        if (item == null || item.getItem() == Items.AIR) {
 //            return true;
 //        }
 //        ItemScriptContainer container = getItemScriptContainer(item);

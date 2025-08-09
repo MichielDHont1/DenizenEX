@@ -25,7 +25,6 @@ import com.denizenscript.denizen.utilities.flags.PlayerFlagHandler;
 //import com.denizenscript.denizen.utilities.packets.DenizenPacketHandler;
 //import com.denizenscript.denizen.utilities.packets.HideParticles;
 //import com.denizenscript.denizen.utilities.packets.ItemChangeMessage;
-import com.denizenscript.denizen.utilities.packets.NetworkInterceptHelper;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.flags.AbstractFlagTracker;
 import com.denizenscript.denizencore.flags.FlaggableObject;
@@ -36,19 +35,14 @@ import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.tags.TagRunnable;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import com.denizenscript.denizencore.utilities.Deprecations;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementList;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stat;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -58,20 +52,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SignBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraftforge.common.world.ForgeChunkManager;
-import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 
@@ -975,7 +963,7 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         registerOnlineOnlyTag(DurationTag.class, "item_cooldown", (attribute, object) -> {
             MaterialTag mat = new ElementTag(attribute.getParam()).asType(MaterialTag.class, attribute.context);
             if (mat != null) {
-                return new DurationTag((long) object.getPlayerEntity().getCooldowns().getCooldownPercent(mat.GetItem(), 0));
+                return new DurationTag((long) object.getPlayerEntity().getCooldowns().getCooldownPercent(mat.getItem(), 0));
             }
             return null;
         });

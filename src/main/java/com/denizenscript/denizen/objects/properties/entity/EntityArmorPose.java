@@ -11,8 +11,7 @@ import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.util.EulerAngle;
+import net.minecraft.world.entity.decoration.ArmorStand;
 
 import java.util.Iterator;
 import java.util.Map;

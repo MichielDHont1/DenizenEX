@@ -10,9 +10,11 @@ import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
-import net.citizensnpcs.api.trait.trait.Equipment;
-import org.bukkit.Material;
+//import net.citizensnpcs.api.trait.trait.Equipment;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import java.util.ArrayList;
 
 public class EntityEquipment implements Property {
 
@@ -62,30 +64,31 @@ public class EntityEquipment implements Property {
         // Output list is boots|leggings|chestplate|helmet
         // -->
         PropertyParser.registerTag(EntityEquipment.class, ObjectTag.class, "equipment", (attribute, object) -> {
-            org.bukkit.inventory.EntityEquipment equipment = object.entity.getLivingEntity().getEquipment();
+            ArrayList<ItemStack> equipment = new ArrayList<ItemStack>() ;
+            object.entity.getLivingEntity().getArmorSlots().forEach(equipment::add);
             if (attribute.startsWith("equipment.boots")) {
                 BukkitImplDeprecations.entityEquipmentSubtags.warn(attribute.context);
                 attribute.fulfill(1);
-                ItemStack boots = equipment.getBoots();
-                return new ItemTag(boots != null ? boots : new ItemStack(Material.AIR));
+                ItemStack boots = equipment.get(0);
+                return new ItemTag(boots != null ? boots : new ItemStack(Items.AIR));
             }
             else if (attribute.startsWith("equipment.chestplate") || attribute.startsWith("equipment.chest")) {
                 BukkitImplDeprecations.entityEquipmentSubtags.warn(attribute.context);
                 attribute.fulfill(1);
-                ItemStack chestplate = equipment.getChestplate();
-                return new ItemTag(chestplate != null ? chestplate : new ItemStack(Material.AIR));
+                ItemStack chestplate = equipment.get(2);
+                return new ItemTag(chestplate != null ? chestplate : new ItemStack(Items.AIR));
             }
             else if (attribute.startsWith("equipment.helmet") || attribute.startsWith("equipment.head")) {
                 BukkitImplDeprecations.entityEquipmentSubtags.warn(attribute.context);
                 attribute.fulfill(1);
-                ItemStack helmet = equipment.getHelmet();
-                return new ItemTag(helmet != null ? helmet : new ItemStack(Material.AIR));
+                ItemStack helmet = equipment.get(3);
+                return new ItemTag(helmet != null ? helmet : new ItemStack(Items.AIR));
             }
             else if (attribute.startsWith("equipment.leggings") || attribute.startsWith("equipment.legs")) {
                 BukkitImplDeprecations.entityEquipmentSubtags.warn(attribute.context);
                 attribute.fulfill(1);
-                ItemStack leggings = equipment.getLeggings();
-                return new ItemTag(leggings != null ? leggings : new ItemStack(Material.AIR));
+                ItemStack leggings = equipment.get(1);
+                return new ItemTag(leggings != null ? leggings : new ItemStack(Items.AIR));
             }
             return object.entity.getEquipment();
         });
@@ -102,11 +105,12 @@ public class EntityEquipment implements Property {
         // -->
         PropertyParser.registerTag(EntityEquipment.class, MapTag.class, "equipment_map", (attribute, object) -> {
             MapTag output = new MapTag();
-            org.bukkit.inventory.EntityEquipment equip = object.entity.getLivingEntity().getEquipment();
-            InventoryTag.addToMapIfNonAir(output, "boots", equip.getBoots());
-            InventoryTag.addToMapIfNonAir(output, "leggings", equip.getLeggings());
-            InventoryTag.addToMapIfNonAir(output, "chestplate", equip.getChestplate());
-            InventoryTag.addToMapIfNonAir(output, "helmet", equip.getHelmet());
+            ArrayList<ItemStack> equipment = new ArrayList<ItemStack>() ;
+            object.entity.getLivingEntity().getArmorSlots().forEach(equipment::add);
+            InventoryTag.addToMapIfNonAir(output, "boots", equipment.get(0));
+            InventoryTag.addToMapIfNonAir(output, "leggings", equipment.get(1));
+            InventoryTag.addToMapIfNonAir(output, "chestplate", equipment.get(2));
+            InventoryTag.addToMapIfNonAir(output, "helmet", equipment.get(3));
             return output;
         });
     }
@@ -126,48 +130,49 @@ public class EntityEquipment implements Property {
         // <EntityTag.equipment_map>
         // -->
         if (mechanism.matches("equipment") && mechanism.hasValue()) {
-            org.bukkit.inventory.EntityEquipment equip = entity.getLivingEntity().getEquipment();
+            ArrayList<ItemStack> equipment = new ArrayList<ItemStack>() ;
+            entity.getLivingEntity().getArmorSlots().forEach(equipment::add);
             if (mechanism.value.canBeType(MapTag.class)) {
                 MapTag map = mechanism.valueAsType(MapTag.class);
                 ItemTag boots = map.getObjectAs("boots", ItemTag.class, mechanism.context);
                 if (boots != null) {
                     ItemStack bootsItem = boots.getItemStack();
-                    if (entity.isCitizensNPC()) {
-                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.BOOTS, bootsItem);
-                    }
-                    else {
-                        equip.setBoots(bootsItem);
-                    }
+//                    if (entity.isCitizensNPC()) {
+//                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.BOOTS, bootsItem);
+//                    }
+//                    else {
+                        equipment.set(0,bootsItem);
+//                    }
                 }
                 ItemTag leggings = map.getObjectAs("leggings", ItemTag.class, mechanism.context);
                 if (leggings != null) {
                     ItemStack leggingsItem = leggings.getItemStack();
-                    if (entity.isCitizensNPC()) {
-                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.LEGGINGS, leggingsItem);
-                    }
-                    else {
-                        equip.setLeggings(leggingsItem);
-                    }
+//                    if (entity.isCitizensNPC()) {
+//                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.LEGGINGS, leggingsItem);
+//                    }
+//                    else {
+                        equipment.set(1, leggingsItem);
+//                    }
                 }
                 ItemTag chestplate = map.getObjectAs("chestplate", ItemTag.class, mechanism.context);
                 if (chestplate != null) {
                     ItemStack chestplateItem = chestplate.getItemStack();
-                    if (entity.isCitizensNPC()) {
-                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.CHESTPLATE, chestplateItem);
-                    }
-                    else {
-                        equip.setChestplate(chestplateItem);
-                    }
+//                    if (entity.isCitizensNPC()) {
+//                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.CHESTPLATE, chestplateItem);
+//                    }
+//                    else {
+                        equipment.set(2, chestplateItem);
+//                    }
                 }
                 ItemTag helmet = map.getObjectAs("helmet", ItemTag.class, mechanism.context);
                 if (helmet != null) {
                     ItemStack helmetItem = helmet.getItemStack();
-                    if (entity.isCitizensNPC()) {
-                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.HELMET, helmetItem);
-                    }
-                    else {
-                        equip.setHelmet(helmetItem);
-                    }
+//                    if (entity.isCitizensNPC()) {
+//                        entity.getDenizenNPC().getEquipmentTrait().set(Equipment.EquipmentSlot.HELMET, helmetItem);
+//                    }
+//                    else {
+                        equipment.set(3, helmetItem);
+//                    }
                 }
             }
             else { // Soft-deprecate: no warn, but long term back-support
@@ -176,7 +181,8 @@ public class EntityEquipment implements Property {
                 for (int i = 0; i < list.size(); i++) {
                     stacks[i] = ItemTag.valueOf(list.get(i), mechanism.context).getItemStack();
                 }
-                equip.setArmorContents(stacks);
+                //todo
+//                entity.setArmorContents(stacks);
             }
         }
     }

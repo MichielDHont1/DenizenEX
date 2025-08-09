@@ -7,7 +7,7 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.attribute.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 
 public class EntityArmorBonus implements Property {
 

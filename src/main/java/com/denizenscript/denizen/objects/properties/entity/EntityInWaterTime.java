@@ -7,7 +7,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.Zombie;
+import net.minecraft.world.entity.monster.Zombie;
 
 public class EntityInWaterTime implements Property {
 

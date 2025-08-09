@@ -4,8 +4,6 @@ import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.objects.properties.bukkit.BukkitColorExtensions;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ColorTag;
-import org.bukkit.Color;
-import org.bukkit.entity.Display;
 
 public class EntityGlowColor extends EntityProperty<ColorTag> {
 

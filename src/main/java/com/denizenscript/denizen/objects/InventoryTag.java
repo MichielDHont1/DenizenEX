@@ -2,18 +2,14 @@ package com.denizenscript.denizen.objects;
 
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.nms.NMSHandler;
-import com.denizenscript.denizen.nms.abstracts.ImprovedOfflinePlayer;
 import com.denizenscript.denizen.objects.properties.inventory.InventoryHolder;
 import com.denizenscript.denizen.scripts.containers.core.InventoryScriptContainer;
 import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
-import com.denizenscript.denizen.scripts.containers.core.ItemScriptHelper;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 //import com.denizenscript.denizen.utilities.PaperAPITools;
 //import com.denizenscript.denizen.utilities.depends.Depends;
 import com.denizenscript.denizen.utilities.inventory.InventoryTrackerSystem;
-import com.denizenscript.denizen.utilities.inventory.InventoryViewUtil;
-import com.denizenscript.denizen.utilities.inventory.RecipeHelper;
 import com.denizenscript.denizen.utilities.inventory.SlotHelper;
 import com.denizenscript.denizen.utilities.nbt.CustomNBT;
 import com.denizenscript.denizencore.events.ScriptEvent;
@@ -38,9 +34,6 @@ import com.denizenscript.denizencore.utilities.YamlConfiguration;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 //import net.citizensnpcs.api.CitizensAPI;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -49,8 +42,8 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -605,6 +598,23 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         return container;
     }
 
+
+    public List<ItemStack> getAllItems()
+    {
+        if (container != null) {
+            try {
+                Field items = container.getClass().getField("items");
+                items.setAccessible(true);
+                return (List<ItemStack>) items.get(null);
+            } catch (NoSuchFieldException e) {
+                //todo debug message, inventory has no items field
+            } catch (IllegalAccessException e) {
+                //todo debug message
+            }
+        }
+        return null;
+    }
+
     public AbstractContainerMenu getMenu()
     {
         return menu;
@@ -1077,21 +1087,20 @@ public ItemStack[] getContents()
         return leftovers;
     }
 
-    //todo material
-//    public int countByMaterial(Material material) {
-//        if (container == null) {
-//            return 0;
-//        }
-//        int qty = 0;
-//        for (ItemStack invStack : inventory) {
-//            if (invStack != null) {
-//                if (invStack.getType() == material && !(new ItemTag(invStack).isItemscript())) {
-//                    qty += invStack.getAmount();
-//                }
-//            }
-//        }
-//        return qty;
-//    }
+    public int countByMaterial(Item material) {
+        if (container == null) {
+            return 0;
+        }
+        int qty = 0;
+        for (ItemStack invStack : getAllItems()) {
+            if (invStack != null) {
+                if (invStack.getItem() == material && !(new ItemTag(invStack).isItemscript())) {
+                    qty += invStack.getCount();
+                }
+            }
+        }
+        return qty;
+    }
 
     public int countByFlag(String flag) {
         if (container == null) {
@@ -1834,7 +1843,7 @@ public ItemStack[] getContents()
                         continue;
                     }
                     for (MaterialTag material : materials) {
-                        if (item.getItem() == material.GetItem() && !(new ItemTag(item).isItemscript())) {
+                        if (item.getItem() == material.getItem() && !(new ItemTag(item).isItemscript())) {
                             found_items += item.getCount();
                             if (found_items >= qty) {
                                 break mainLoop;
@@ -1962,26 +1971,25 @@ public ItemStack[] getContents()
 
         tagProcessor.registerTag(ElementTag.class, "find", (attribute, object) -> {
             BukkitImplDeprecations.inventoryNonMatcherTags.warn(attribute.context);
-            //todo material
-            //            if (attribute.startsWith("material", 2)) {
-//                ListTag list = attribute.contextAsType(2, ListTag.class);
-//                if (list == null) {
-//                    return null;
-//                }
-//                HashSet<Material> materials = new HashSet<>();
-//                for (ObjectTag obj : list.objectForms) {
-//                    materials.add(obj.asType(MaterialTag.class, attribute.context).getMaterial());
-//                }
-//                int slot = -1;
-//                for (int i = 0; i < object.container.getContainerSize(); i++) {
-//                    if (object.container.getItem(i) != null && materials.contains(object.container.getItem(i).getType())) {
-//                        slot = i + 1;
-//                        break;
-//                    }
-//                }
-//                attribute.fulfill(1);
-//                return new ElementTag(slot);
-//            }
+            if (attribute.startsWith("material", 2)) {
+                ListTag list = attribute.contextAsType(2, ListTag.class);
+                if (list == null) {
+                    return null;
+                }
+                HashSet<Item> materials = new HashSet<>();
+                for (ObjectTag obj : list.objectForms) {
+                    materials.add(obj.asType(MaterialTag.class, attribute.context).getItem());
+                }
+                int slot = -1;
+                for (int i = 0; i < object.container.getContainerSize(); i++) {
+                    if ((object.container.getItem(i).getItem() != Items.AIR) && materials.contains(object.container.getItem(i).getItem())) {
+                        slot = i + 1;
+                        break;
+                    }
+                }
+                attribute.fulfill(1);
+                return new ElementTag(slot);
+            }
 
             if (attribute.startsWith("scriptname", 2)) {
                 String scrname = attribute.contextAsType(2, ItemTag.class).getScriptName();
@@ -2114,15 +2122,14 @@ public ItemStack[] getContents()
                 attribute.fulfill(1);
                 return new ElementTag(object.countByFlag(flag));
             }
-            //todo material
-//            if (attribute.startsWith("material", 2)) {
-//                if (!attribute.hasContext(2) || !MaterialTag.matches(attribute.getContext(2))) {
-//                    return null;
-//                }
-//                MaterialTag material = attribute.contextAsType(2, MaterialTag.class);
-//                attribute.fulfill(1);
-//                return new ElementTag(object.countByMaterial(material.getMaterial()));
-//            }
+            if (attribute.startsWith("material", 2)) {
+                if (!attribute.hasContext(2) || !MaterialTag.matches(attribute.getContext(2))) {
+                    return null;
+                }
+                MaterialTag material = attribute.contextAsType(2, MaterialTag.class);
+                attribute.fulfill(1);
+                return new ElementTag(object.countByMaterial(material.getItem()));
+            }
             if (attribute.hasParam() && ItemTag.matches(attribute.getParam())) {
                 return new ElementTag(object.count
                         (attribute.paramAsType(ItemTag.class).getItemStack(), false));

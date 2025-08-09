@@ -8,7 +8,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
+import javax.sound.midi.Instrument;
 import java.util.Set;
 
 public interface BlockHelper {
@@ -32,10 +34,10 @@ public interface BlockHelper {
         NORMAL, DESTROY, BLOCK, IGNORE, PUSH_ONLY;
         public static final PistonPushReaction[] VALUES = values();
     }
-
-    default PistonPushReaction getPushReaction(Block mat) { // TODO: once minimum version is 1.19, remove from NMS
-        return PistonPushReaction.VALUES[mat.createBlockData().getPistonMoveReaction().ordinal()];
-    }
+//todo
+//    default PistonPushReaction getPushReaction(Block mat) { // TODO: once minimum version is 1.19, remove from NMS
+//        return PistonPushReaction.VALUES[mat.createBlockData().getPistonMoveReaction().ordinal()];
+//    }
 
     void setPushReaction(Block mat, PistonPushReaction reaction);
 
@@ -55,16 +57,16 @@ public interface BlockHelper {
         return material;
     }
 
-    default BlockData parseBlockData(String text) {
-        int openBracket = text.indexOf('[');
-        String material = text;
-        String otherData = null;
-        if (openBracket > 0) {
-            material = text.substring(0, openBracket);
-            otherData = text.substring(openBracket);
-        }
-        return Material.matchMaterial(material).createBlockData(otherData);
-    }
+//    default BlockData parseBlockData(String text) {
+//        int openBracket = text.indexOf('[');
+//        String material = text;
+//        String otherData = null;
+//        if (openBracket > 0) {
+//            material = text.substring(0, openBracket);
+//            otherData = text.substring(openBracket);
+//        }
+//        return Material.matchMaterial(material).createBlockData(otherData);
+//    }
 
     default void makeBlockStateRaw(BlockState state) {} // TODO: once 1.19 is the minimum supported version, remove this
 
@@ -72,25 +74,25 @@ public interface BlockHelper {
 
     Instrument getInstrumentFor(Block mat);
 
-    default void ringBell(Bell bell) { /// TODO: once minimum version is 1.19, remove from NMS
-        bell.ring();
-    }
+//    default void ringBell(Bell bell) { /// TODO: once minimum version is 1.19, remove from NMS
+//        bell.ring();
+//    }
 
     int getExpDrop(Block block, ItemStack item);
 
-    default void setSpawnerCustomRules(CreatureSpawner spawner, int skyMin, int skyMax, int blockMin, int blockMax) {
-        throw new UnsupportedOperationException();
-    }
+//    default void setSpawnerCustomRules(CreatureSpawner spawner, int skyMin, int skyMax, int blockMin, int blockMax) {
+//        throw new UnsupportedOperationException();
+//    }
+//todo
+//    default void setSpawnerSpawnedType(CreatureSpawner spawner, EntityTag entity) {
+//        spawner.setSpawnedType(entity.getBukkitEntityType());
+//    }
 
-    default void setSpawnerSpawnedType(CreatureSpawner spawner, EntityTag entity) {
-        spawner.setSpawnedType(entity.getBukkitEntityType());
-    }
+//    default Color getMapColor(Block block) { // TODO: once 1.20 is the minimum supported version, remove from NMS
+//        return block.getBlockData().getMapColor();
+//    }
 
-    default Color getMapColor(Block block) { // TODO: once 1.20 is the minimum supported version, remove from NMS
-        return block.getBlockData().getMapColor();
-    }
-
-    default void setVanillaTags(Material material, Set<NamespacedKey> tags) { // TODO: once 1.21 is the minimum supported version, remove this
-        throw new UnsupportedOperationException();
-    }
+//    default void setVanillaTags(Material material, Set<NamespacedKey> tags) { // TODO: once 1.21 is the minimum supported version, remove this
+//        throw new UnsupportedOperationException();
+//    }
 }

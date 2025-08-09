@@ -6,15 +6,14 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.Material;
-import org.bukkit.entity.Firework;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
+import net.minecraft.world.item.Items;
 
 public class EntityFirework implements Property {
 
     public static boolean describes(ObjectTag entity) {
-        return entity instanceof EntityTag entityTag && entityTag.getBukkitEntity() instanceof Firework;
+        return entity instanceof EntityTag entityTag && entityTag.getBukkitEntity() instanceof FireworkRocketEntity;
     }
 
     public static EntityFirework getFrom(ObjectTag entity) {
@@ -42,8 +41,9 @@ public class EntityFirework implements Property {
 
     @Override
     public String getPropertyString() {
-        ItemStack item = new ItemStack(Material.FIREWORK_ROCKET);
-        item.setItemMeta(((Firework) firework.getBukkitEntity()).getFireworkMeta());
+        ItemStack item = new ItemStack(Items.FIREWORK_ROCKET);
+        //todo metadata
+//        item.setItemMeta(((Firework) firework.getBukkitEntity()).getFireworkMeta());
         return new ItemTag(item).identify();
     }
 
@@ -68,8 +68,9 @@ public class EntityFirework implements Property {
         // If the entity is a firework, returns the firework item used to launch it.
         // -->
         if (attribute.startsWith("firework_item")) {
-            ItemStack item = new ItemStack(Material.FIREWORK_ROCKET);
-            item.setItemMeta(((Firework) firework.getBukkitEntity()).getFireworkMeta());
+            ItemStack item = new ItemStack(Items.FIREWORK_ROCKET);
+            //todo metadata
+//            item.setItemMeta(((Firework) firework.getBukkitEntity()).getFireworkMeta());
             return new ItemTag(item).getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -90,12 +91,13 @@ public class EntityFirework implements Property {
         // -->
         if (mechanism.matches("firework_item") && mechanism.requireObject(ItemTag.class)) {
             ItemTag item = mechanism.valueAsType(ItemTag.class);
-            if (item != null && item.getItemMeta() instanceof FireworkMeta) {
-                ((Firework) firework.getBukkitEntity()).setFireworkMeta((FireworkMeta) item.getItemMeta());
-            }
-            else {
+            //todo metadata
+//            if (item != null && item.getItemMeta() instanceof FireworkMeta) {
+//                ((Firework) firework.getBukkitEntity()).setFireworkMeta((FireworkMeta) item.getItemMeta());
+//            }
+//            else {
                 mechanism.echoError("'" + mechanism.getValue().asString() + "' is not a valid firework item.");
-            }
+//            }
         }
     }
 }

@@ -6,8 +6,8 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Bee;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Bee;
 
 public class EntityHive implements Property {
 
@@ -48,10 +48,10 @@ public class EntityHive implements Property {
 
     @Override
     public String getPropertyString() {
-        if (getBee().getHive() == null) {
+        if (getBee().getHivePos() == null) {
             return null;
         }
-        return new LocationTag(getBee().getHive()).identify();
+        return new LocationTag(getBee().getHivePos()).identify();
     }
 
     @Override
@@ -75,10 +75,10 @@ public class EntityHive implements Property {
         // Returns the location of a bee's hive (if any).
         // -->
         if (attribute.startsWith("hive")) {
-            if (getBee().getHive() == null) {
+            if (getBee().getHivePos() == null) {
                 return null;
             }
-            return new LocationTag(getBee().getHive())
+            return new LocationTag(getBee().getHivePos())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -98,13 +98,14 @@ public class EntityHive implements Property {
         // @tags
         // <EntityTag.hive>
         // -->
-        if (mechanism.matches("hive")) {
-            if (mechanism.hasValue() && mechanism.requireObject(LocationTag.class)) {
-                getBee().setHive(mechanism.valueAsType(LocationTag.class));
-            }
-            else {
-                getBee().setHive(null);
-            }
-        }
+        //todo private
+//        if (mechanism.matches("hive")) {
+//            if (mechanism.hasValue() && mechanism.requireObject(LocationTag.class)) {
+//                getBee().setHive(mechanism.valueAsType(LocationTag.class));
+//            }
+//            else {
+//                getBee().setHive(null);
+//            }
+//        }
     }
 }

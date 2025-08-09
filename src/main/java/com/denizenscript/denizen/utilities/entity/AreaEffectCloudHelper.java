@@ -2,15 +2,12 @@ package com.denizenscript.denizen.utilities.entity;
 
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.Color;
-import org.bukkit.Particle;
-import org.bukkit.entity.AreaEffectCloud;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
-import org.bukkit.projectiles.ProjectileSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.alchemy.Potion;
 
 import java.util.List;
 
@@ -25,48 +22,55 @@ public class AreaEffectCloudHelper {
     // Base Potion Data
     /////////
 
-    private PotionData getBPData() {
-        return entity.getBasePotionData();
+    private Potion getBPData() {
+        return entity.getPotion();
     }
 
     public String getBPName() {
-        return getBPData().getType().name();
+        return getBPData().getName("");
     }
 
     public boolean getBPUpgraded() {
-        return getBPData().isUpgraded();
+        return getBPData().getEffects().getFirst().getAmplifier() > 1;
     }
 
-    public boolean getBPExtended() {
-        return getBPData().isExtended();
-    }
+//    public boolean getBPExtended() {
+//        return getBPData().getEffects().getFirst().;
+//    }
 
-    public void setBP(PotionType type, boolean extended, boolean upgraded) {
-        entity.setBasePotionData(new PotionData(type, extended, upgraded));
+    public void setBP(Potion  type, boolean extended, boolean upgraded) {
+        CompoundTag Potiontag = new CompoundTag();
+        Potiontag.putByte("Amplifier",  (byte)(upgraded ? 2 : 1));
+        Potiontag.putInt("Duration", extended ? 480 : 180);
+        //todo make these available
+        Potiontag.putBoolean("ShowIcon", true);
+        Potiontag.putBoolean("ShowParticles", true);
+        Potiontag.putBoolean("Ambient", true);
+        entity.setPotion(new Potion(MobEffectInstance.load(Potiontag)));
     }
 
     ////////////////
     // Particles
     /////////
+//todo
+//    public Color getColor() {
+//        return entity.getColor();
+//    }
 
-    public Color getColor() {
-        return entity.getColor();
-    }
+//    public void setColor(Color color) {
+//        entity.setColor(color);
+//    }
 
-    public void setColor(Color color) {
-        entity.setColor(color);
-    }
+//    public String getParticle() {
+//        return entity.getParticle().name();
+//    }
 
-    public String getParticle() {
-        return entity.getParticle().name();
-    }
-
-    public void setParticle(String name) {
-        Particle particle = Utilities.elementToEnumlike(new ElementTag(name, true), Particle.class);
-        if (particle != null) {
-            entity.setParticle(particle);
-        }
-    }
+//    public void setParticle(String name) {
+//        Particle particle = Utilities.elementToEnumlike(new ElementTag(name, true), Particle.class);
+//        if (particle != null) {
+//            entity.setParticle(particle);
+//        }
+//    }
 
     ////////////////
     // Radius
@@ -107,10 +111,10 @@ public class AreaEffectCloudHelper {
     public long getDurationOnUse() {
         return (long) entity.getDurationOnUse();
     }
-
-    public long getReappDelay() {
-        return (long) entity.getReapplicationDelay();
-    }
+//todo
+//    public long getReappDelay() {
+//        return (long) entity.getReapplicationDelay();
+//    }
 
     public long getWaitTime() {
         return (long) entity.getWaitTime();
@@ -123,10 +127,10 @@ public class AreaEffectCloudHelper {
     public void setDurationOnUse(int ticks) {
         entity.setDurationOnUse(ticks);
     }
-
-    public void setReappDelay(int ticks) {
-        entity.setReapplicationDelay(ticks);
-    }
+    //todo
+//    public void setReappDelay(int ticks) {
+//        entity.setReapplicationDelay(ticks);
+//    }
 
     public void setWaitTime(int ticks) {
         entity.setWaitTime(ticks);
@@ -135,36 +139,36 @@ public class AreaEffectCloudHelper {
     ////////////////
     // Custom Effects
     /////////
+//todo
+//    public List<PotionEffect> getCustomEffects() {
+//        return entity.getCustomEffects();
+//    }
 
-    public List<PotionEffect> getCustomEffects() {
-        return entity.getCustomEffects();
-    }
+//    public boolean hasCustomEffects() {
+//        return entity.hasCustomEffects();
+//    }
 
-    public boolean hasCustomEffects() {
-        return entity.hasCustomEffects();
-    }
+//    public void clearEffects() {
+//        entity.clearCustomEffects();
+//    }
 
-    public void clearEffects() {
-        entity.clearCustomEffects();
-    }
+//    public void removeEffect(PotionEffectType type) {
+//        entity.removeCustomEffect(type);
+//    }
 
-    public void removeEffect(PotionEffectType type) {
-        entity.removeCustomEffect(type);
-    }
-
-    public void addEffect(PotionEffect effect, boolean override) {
-        entity.addCustomEffect(effect, override);
-    }
+//    public void addEffect(PotionEffect effect, boolean override) {
+//        entity.addCustomEffect(effect, override);
+//    }
 
     ////////////////
     // Misc
     /////////
 
-    public ProjectileSource getSource() {
-        return entity.getSource();
+    public LivingEntity getSource() {
+        return entity.getOwner();
     }
 
-    public void setSource(ProjectileSource source) {
-        entity.setSource(source);
+    public void setSource(LivingEntity source) {
+        entity.setOwner(source);
     }
 }
