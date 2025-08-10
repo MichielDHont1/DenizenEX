@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 
 public class EntityPickupStatus implements Property {
 
@@ -37,7 +37,7 @@ public class EntityPickupStatus implements Property {
 
     @Override
     public String getPropertyString() {
-        return ((AbstractArrow) dentity.getBukkitEntity()).getPickupStatus().name();
+        return ((AbstractArrow) dentity.getBukkitEntity()).pickup.name();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class EntityPickupStatus implements Property {
         // If the entity is an arrow or trident, returns the pickup status of the arrow/trident.
         // -->
         if (attribute.startsWith("pickup_status")) {
-            return new ElementTag(((AbstractArrow) dentity.getBukkitEntity()).getPickupStatus())
+            return new ElementTag(((AbstractArrow) dentity.getBukkitEntity()).pickup.name())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -81,8 +81,8 @@ public class EntityPickupStatus implements Property {
         // @tags
         // <EntityTag.pickup_status>
         // -->
-        if (mechanism.matches("pickup_status") && mechanism.requireEnum(AbstractArrow.PickupStatus.class)) {
-            ((AbstractArrow) dentity.getBukkitEntity()).setPickupStatus(mechanism.getValue().asEnum(AbstractArrow.PickupStatus.class));
+        if (mechanism.matches("pickup_status") && mechanism.requireEnum(AbstractArrow.Pickup.class)) {
+            ((AbstractArrow) dentity.getBukkitEntity()).pickup = (mechanism.getValue().asEnum(AbstractArrow.Pickup.class));
         }
     }
 }

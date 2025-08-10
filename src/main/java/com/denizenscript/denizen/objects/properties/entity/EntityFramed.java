@@ -9,9 +9,9 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.Material;
-import org.bukkit.Rotation;
-import org.bukkit.entity.ItemFrame;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Rotation;
 
 public class EntityFramed implements Property {
 
@@ -45,7 +45,7 @@ public class EntityFramed implements Property {
 
     public boolean hasItem() {
         return getItemFrameEntity().getItem() != null
-                && getItemFrameEntity().getItem().getType() != Material.AIR;
+                && getItemFrameEntity().getItem().getItem() != Items.AIR;
     }
 
     public ItemFrame getItemFrameEntity() {
@@ -63,9 +63,7 @@ public class EntityFramed implements Property {
     @Override
     public String getPropertyString() {
         if (hasItem()) {
-            return getItem().identify()
-                    + (getItemFrameEntity().getRotation() == Rotation.NONE ? ""
-                    : '|' + CoreUtilities.toLowerCase(getItemFrameEntity().getRotation().name()));
+            return getItem().identify() + Integer.toString(getItemFrameEntity().getRotation());
         }
         else {
             return null;
@@ -93,7 +91,7 @@ public class EntityFramed implements Property {
         // If the entity is an item frame, returns the rotation of the item currently framed.
         // -->
         if (attribute.startsWith("framed_item_rotation")) {
-            return new ElementTag(CoreUtilities.toLowerCase(getItemFrameEntity().getRotation().name()))
+            return new ElementTag(CoreUtilities.toLowerCase(Integer.toString(getItemFrameEntity().getRotation())))
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -153,8 +151,12 @@ public class EntityFramed implements Property {
             else {
                 mechanism.echoError("Invalid item '" + list.get(0) + "'");
             }
-            if (list.size() > 1 && new ElementTag(list.get(1)).matchesEnum(Rotation.class)) {
-                getItemFrameEntity().setRotation(Rotation.valueOf(list.get(1).toUpperCase()));
+            if (list.size() > 1) {
+                try
+                {
+                    getItemFrameEntity().setRotation(Integer.parseInt(list.get(1)));
+                } catch (NumberFormatException e) {
+                }
             }
         }
 

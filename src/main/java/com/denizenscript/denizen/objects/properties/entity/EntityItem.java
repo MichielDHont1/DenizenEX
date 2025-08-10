@@ -10,11 +10,17 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.tags.TagContext;
-import net.citizensnpcs.api.npc.NPC;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.*;
+//import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.projectile.EyeOfEnder;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 
 public class EntityItem implements Property {
 
@@ -37,12 +43,12 @@ public class EntityItem implements Property {
             return false;
         }
         Entity entity = ((EntityTag) object).getBukkitEntity();
-        return entity instanceof Item
-                || entity instanceof Enderman
-                || entity instanceof SizedFireball
-                || entity instanceof ThrowableProjectile
-                || entity instanceof EnderSignal
-                || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && entity instanceof ItemDisplay);
+        return entity instanceof ItemEntity
+                || entity instanceof EnderMan
+                || entity instanceof Fireball
+                || entity instanceof ThrowableItemProjectile
+                || entity instanceof EyeOfEnder; //todo 1.19
+//                || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && entity instanceof ItemDisplay);
     }
 
     public static EntityItem getFrom(ObjectTag entity) {
@@ -66,79 +72,80 @@ public class EntityItem implements Property {
 
     public ItemTag getItem(boolean includeDeprecated, TagContext context) {
         if (isDroppedItem()) {
-            return new ItemTag(getDroppedItem().getItemStack());
+            return new ItemTag(getDroppedItem().getItem());
         }
-        else if (includeDeprecated && isEnderman()) {
-            BukkitImplDeprecations.entityItemEnderman.warn(context);
-            BlockData data = getEnderman().getCarriedBlock();
-            if (data == null) {
-                return new ItemTag(Material.AIR);
-            }
-            return new ItemTag(data.getMaterial());
-        }
+        //todo remove deprecated
+//        else if (includeDeprecated && isEnderman()) {
+//            BukkitImplDeprecations.entityItemEnderman.warn(context);
+//            BlockData data = getEnderman().getCarriedBlock();
+//            if (data == null) {
+//                return new ItemTag(Material.AIR);
+//            }
+//            return new ItemTag(data.getMaterial());
+//        }
         else if (isFireball()) {
-            return new ItemTag(getFireball().getDisplayItem());
+            return new ItemTag(getFireball().getItem());
         }
         else if (isThrowableProjectile()) {
             return new ItemTag(getThrowableProjectile().getItem());
         }
-        else if (isEnderSignal()) {
-            return new ItemTag(getEnderSignal().getItem());
+        else if (isEyeOfEnder()) {
+            return new ItemTag(getEyeOfEnder().getItem());
         }
-        else if (isDisplay()) { // TODO: 1.19: when 1.19 is minimum, make a 'getDisplay'
-            return new ItemTag(((ItemDisplay) item.getBukkitEntity()).getItemStack());
-        }
+//        else if (isDisplay()) { // TODO: 1.19: when 1.19 is minimum, make a 'getDisplay'
+//            return new ItemTag(((ItemDisplay) item.getBukkitEntity()).getItemStack());
+//        }
         return null;
     }
 
     public boolean isDroppedItem() {
-        return item.getBukkitEntity() instanceof Item;
+        return item.getBukkitEntity() instanceof ItemEntity;
     }
 
     public boolean isEnderman() {
-        return item.getBukkitEntity() instanceof Enderman;
+        return item.getBukkitEntity() instanceof EnderMan;
     }
 
     public boolean isFireball() {
-        return item.getBukkitEntity() instanceof SizedFireball;
+        return item.getBukkitEntity() instanceof Fireball;
     }
 
     public boolean isThrowableProjectile() {
-        return item.getBukkitEntity() instanceof ThrowableProjectile;
+        return item.getBukkitEntity() instanceof ThrowableItemProjectile;
     }
 
-    public boolean isEnderSignal() {
-        return item.getBukkitEntity() instanceof EnderSignal;
+    public boolean isEyeOfEnder() {
+        return item.getBukkitEntity() instanceof EyeOfEnder;
     }
 
-    public boolean isDisplay() {
-        return NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && item.getBukkitEntity() instanceof Display;
+//    public boolean isDisplay() {
+//        return NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && item.getBukkitEntity() instanceof Display;
+//    }
+
+    public ItemEntity getDroppedItem() {
+        return ((ItemEntity) item.getBukkitEntity());
     }
 
-    public Item getDroppedItem() {
-        return (Item) item.getBukkitEntity();
+    public EnderMan getEnderman() {
+        return (EnderMan) item.getBukkitEntity();
     }
 
-    public Enderman getEnderman() {
-        return (Enderman) item.getBukkitEntity();
+    public EyeOfEnder getEyeOfEnder() {
+        return (EyeOfEnder) item.getBukkitEntity();
     }
 
-    public EnderSignal getEnderSignal() {
-        return (EnderSignal) item.getBukkitEntity();
+    public ThrowableItemProjectile getThrowableProjectile() {
+        return (ThrowableItemProjectile) item.getBukkitEntity();
     }
 
-    public ThrowableProjectile getThrowableProjectile() {
-        return (ThrowableProjectile) item.getBukkitEntity();
-    }
-
-    public SizedFireball getFireball() {
-        return (SizedFireball) item.getBukkitEntity();
+    public Fireball getFireball() {
+        return (Fireball) item.getBukkitEntity();
     }
 
     @Override
     public String getPropertyString() {
         ItemTag item = getItem(false, null);
-        if (item.getBukkitMaterial() != Material.AIR) {
+        if (item.getBukkitMaterial() != Items.AIR) {
             return item.identify();
         }
         return null;
@@ -159,28 +166,29 @@ public class EntityItem implements Property {
     public void adjust(Mechanism mechanism) {
         if (mechanism.matches("item") && mechanism.requireObject(ItemTag.class)) {
             ItemStack itemStack = mechanism.valueAsType(ItemTag.class).getItemStack();
-            if (item.isCitizensNPC()) {
-                item.getDenizenNPC().getCitizen().data().setPersistent(NPC.Metadata.ITEM_ID, itemStack.getType().name());
-            }
+//            if (item.isCitizensNPC()) {
+//                item.getDenizenNPC().getCitizen().data().setPersistent(NPC.Metadata.ITEM_ID, itemStack.getType().name());
+//            }
             if (isDroppedItem()) {
-                getDroppedItem().setItemStack(itemStack);
+                getDroppedItem().setItem(itemStack);
             }
             else if (isEnderman()) {
                 BukkitImplDeprecations.entityItemEnderman.warn(mechanism.context);
-                getEnderman().setCarriedBlock(itemStack.getType().createBlockData());
+                getEnderman().setCarriedBlock(Block.byItem(itemStack.getItem()).defaultBlockState());
             }
             else if (isFireball()) {
-                getFireball().setDisplayItem(itemStack);
+                getFireball().setItem(itemStack);
             }
             else if (isThrowableProjectile()) {
                 getThrowableProjectile().setItem(itemStack);
             }
-            else if (isEnderSignal()) {
-                getEnderSignal().setItem(itemStack);
+            else if (isEyeOfEnder()) {
+                getEyeOfEnder().setItem(itemStack);
             }
-            else if (isDisplay()) { // TODO: 1.19: when 1.19 is minimum, make a 'getDisplay'
-                ((ItemDisplay) item.getBukkitEntity()).setItemStack(itemStack);
-            }
+            //todo 1.19
+//            else if (isDisplay()) { // TODO: 1.19: when 1.19 is minimum, make a 'getDisplay'
+//                ((ItemDisplay) item.getBukkitEntity()).setItemStack(itemStack);
+//            }
         }
     }
 }

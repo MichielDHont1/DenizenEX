@@ -6,8 +6,9 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Creeper;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class EntityMaxFuseTicks implements Property {
 
@@ -40,7 +41,14 @@ public class EntityMaxFuseTicks implements Property {
 
     @Override
     public String getPropertyString() {
-        return String.valueOf(((Creeper) entity.getBukkitEntity()).getMaxFuseTicks());
+        try
+        {
+            int maxFuse = (int)FieldUtils.readField((Object)entity, "maxSwell", true);
+            return String.valueOf(maxFuse);
+        } catch (IllegalAccessException e) {
+            //todo debug msg
+        }
+        return null;
     }
 
     @Override
@@ -64,8 +72,15 @@ public class EntityMaxFuseTicks implements Property {
         // Returns the default number of ticks until the creeper explodes when primed (NOT the time remaining if already primed).
         // -->
         if (attribute.startsWith("max_fuse_ticks")) {
-            return new ElementTag(((Creeper) entity.getBukkitEntity()).getMaxFuseTicks())
-                    .getObjectAttribute(attribute.fulfill(1));
+            try
+            {
+                int maxFuse = (int)FieldUtils.readField((Object)entity, "maxSwell", true);
+                return new ElementTag(maxFuse)
+                        .getObjectAttribute(attribute.fulfill(1));
+            } catch (IllegalAccessException e) {
+                //todo debug msg
+            }
+            return null;
         }
 
         return null;
@@ -84,7 +99,12 @@ public class EntityMaxFuseTicks implements Property {
         // <EntityTag.max_fuse_ticks>
         // -->
         if (mechanism.matches("max_fuse_ticks") && mechanism.requireInteger()) {
-            ((Creeper) entity.getBukkitEntity()).setMaxFuseTicks(mechanism.getValue().asInt());
+            try
+            {
+                FieldUtils.writeField((Object)entity, "maxSwell", (Object) mechanism.getValue().asInt());
+            } catch (IllegalAccessException e) {
+                //todo debug msg
+            }
         }
 
     }

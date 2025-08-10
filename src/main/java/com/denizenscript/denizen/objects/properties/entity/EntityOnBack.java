@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Panda;
+import net.minecraft.world.entity.animal.Panda;
 
 public class EntityOnBack extends EntityProperty<ElementTag> {
 

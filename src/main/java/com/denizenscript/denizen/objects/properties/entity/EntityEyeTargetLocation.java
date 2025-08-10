@@ -11,7 +11,7 @@ public class EntityEyeTargetLocation implements Property {
 
     public static boolean describes(ObjectTag entity) {
         return entity instanceof EntityTag
-                && ((EntityTag) entity).getBukkitEntity() instanceof EnderSignal;
+                && ((EntityTag) entity).getBukkitEntity() instanceof EyeOfEnder;
     }
 
     public static EntityEyeTargetLocation getFrom(ObjectTag entity) {
@@ -44,13 +44,13 @@ public class EntityEyeTargetLocation implements Property {
         // Returns a thrown eye of ender's target location - the location it's moving towards, which in vanilla is a stronghold location.
         // -->
         PropertyParser.registerTag(EntityEyeTargetLocation.class, LocationTag.class, "ender_eye_target_location", (attribute, entity) -> {
-            return new LocationTag(((EnderSignal) entity.entity.getBukkitEntity()).getTargetLocation());
+            return new LocationTag(((EyeOfEnder) entity.entity.getBukkitEntity()).getTargetLocation());
         });
     }
 
     @Override
     public String getPropertyString() {
-        return new LocationTag(((EnderSignal) entity.getBukkitEntity()).getTargetLocation()).identify();
+        return new LocationTag(((EyeOfEnder) entity.getBukkitEntity()).getTargetLocation()).identify();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class EntityEyeTargetLocation implements Property {
         // <EntityTag.ender_eye_target_location>
         // -->
         if (mechanism.matches("ender_eye_target_location") && mechanism.requireObject(LocationTag.class)) {
-            ((EnderSignal) entity.getBukkitEntity()).setTargetLocation(mechanism.valueAsType(LocationTag.class));
+            ((EyeOfEnder) entity.getBukkitEntity()).setTargetLocation(mechanism.valueAsType(LocationTag.class));
         }
     }
 }

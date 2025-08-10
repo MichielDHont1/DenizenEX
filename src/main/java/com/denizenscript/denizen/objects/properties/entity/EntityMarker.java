@@ -6,8 +6,12 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class EntityMarker implements Property {
 
@@ -90,7 +94,18 @@ public class EntityMarker implements Property {
         // <EntityTag.marker>
         // -->
         if (mechanism.matches("marker") && mechanism.requireBoolean()) {
-            ((ArmorStand) dentity.getBukkitEntity()).setMarker(mechanism.getValue().asBoolean());
+            try
+            {
+                Method method = dentity.getBukkitEntity().getClass().getDeclaredMethod("setMarker");
+                method.setAccessible(true);
+                Object r = method.invoke(dentity.getBukkitEntity(), mechanism.getValue().asBoolean());
+            }
+            catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException e) {
+                //todo debug msg
+            } catch (InvocationTargetException e) {
+            }
+
         }
     }
 }

@@ -5,11 +5,11 @@ import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.objects.MaterialTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.BlockDisplay;
-import org.bukkit.entity.Enderman;
-import org.bukkit.entity.Minecart;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class EntityMaterial extends EntityProperty<MaterialTag> {
 
@@ -25,42 +25,44 @@ public class EntityMaterial extends EntityProperty<MaterialTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-        return entity.getBukkitEntity() instanceof Enderman
-                || entity.getBukkitEntity() instanceof Minecart
-                || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && entity.getBukkitEntity() instanceof BlockDisplay);
+        return entity.getBukkitEntity() instanceof EnderMan
+                || entity.getBukkitEntity() instanceof Minecart; //todo added in 1.19
+        /*      || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && entity.getBukkitEntity() instanceof BlockDisplay);*/
     }
 
     @Override
     public MaterialTag getPropertyValue() {
-        BlockData blockData = null;
-        if (getEntity() instanceof Enderman enderman) {
+        BlockState blockData = null;
+        if (getEntity() instanceof EnderMan enderman) {
             blockData = enderman.getCarriedBlock();
         }
         else if (getEntity() instanceof Minecart minecart) {
-            blockData = minecart.getDisplayBlockData();
+            blockData = minecart.getDisplayBlockState();
         }
-        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
-            blockData = as(BlockDisplay.class).getBlock();
-        }
-        return blockData != null ? new MaterialTag(blockData) : new MaterialTag(Material.AIR);
+        //todo 1.19
+//        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
+//            blockData = as(BlockDisplay.class).getBlock();
+//        }
+        return blockData != null ? new MaterialTag(blockData) : new MaterialTag(Blocks.AIR.defaultBlockState());
     }
 
     @Override
     public boolean isDefaultValue(MaterialTag value) {
-        return value.getMaterial() == Material.AIR;
+        return value.getBlock() == Blocks.AIR;
     }
 
     @Override
     public void setPropertyValue(MaterialTag value, Mechanism mechanism) {
-        if (getEntity() instanceof Enderman enderman) {
-            enderman.setCarriedBlock(value.getModernData());
+        if (getEntity() instanceof EnderMan enderman) {
+            enderman.setCarriedBlock(value.getBlock().defaultBlockState());
         }
         else if (getEntity() instanceof Minecart minecart) {
-            minecart.setDisplayBlockData(value.getModernData());
+            minecart.setDisplayBlockState(value.getBlock().defaultBlockState());
         }
-        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
-            as(BlockDisplay.class).setBlock(value.getModernData());
-        }
+        //todo 1.19
+//        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
+//            as(BlockDisplay.class).setBlock(value.getModernData());
+//        }
     }
 
     @Override

@@ -62,7 +62,13 @@ public class Location implements Cloneable {
         x = vector.x();
         y = vector.y();
         z = vector.z();
+    }
 
+    public Location(BlockPos blockPos)
+    {
+        x = blockPos.getX();
+        y = blockPos.getY();
+        z = blockPos.getZ();
     }
 
     public BlockPos toBlockPos()

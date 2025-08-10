@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 
 public class EntityJumpStrength implements Property {
 
@@ -40,7 +40,7 @@ public class EntityJumpStrength implements Property {
 
     @Override
     public String getPropertyString() {
-        return String.valueOf(((AbstractHorse) entity.getBukkitEntity()).getJumpStrength());
+        return String.valueOf(((AbstractHorse) entity.getBukkitEntity()).getCustomJump());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class EntityJumpStrength implements Property {
         // Also applies to horse-like mobs, such as donkeys and mules.
         // -->
         if (attribute.startsWith("jump_strength")) {
-            return new ElementTag(((AbstractHorse) entity.getBukkitEntity()).getJumpStrength())
+            return new ElementTag(((AbstractHorse) entity.getBukkitEntity()).getCustomJump())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -87,8 +87,9 @@ public class EntityJumpStrength implements Property {
         // @tags
         // <EntityTag.jump_strength>
         // -->
-        if (mechanism.matches("jump_strength") && mechanism.requireDouble()) {
-            ((AbstractHorse) entity.getBukkitEntity()).setJumpStrength(mechanism.getValue().asDouble());
-        }
+        //todo attribute
+//        if (mechanism.matches("jump_strength") && mechanism.requireDouble()) {
+//            ((AbstractHorse) entity.getBukkitEntity()).setJumpStrength(mechanism.getValue().asDouble());
+//        }
     }
 }

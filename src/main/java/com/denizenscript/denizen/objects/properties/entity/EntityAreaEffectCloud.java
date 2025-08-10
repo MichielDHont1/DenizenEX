@@ -17,6 +17,7 @@ import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.alchemy.Potion;
 
 import java.util.List;
 
@@ -496,7 +497,7 @@ public class EntityAreaEffectCloud implements Property {
                 mechanism.echoError(mechanism.getValue() + " is not a valid base potion!");
                 return;
             }
-            PotionType type = Utilities.elementToEnumlike(new ElementTag(data.get(0), true), PotionType.class);
+            Potion type = Utilities.elementToEnumlike(new ElementTag(data.get(0), true), PotionType.class);
             if (type == null) {
                 mechanism.echoError(mechanism.getValue() + " is not a valid base potion!");
                 return;

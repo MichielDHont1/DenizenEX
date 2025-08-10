@@ -30,6 +30,7 @@ import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.ObjectTagProcessor;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
 import com.denizenscript.denizencore.utilities.YamlConfiguration;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 //import net.citizensnpcs.api.CitizensAPI;
@@ -602,15 +603,17 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
     public List<ItemStack> getAllItems()
     {
         if (container != null) {
-            try {
-                Field items = container.getClass().getField("items");
-                items.setAccessible(true);
-                return (List<ItemStack>) items.get(null);
-            } catch (NoSuchFieldException e) {
-                //todo debug message, inventory has no items field
-            } catch (IllegalAccessException e) {
-                //todo debug message
-            }
+            return ReflectionHelper.getFieldValue(container.getClass(), "items", container);
+//todo remove old code
+            //            try {
+//                Field items = container.getClass().getField("items");
+//                items.setAccessible(true);
+//                return (List<ItemStack>) items.get(null);
+//            } catch (NoSuchFieldException e) {
+//                //todo debug message, inventory has no items field
+//            } catch (IllegalAccessException e) {
+//                //todo debug message
+//            }
         }
         return null;
     }

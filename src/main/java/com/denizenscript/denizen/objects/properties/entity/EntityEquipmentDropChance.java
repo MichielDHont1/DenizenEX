@@ -4,8 +4,16 @@ import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
-import org.bukkit.entity.Mob;
-import org.bukkit.inventory.EntityEquipment;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Ref;
 
 public class EntityEquipmentDropChance extends EntityProperty<MapTag> {
 
@@ -34,20 +42,31 @@ public class EntityEquipmentDropChance extends EntityProperty<MapTag> {
 
     @Override
     public MapTag getPropertyValue() {
-        EntityEquipment equipment = getLivingEntity().getEquipment();
         MapTag map = new MapTag();
-        map.putObject("head", new ElementTag(equipment.getHelmetDropChance()));
-        map.putObject("chest", new ElementTag(equipment.getChestplateDropChance()));
-        map.putObject("legs", new ElementTag(equipment.getLeggingsDropChance()));
-        map.putObject("feet", new ElementTag(equipment.getBootsDropChance()));
-        map.putObject("hand", new ElementTag(equipment.getItemInMainHandDropChance()));
-        map.putObject("off_hand", new ElementTag(equipment.getItemInOffHandDropChance()));
+        float[] dropChanceByIndex = new float[6];
+        Method method = ReflectionHelper.getMethod(getLivingEntity().getClass(), "getEquipmentDropChance", EquipmentSlot.class);
+        if (method != null) {
+            for (EquipmentSlot equipmentslot : EquipmentSlot.values()) {
+                try {
+                    int handIndexOffset = equipmentslot.getType().equals(EquipmentSlot.Type.HAND) ? 4 : 0;
+                    dropChanceByIndex[equipmentslot.getIndex() + handIndexOffset] = (float) method.invoke(getLivingEntity(), equipmentslot);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    ReflectionHelper.echoError(e);
+                }
+            }
+        }
+        //todo get correct id for each
+        map.putObject("head", new ElementTag(dropChanceByIndex[3]));
+        map.putObject("chest", new ElementTag(dropChanceByIndex[2]));
+        map.putObject("legs", new ElementTag(dropChanceByIndex[1]));
+        map.putObject("feet", new ElementTag(dropChanceByIndex[0]));
+        map.putObject("hand", new ElementTag(dropChanceByIndex[4]));
+        map.putObject("off_hand", new ElementTag(dropChanceByIndex[5]));
         return map;
     }
 
     @Override
     public void setPropertyValue(MapTag map, Mechanism mechanism) {
-        EntityEquipment equipment = getLivingEntity().getEquipment();
         ElementTag head = map.getElement("head");
         ElementTag chest = map.getElement("chest");
         ElementTag legs = map.getElement("legs");
@@ -55,22 +74,43 @@ public class EntityEquipmentDropChance extends EntityProperty<MapTag> {
         ElementTag hand = map.getElement("hand");
         ElementTag offHand = map.getElement("off_hand");
         if (head != null) {
-            equipment.setHelmetDropChance(head.asFloat());
+            setDropChance(getLivingEntity(), EquipmentSlot.Type.ARMOR, 3, head.asFloat());
         }
         if (chest != null) {
-            equipment.setChestplateDropChance(chest.asFloat());
+            setDropChance(getLivingEntity(), EquipmentSlot.Type.ARMOR, 2, chest.asFloat());
         }
         if (legs != null) {
-            equipment.setLeggingsDropChance(legs.asFloat());
+            setDropChance(getLivingEntity(), EquipmentSlot.Type.ARMOR, 1, legs.asFloat());
         }
         if (feet != null) {
-            equipment.setBootsDropChance(feet.asFloat());
+            setDropChance(getLivingEntity(), EquipmentSlot.Type.ARMOR, 0, feet.asFloat());
         }
         if (hand != null) {
-            equipment.setItemInMainHandDropChance(hand.asFloat());
+            setDropChance(getLivingEntity(), EquipmentSlot.Type.HAND, 0, hand.asFloat());
         }
         if (offHand != null) {
-            equipment.setItemInOffHandDropChance(offHand.asFloat());
+            setDropChance(getLivingEntity(), EquipmentSlot.Type.HAND, 1, offHand.asFloat());
+        }
+    }
+
+    public void setDropChance(LivingEntity entity, EquipmentSlot.Type type, int index, float value) {
+        switch (type) {
+            case HAND:
+                try {
+                    Field field = FieldUtils.getField(entity.getClass(), "handDropChances");
+                    ((float[]) field.get(entity))[index] = value;
+                } catch (Throwable ex) {
+                    ReflectionHelper.echoError(ex);
+                }
+                break;
+            case ARMOR:
+                try {
+                    Field field = FieldUtils.getField(entity.getClass(), "armorDropChances");
+                    ((float[]) field.get(entity))[index] = value;
+                } catch (Throwable ex) {
+                    ReflectionHelper.echoError(ex);
+                }
+                break;
         }
     }
 

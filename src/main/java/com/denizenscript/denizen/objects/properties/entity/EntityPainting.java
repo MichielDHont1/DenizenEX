@@ -8,10 +8,14 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.Art;
-import org.bukkit.Registry;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Painting;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.Motive;
+import net.minecraft.world.entity.decoration.Painting;
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import java.awt.*;
+import java.lang.reflect.Field;
 
 public class EntityPainting implements Property {
 
@@ -44,7 +48,7 @@ public class EntityPainting implements Property {
 
     @Override
     public String getPropertyString() {
-        return ((Painting) painting.getBukkitEntity()).getArt().name();
+        return ((Painting) painting.getBukkitEntity()).motive.toString();
     }
 
     @Override
@@ -68,7 +72,7 @@ public class EntityPainting implements Property {
         // If the entity is a painting, returns its width.
         // -->
         if (attribute.startsWith("painting_width")) {
-            return new ElementTag(NMSHandler.entityHelper.getBlockWidth(((Painting) painting.getBukkitEntity()).getArt()))
+            return new ElementTag(((Painting) painting.getBukkitEntity()).motive.getWidth())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -81,7 +85,7 @@ public class EntityPainting implements Property {
         // If the entity is a painting, returns its height.
         // -->
         if (attribute.startsWith("painting_height")) {
-            return new ElementTag(NMSHandler.entityHelper.getBlockHeight(((Painting) painting.getBukkitEntity()).getArt()))
+            return new ElementTag(((Painting) painting.getBukkitEntity()).motive.getHeight())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -95,7 +99,7 @@ public class EntityPainting implements Property {
         // See also <@link tag server.art_types>.
         // -->
         if (attribute.startsWith("painting")) {
-            return Utilities.enumlikeToElement(((Painting) painting.getBukkitEntity()).getArt())
+            return Utilities.enumlikeToElement(((Painting) painting.getBukkitEntity()).motive)
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -115,10 +119,24 @@ public class EntityPainting implements Property {
         // <EntityTag.painting>
         // <server.art_types>
         // -->
-        if (mechanism.matches("painting") && Utilities.requireEnumlike(mechanism, Art.class)) {
-            Art art = Registry.ART.get(Utilities.parseNamespacedKey(mechanism.getValue().asString()));
-            if (((Painting) painting.getBukkitEntity()).getArt() != art) {
-                ((Painting) painting.getBukkitEntity()).setArt(art, true);
+        if (mechanism.matches("painting") && Utilities.requireEnumlike(mechanism, Motive.class)) {
+
+            Painting currentPainting = ((Painting) painting.getBukkitEntity());
+            String newMotiveName = mechanism.getValue().asString();
+            if (!currentPainting.motive.toString().equals(newMotiveName)) {
+                Motive newMotive = ReflectionHelper.getFieldValue(Painting.class, newMotiveName, null);
+                if (newMotive != null)
+                {
+                    currentPainting.motive = newMotive;
+                }
+                //todo remove old code
+//                try
+//                {
+//                    Field field = FieldUtils.getField(Painting.class, newMotiveName);
+//                    currentPainting.motive = (Motive) field.get(null);
+//                } catch (IllegalAccessException e) {
+//                    //todo debug msg
+//                }
             }
         }
     }

@@ -386,6 +386,7 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         setItemScriptName(script.getName());
     }
 
+    //todo rename function
     public Item getBukkitMaterial() {
         return getItemStack().getItem();
     }
@@ -603,20 +604,21 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // Returns the MaterialTag that is the basis of the item.
         // EG, a stone with lore and a display name, etc. will return only "m@stone".
         // -->
-        tagProcessor.registerTag(ObjectTag.class, "material", (attribute, object) -> {
-            if (attribute.getAttribute(2).equals("formatted")) {
-                return object;
-            }
-            if (object.getItemMeta() instanceof BlockStateMeta) {
-                if (object.getBukkitMaterial() == Material.SHIELD) {
-                    MaterialTag material = new MaterialTag(Material.SHIELD);
-                    material.setModernData(((BlockStateMeta) object.getItemMeta()).getBlockState().getBlockData());
-                    return material;
-                }
-                return new MaterialTag(((BlockStateMeta) object.getItemMeta()).getBlockState());
-            }
-            return object.getMaterial();
-        });
+        //todo metadata
+//        tagProcessor.registerTag(ObjectTag.class, "material", (attribute, object) -> {
+//            if (attribute.getAttribute(2).equals("formatted")) {
+//                return object;
+//            }
+//            if (object.getItemMeta() instanceof BlockStateMeta) {
+//                if (object.getBukkitMaterial() == Material.SHIELD) {
+//                    MaterialTag material = new MaterialTag(Material.SHIELD);
+//                    material.setModernData(((BlockStateMeta) object.getItemMeta()).getBlockState().getBlockData());
+//                    return material;
+//                }
+//                return new MaterialTag(((BlockStateMeta) object.getItemMeta()).getBlockState());
+//            }
+//            return object.getMaterial();
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.placed_material>

@@ -5,7 +5,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 
 public class EntityKnockback implements Property {
 
@@ -30,7 +30,7 @@ public class EntityKnockback implements Property {
 
     @Override
     public String getPropertyString() {
-        return String.valueOf(getAbstractArrow().getKnockbackStrength());
+        return String.valueOf(getAbstractArrow().getKnockback());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class EntityKnockback implements Property {
         // Returns the knockback strength of an arrow or trident.
         // -->
         PropertyParser.registerTag(EntityKnockback.class, ElementTag.class, "knockback", (attribute, object) -> {
-            return new ElementTag(object.getAbstractArrow().getKnockbackStrength());
+            return new ElementTag(object.getAbstractArrow().getKnockback());
         });
 
         // <--[mechanism]
@@ -63,7 +63,7 @@ public class EntityKnockback implements Property {
         // -->
         PropertyParser.registerMechanism(EntityKnockback.class, ElementTag.class, "knockback", (object, mechanism, input) -> {
             if (mechanism.requireInteger()) {
-                object.getAbstractArrow().setKnockbackStrength(input.asInt());
+                object.getAbstractArrow().setKnockback(input.asInt());
             }
         });
     }

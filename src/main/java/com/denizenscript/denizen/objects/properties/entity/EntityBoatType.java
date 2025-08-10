@@ -7,8 +7,7 @@ import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.TreeSpecies;
-import org.bukkit.entity.Boat;
+import net.minecraft.world.entity.vehicle.Boat;
 
 public class EntityBoatType extends EntityProperty<ElementTag> {
 
@@ -31,7 +30,7 @@ public class EntityBoatType extends EntityProperty<ElementTag> {
         if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
             return null;
         }
-        return new ElementTag(as(Boat.class).getWoodType());
+        return new ElementTag(as(Boat.class).getBoatType());
     }
 
     @Override
@@ -42,7 +41,7 @@ public class EntityBoatType extends EntityProperty<ElementTag> {
         if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
             BukkitImplDeprecations.gettingBoatType.warn(attribute.context);
         }
-        return new ElementTag(as(Boat.class).getWoodType());
+        return new ElementTag(as(Boat.class).getBoatType());
     }
 
     @Override
@@ -59,8 +58,8 @@ public class EntityBoatType extends EntityProperty<ElementTag> {
             BukkitImplDeprecations.settingBoatType.warn(mechanism.context);
             return;
         }
-        if (mechanism.requireEnum(TreeSpecies.class)) {
-            as(Boat.class).setWoodType(type.asEnum(TreeSpecies.class));
+        if (mechanism.requireEnum(Boat.Type.class)) {
+            as(Boat.class).setType(type.asEnum(Boat.Type.class));
         }
     }
 

@@ -9,13 +9,13 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.inventory.InventoryHolder;
 
 public class EntityInventory implements Property {
 
     public static boolean describes(ObjectTag entity) {
-        return entity instanceof EntityTag
-                && ((EntityTag) entity).getBukkitEntity() instanceof InventoryHolder;
+        return entity instanceof EntityTag;
+        //todo
+                //&& ((EntityTag) entity).getBukkitEntity() instanceof InventoryHolder;
     }
 
     public static EntityInventory getFrom(ObjectTag entity) {

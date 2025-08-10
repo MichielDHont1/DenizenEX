@@ -35,6 +35,7 @@ import com.denizenscript.denizencore.utilities.SimplexNoise;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
@@ -239,6 +240,11 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         }
     }
 
+    public LocationTag(Direction direction) {
+        this(direction.getNormal());
+    //todo direction
+    }
+
     public LocationTag(Vec3 vector) {
         this((Level) null, vector.x, vector.y, vector.z, 0, 0);
     }
@@ -337,6 +343,11 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         finally {
             NMSHandler.chunkHelper.restoreServerThread(getWorld());
         }
+    }
+
+    public static LocationTag fromRotation(float xRotation, float yRotation)
+    {
+        LocationTag newTag = new LocationTag()
     }
 
 //todo

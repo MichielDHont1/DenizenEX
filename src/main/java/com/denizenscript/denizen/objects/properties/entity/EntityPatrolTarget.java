@@ -6,8 +6,8 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Raider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.raid.Raider;
 
 public class EntityPatrolTarget implements Property {
 
@@ -36,11 +36,11 @@ public class EntityPatrolTarget implements Property {
 
     @Override
     public String getPropertyString() {
-        Block target = ((Raider) entity.getBukkitEntity()).getPatrolTarget();
+        BlockPos target = ((Raider) entity.getBukkitEntity()).getPatrolTarget();
         if (target == null) {
             return null;
         }
-        return new LocationTag(target.getLocation()).identify();
+        return new LocationTag(target).identify();
     }
 
     @Override
@@ -59,11 +59,11 @@ public class EntityPatrolTarget implements Property {
         // If the entity is raider mob (like a pillager), returns whether the entity is allowed to join active raids.
         // -->
         PropertyParser.registerTag(EntityPatrolTarget.class, LocationTag.class, "patrol_target", (attribute, object) -> {
-            Block target = ((Raider) object.entity.getBukkitEntity()).getPatrolTarget();
+            BlockPos target = ((Raider) object.entity.getBukkitEntity()).getPatrolTarget();
             if (target == null) {
                 return null;
             }
-            return new LocationTag(target.getLocation());
+            return new LocationTag(target);
         });
     }
 
@@ -81,7 +81,7 @@ public class EntityPatrolTarget implements Property {
         // -->
         if (mechanism.matches("patrol_target")) {
             if (mechanism.hasValue() && mechanism.requireObject(LocationTag.class)) {
-                ((Raider) entity.getBukkitEntity()).setPatrolTarget(mechanism.valueAsType(LocationTag.class).getBlock());
+                ((Raider) entity.getBukkitEntity()).setPatrolTarget(mechanism.valueAsType(LocationTag.class).getBlockPos());
             }
             else {
                 ((Raider) entity.getBukkitEntity()).setPatrolTarget(null);

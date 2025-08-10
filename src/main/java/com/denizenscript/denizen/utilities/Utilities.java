@@ -18,12 +18,15 @@ import com.denizenscript.denizencore.tags.TagManager;
 import com.denizenscript.denizencore.utilities.AsciiMatcher;
 import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.debugging.DebugInternals;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.Motive;
+import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -33,9 +36,11 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -582,68 +587,53 @@ public class Utilities {
 //        }
         throw new UnsupportedOperationException("Cannot get legacy name element, value isn't an enum: " + val);
     }
-//todo
-//    public static <T> T elementToEnumlike(ElementTag element, Class<T> type) {
-//        return elementToEnumlike(element, type, true);
-//    }
-//
-//    public static <T> T elementToEnumlike(ElementTag element, Class<T> type, boolean showWarning) {
-//        if (NMSHandler.getVersion().isAtMost(NMSVersion.v1_20)) {
-//            return element.asEnum(type);
-//        }
-//        Registry<?> registry = Bukkit.getRegistry((Class<? extends Keyed>) type);
-//        if (registry == null) {
-//            return element.asEnum(type);
-//        }
-//        T value = (T) registry.get(parseNamespacedKey(element.asString()));
-//        if (value != null || !Settings.cache_legacySpigotNamesSupport) {
-//            return value;
-//        }
-//        T enumValue = element.asEnum(type);
-//        if (enumValue != null) {
-//            if (showWarning) {
-//                BukkitImplDeprecations.oldSpigotNames.warn();
-//            }
-//            return enumValue;
-//        }
-//        String updatedName = NMSHandler.instance.updateLegacyName(type, element.asString());
-//        if (CoreUtilities.equalsIgnoreCase(element.asString(), updatedName)) {
-//            return null;
-//        }
-//        if (showWarning) {
-//            BukkitImplDeprecations.oldSpigotNames.warn();
-//        }
-//        return (T) registry.get(parseNamespacedKey(updatedName));
-//    }
 
-//    public static <T> T elementToRequiredEnumLike(ElementTag element, Class<T> type, Mechanism mechanism) {
-//        T converted = elementToEnumlike(element, type);
-//        if (converted == null) {
-//            mechanism.echoError("Invalid " + DebugInternals.getClassNameOpti(type) + " specified.");
-//            return null;
-//        }
-//        return converted;
-//    }
-//todo
-//    public static <T> T findBestEnumlike(Class<T> type, String... names) {
-//        for (String name : names) {
-//            T val = elementToEnumlike(new ElementTag(name), type, false);
-//            if (val != null) {
-//                return val;
-//            }
+    public static <T> T elementToEnumlike(ElementTag element, Class<T> type) {
+        return elementToEnumlike(element, type, true);
+    }
+
+    public static <T> T elementToEnumlike(ElementTag element, Class<T> type, boolean showWarning) {
+        return ReflectionHelper.getFieldValue(Painting.class, element.asString(), null);
+        //todo remove old code
+//        try
+//        {
+//            Field field = FieldUtils.getField(Painting.class, element.asString());
+//            Object enumLikeField = field.get(null);
+//            return (T) field.get(null);
+//        } catch (IllegalAccessException e) {
+//            //todo debug msg
 //        }
 //        return null;
-//    }
-//
-//    public static boolean matchesEnumlike(ElementTag element, Class<?> type) {
-//        return elementToEnumlike(element, type, false) != null;
-//    }
-//
-//    public static boolean requireEnumlike(Mechanism mechanism, Class<?> type) {
-//        if (!matchesEnumlike(mechanism.getValue(), type)) {
-//            mechanism.echoError("Invalid " + DebugInternals.getClassNameOpti(type) + " specified.");
-//            return false;
-//        }
-//        return true;
-//    }
+    }
+
+    public static <T> T elementToRequiredEnumLike(ElementTag element, Class<T> type, Mechanism mechanism) {
+        T converted = elementToEnumlike(element, type);
+        if (converted == null) {
+            mechanism.echoError("Invalid " + DebugInternals.getClassNameOpti(type) + " specified.");
+            return null;
+        }
+        return converted;
+    }
+
+    public static <T> T findBestEnumlike(Class<T> type, String... names) {
+        for (String name : names) {
+            T val = elementToEnumlike(new ElementTag(name), type, false);
+            if (val != null) {
+                return val;
+            }
+        }
+        return null;
+    }
+
+    public static boolean matchesEnumlike(ElementTag element, Class<?> type) {
+        return elementToEnumlike(element, type, false) != null;
+    }
+
+    public static boolean requireEnumlike(Mechanism mechanism, Class<?> type) {
+        if (!matchesEnumlike(mechanism.getValue(), type)) {
+            mechanism.echoError("Invalid " + DebugInternals.getClassNameOpti(type) + " specified.");
+            return false;
+        }
+        return true;
+    }
 }

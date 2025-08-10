@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.Fireball;
+import net.minecraft.world.entity.projectile.Fireball;
 
 public class EntityDirection implements Property {
 
@@ -76,7 +76,7 @@ public class EntityDirection implements Property {
         // <EntityTag.direction>
         // -->
         if (mechanism.matches("direction") && mechanism.requireObject(LocationTag.class)) {
-            getFireball().setDirection(mechanism.valueAsType(LocationTag.class).toVector());
+            getFireball().setYRot(mechanism.valueAsType(LocationTag.class).toVector());
         }
     }
 }

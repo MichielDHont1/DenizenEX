@@ -7,7 +7,7 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.entity.Goat;
+import net.minecraft.world.entity.animal.goat.Goat;
 
 public class EntityHorns implements Property {
 
@@ -42,14 +42,16 @@ public class EntityHorns implements Property {
     }
 
     public ListTag getHornsList() {
-        ListTag result = new ListTag();
-        if (getGoat().hasLeftHorn()) {
-            result.addObject(new ElementTag("left"));
-        }
-        if (getGoat().hasRightHorn()) {
-            result.addObject(new ElementTag("right"));
-        }
-        return result;
+        //todo
+//        ListTag result = new ListTag();
+//        if (getGoat().hasLeftHorn()) {
+//            result.addObject(new ElementTag("left"));
+//        }
+//        if (getGoat().hasRightHorn()) {
+//            result.addObject(new ElementTag("right"));
+//        }
+//        return result;
+        return null;
     }
 
     public static void register() {
@@ -75,23 +77,24 @@ public class EntityHorns implements Property {
         // @tags
         // <EntityTag.horns>
         // -->
-        PropertyParser.registerMechanism(EntityHorns.class, ListTag.class, "horns", (object, mechanism, input) -> {
-            boolean left = false, right = false;
-            for (String value : input) {
-                String low = CoreUtilities.toLowerCase(value);
-                if (low.equals("left")) {
-                    left = true;
-                }
-                else if (low.equals("right")) {
-                    right = true;
-                }
-                else {
-                    mechanism.echoError("Invalid horn '" + value + "': must be 'left' or 'right'.");
-                }
-            }
-            object.getGoat().setLeftHorn(left);
-            object.getGoat().setRightHorn(right);
-        });
+        //todo
+//        PropertyParser.registerMechanism(EntityHorns.class, ListTag.class, "horns", (object, mechanism, input) -> {
+//            boolean left = false, right = false;
+//            for (String value : input) {
+//                String low = CoreUtilities.toLowerCase(value);
+//                if (low.equals("left")) {
+//                    left = true;
+//                }
+//                else if (low.equals("right")) {
+//                    right = true;
+//                }
+//                else {
+//                    mechanism.echoError("Invalid horn '" + value + "': must be 'left' or 'right'.");
+//                }
+//            }
+//            object.getGoat().setLeftHorn(left);
+//            object.getGoat().setRightHorn(right);
+//        });
     }
 
     public Goat getGoat() {

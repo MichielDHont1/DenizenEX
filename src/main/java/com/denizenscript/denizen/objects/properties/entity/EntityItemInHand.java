@@ -6,7 +6,8 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.Material;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Items;
 
 public class EntityItemInHand implements Property {
 
@@ -45,8 +46,8 @@ public class EntityItemInHand implements Property {
 
     @Override
     public String getPropertyString() {
-        ItemTag item = new ItemTag(entity.getLivingEntity().getEquipment().getItemInMainHand());
-        if (item.getBukkitMaterial() != Material.AIR) {
+        ItemTag item = new ItemTag(entity.getLivingEntity().getMainHandItem());
+        if (item.getBukkitMaterial() != Items.AIR) {
             return item.identify();
         }
         else {
@@ -78,7 +79,7 @@ public class EntityItemInHand implements Property {
             if (!entity.isSpawnedOrValidForTag()) {
                 return null;
             }
-            return new ItemTag(entity.getLivingEntity().getEquipment().getItemInMainHand()).getObjectAttribute(attribute.fulfill(1));
+            return new ItemTag(entity.getLivingEntity().getMainHandItem()).getObjectAttribute(attribute.fulfill(1));
         }
 
         return null;
@@ -98,7 +99,7 @@ public class EntityItemInHand implements Property {
         // <EntityTag.item_in_hand>
         // -->
         if (mechanism.matches("item_in_hand")) {
-            entity.getLivingEntity().getEquipment().setItemInMainHand(mechanism.valueAsType(ItemTag.class).getItemStack());
+            entity.getLivingEntity().setItemInHand(InteractionHand.MAIN_HAND, mechanism.valueAsType(ItemTag.class).getItemStack());
         }
     }
 }

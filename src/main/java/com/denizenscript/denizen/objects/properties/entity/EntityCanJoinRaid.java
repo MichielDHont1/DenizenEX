@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Raider;
+import net.minecraft.world.entity.raid.Raider;
 
 public class EntityCanJoinRaid extends EntityProperty<ElementTag> {
 
@@ -21,7 +21,7 @@ public class EntityCanJoinRaid extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(Raider.class).isCanJoinRaid());
+        return new ElementTag(as(Raider.class).canJoinRaid());
     }
 
     @Override

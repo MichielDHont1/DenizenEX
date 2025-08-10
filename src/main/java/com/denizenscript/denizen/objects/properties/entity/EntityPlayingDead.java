@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.Axolotl;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 
 public class EntityPlayingDead implements Property {
 

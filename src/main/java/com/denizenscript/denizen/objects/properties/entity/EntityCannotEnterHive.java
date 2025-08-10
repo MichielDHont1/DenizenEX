@@ -3,7 +3,8 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.DurationTag;
-import org.bukkit.entity.Bee;
+import net.minecraft.world.entity.animal.Bee;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class EntityCannotEnterHive extends EntityProperty<DurationTag> {
 
@@ -21,12 +22,19 @@ public class EntityCannotEnterHive extends EntityProperty<DurationTag> {
 
     @Override
     public DurationTag getPropertyValue() {
-        return new DurationTag((long) as(Bee.class).getCannotEnterHiveTicks());
+        try
+        {
+            int countdown = (int)FieldUtils.readField(this, "stayOutOfHiveCountdown", true);
+            return new DurationTag(countdown);
+        } catch (IllegalAccessException e) {
+            //todo debug msg
+        }
+        return null;
     }
 
     @Override
     public void setPropertyValue(DurationTag param, Mechanism mechanism) {
-        as(Bee.class).setCannotEnterHiveTicks(param.getTicksAsInt());
+        as(Bee.class).setStayOutOfHiveCountdown(param.getTicksAsInt());
     }
 
     @Override

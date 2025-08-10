@@ -6,7 +6,12 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.GlowSquid;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.world.entity.GlowSquid;
+
+import java.lang.reflect.Field;
+import java.sql.Ref;
 
 public class EntityDarkDuration implements Property {
 
@@ -76,7 +81,12 @@ public class EntityDarkDuration implements Property {
         // <EntityTag.dark_duration>
         // -->
         if (mechanism.matches("dark_duration") && mechanism.requireObject(DurationTag.class)) {
-            getGlowSquid().setDarkTicksRemaining(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+            Field field = ReflectionHelper.getField(getGlowSquid().getClass(), "DATA_DARK_TICKS_REMAINING");
+            try {
+                getGlowSquid().getEntityData().set((EntityDataAccessor<Integer>)field.get(getGlowSquid()), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+            } catch (IllegalAccessException e) {
+                ReflectionHelper.echoError(e);
+            }
         }
     }
 }

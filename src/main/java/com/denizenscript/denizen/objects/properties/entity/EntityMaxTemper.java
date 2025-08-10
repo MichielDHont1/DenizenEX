@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 
 public class EntityMaxTemper extends EntityProperty<ElementTag> {
 
@@ -32,13 +32,13 @@ public class EntityMaxTemper extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(AbstractHorse.class).getMaxDomestication());
+        return new ElementTag(as(AbstractHorse.class).getTemper());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireInteger()) {
-            as(AbstractHorse.class).setMaxDomestication(param.asInt());
+            as(AbstractHorse.class).setTemper(param.asInt());
         }
     }
 

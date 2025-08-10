@@ -6,12 +6,12 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.EnderCrystal;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 
 public class EntityIsShowingBottom implements Property {
 
     public static boolean describes(ObjectTag entity) {
-        return entity instanceof EntityTag entityTag && entityTag.getBukkitEntity() instanceof EnderCrystal;
+        return entity instanceof EntityTag entityTag && entityTag.getBukkitEntity() instanceof EndCrystal;
     }
 
     public static EntityIsShowingBottom getFrom(ObjectTag entity) {
@@ -39,7 +39,7 @@ public class EntityIsShowingBottom implements Property {
 
     @Override
     public String getPropertyString() {
-        if (((EnderCrystal) dentity.getBukkitEntity()).isShowingBottom()) {
+        if (((EndCrystal) dentity.getBukkitEntity()).showsBottom()) {
             return null;
         }
         else {
@@ -68,7 +68,7 @@ public class EntityIsShowingBottom implements Property {
         // If the entity is an ender crystal, returns whether the ender crystal has its bottom showing.
         // -->
         if (attribute.startsWith("is_showing_bottom")) {
-            return new ElementTag(((EnderCrystal) dentity.getBukkitEntity()).isShowingBottom())
+            return new ElementTag(((EndCrystal) dentity.getBukkitEntity()).showsBottom())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -88,7 +88,7 @@ public class EntityIsShowingBottom implements Property {
         // <EntityTag.is_showing_bottom>
         // -->
         if (mechanism.matches("is_showing_bottom") && mechanism.requireBoolean()) {
-            ((EnderCrystal) dentity.getBukkitEntity()).setShowingBottom(mechanism.getValue().asBoolean());
+            ((EndCrystal) dentity.getBukkitEntity()).setShowBottom(mechanism.getValue().asBoolean());
         }
     }
 }

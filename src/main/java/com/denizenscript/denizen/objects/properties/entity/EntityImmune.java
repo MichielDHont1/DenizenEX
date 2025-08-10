@@ -6,14 +6,18 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Hoglin;
-import org.bukkit.entity.PiglinAbstract;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class EntityImmune implements Property {
 
     public static boolean describes(ObjectTag entity) {
         return entity instanceof EntityTag
-                && (((EntityTag) entity).getBukkitEntity() instanceof PiglinAbstract
+                && (((EntityTag) entity).getBukkitEntity() instanceof AbstractPiglin
                 || ((EntityTag) entity).getBukkitEntity() instanceof Hoglin);
     }
 
@@ -48,15 +52,31 @@ public class EntityImmune implements Property {
         return (Hoglin) dentity.getBukkitEntity();
     }
 
-    public PiglinAbstract getPiglin() {
-        return (PiglinAbstract) dentity.getBukkitEntity();
+    public AbstractPiglin getPiglin() {
+        return (AbstractPiglin) dentity.getBukkitEntity();
     }
 
     public boolean getIsImmune() {
+        Object obj;
         if (isHoglin()) {
-            return getHoglin().isImmuneToZombification();
+            obj = (Object) getHoglin();
         }
-        return getPiglin().isImmuneToZombification();
+        else {
+            obj = (Object) getPiglin();
+        }
+        try
+        {
+            Method method = obj.getClass().getDeclaredMethod("isImmuneToZombification");
+            method.setAccessible(true);
+            Object r = method.invoke(obj);
+            return (boolean) r;
+        }
+        catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException e) {
+            //todo debug msg
+        } catch (InvocationTargetException e) {
+        }
+        return false;
     }
 
     @Override

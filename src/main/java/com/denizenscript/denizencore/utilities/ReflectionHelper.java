@@ -172,6 +172,22 @@ public class ReflectionHelper {
         return cachedFields.computeIfAbsent(clazz, FieldCache::new);
     }
 
+    public static Field getField(Class<?> clazz, String field) {
+        Field f = null;
+        try {
+            f = clazz.getDeclaredField(field);
+        }
+        catch (Exception ex) {
+            echoError(ex);
+        }
+        if (f == null) {
+            echoError("Reflection method missing - Tried to read method '" + field + "' of class '" + clazz.getCanonicalName() + "'.");
+            return null;
+        }
+        f.setAccessible(true);
+        return f;
+    }
+
     public static Method getMethod(Class<?> clazz, String method, Class<?>... params) {
         Method f = null;
         try {

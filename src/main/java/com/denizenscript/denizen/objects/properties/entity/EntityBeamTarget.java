@@ -7,13 +7,14 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizen.utilities.Location;
-import org.bukkit.entity.EnderCrystal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 
 public class EntityBeamTarget implements Property {
 
     public static boolean describes(ObjectTag entity) {
         return entity instanceof EntityTag
-                && ((EntityTag) entity).getBukkitEntity() instanceof EnderCrystal;
+                && ((EntityTag) entity).getBukkitEntity() instanceof EndCrystal;
     }
 
     public static EntityBeamTarget getFrom(ObjectTag entity) {
@@ -37,7 +38,7 @@ public class EntityBeamTarget implements Property {
 
     @Override
     public String getPropertyString() {
-        Location beamTarget = getCrystal().getBeamTarget();
+        BlockPos beamTarget = getCrystal().getBeamTarget();
         return beamTarget != null ? new LocationTag(beamTarget).identify() : null;
     }
 
@@ -46,8 +47,8 @@ public class EntityBeamTarget implements Property {
         return "beam_target";
     }
 
-    public EnderCrystal getCrystal() {
-        return (EnderCrystal) dentity.getBukkitEntity();
+    public EndCrystal getCrystal() {
+        return (EndCrystal) dentity.getBukkitEntity();
     }
 
     public static void register() {
@@ -61,7 +62,7 @@ public class EntityBeamTarget implements Property {
         // Returns the target location of the ender crystal's beam, if any.
         // -->
         PropertyParser.registerTag(EntityBeamTarget.class, LocationTag.class, "beam_target", (attribute, object) -> {
-            Location beamTarget = object.getCrystal().getBeamTarget();
+            BlockPos beamTarget = object.getCrystal().getBeamTarget();
             if (beamTarget != null) {
                 return new LocationTag(beamTarget);
             }
@@ -85,7 +86,7 @@ public class EntityBeamTarget implements Property {
         if (mechanism.matches("beam_target")) {
             if (mechanism.hasValue()) {
                 if (mechanism.requireObject(LocationTag.class)) {
-                    getCrystal().setBeamTarget(mechanism.valueAsType(LocationTag.class));
+                    getCrystal().setBeamTarget(mechanism.valueAsType(LocationTag.class).getBlockPos());
                 }
             }
             else {

@@ -6,14 +6,19 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Explosive;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
+import org.apache.commons.lang3.reflect.FieldUtils;
+
+import java.lang.reflect.Field;
 
 public class EntityExplosionRadius implements Property {
 
     public static boolean describes(ObjectTag entity) {
         return entity instanceof EntityTag
-                && (((EntityTag) entity).getBukkitEntity() instanceof Explosive
+                && (((EntityTag) entity).getBukkitEntity() instanceof PrimedTnt
                 || ((EntityTag) entity).getBukkitEntity() instanceof Creeper);
     }
 
@@ -30,10 +35,24 @@ public class EntityExplosionRadius implements Property {
     };
 
     public float getExplosionRadius() {
-        if (entity.getBukkitEntity() instanceof Creeper) {
-            return ((Creeper) entity.getBukkitEntity()).getExplosionRadius();
+        Entity creeper = entity.getBukkitEntity();
+        if (creeper instanceof Creeper) {
+            Object obj = ReflectionHelper.getFieldValue(creeper.getClass(), "explosionRadius", creeper);
+            if (obj != null)
+            {
+                return (float) obj;
+            }
+            return 0;
+            //todo remove old code
+//            try {
+//                Field field = FieldUtils.getField(entity.getBukkitEntityType().getClass(), "explosionRadius", true);
+//                return (int) field.get(null);
+//            } catch (IllegalAccessException e) {
+//                //todo debug msg
+//            }
+//            return 0;
         }
-        return ((Explosive) entity.getBukkitEntity()).getYield();
+        return 4; //explosion power is fixed at 4 for tnt entity
     }
 
     public EntityExplosionRadius(EntityTag ent) {
@@ -89,10 +108,15 @@ public class EntityExplosionRadius implements Property {
         // -->
         if (mechanism.matches("explosion_radius") && mechanism.requireFloat()) {
             if (entity.getBukkitEntity() instanceof Creeper) {
-                ((Creeper) entity.getBukkitEntity()).setExplosionRadius(mechanism.getValue().asInt());
+                try {
+                    FieldUtils.writeField(entity.getBukkitEntityType().getClass(), "explosionRadius", mechanism.getValue().asInt());
+                } catch (IllegalAccessException e) {
+                    //todo debug msg
+                }
             }
             else {
-                ((Explosive) entity.getBukkitEntity()).setYield(mechanism.getValue().asFloat());
+                //todo unavailable on 1.18
+//                ((PrimedTnt) entity.getBukkitEntity()).setYield(mechanism.getValue().asFloat());
             }
         }
     }
