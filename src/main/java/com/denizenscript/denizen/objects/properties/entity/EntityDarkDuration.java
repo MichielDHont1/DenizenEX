@@ -81,11 +81,10 @@ public class EntityDarkDuration implements Property {
         // <EntityTag.dark_duration>
         // -->
         if (mechanism.matches("dark_duration") && mechanism.requireObject(DurationTag.class)) {
-            Field field = ReflectionHelper.getField(getGlowSquid().getClass(), "DATA_DARK_TICKS_REMAINING");
-            try {
-                getGlowSquid().getEntityData().set((EntityDataAccessor<Integer>)field.get(getGlowSquid()), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
-            } catch (IllegalAccessException e) {
-                ReflectionHelper.echoError(e);
+            Object object = ReflectionHelper.getField(getGlowSquid().getClass(), "DATA_DARK_TICKS_REMAINING");
+            if (object != null)
+            {
+                 getGlowSquid().getEntityData().set(((EntityDataAccessor<Integer>)object), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
             }
         }
     }

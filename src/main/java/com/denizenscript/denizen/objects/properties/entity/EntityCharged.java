@@ -3,7 +3,9 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.*;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.projectile.WitherSkull;
 
 public class EntityCharged extends EntityProperty<ElementTag> {
 
@@ -33,14 +35,15 @@ public class EntityCharged extends EntityProperty<ElementTag> {
     @Override
     public ElementTag getPropertyValue() {
         if (getEntity() instanceof WitherSkull entity) {
-            return new ElementTag(entity.isCharged());
+            return new ElementTag(entity.isDangerous());
         }
         else if (getEntity() instanceof Vex entity) {
             return new ElementTag(entity.isCharging());
         }
-        else if (getEntity() instanceof Guardian entity) {
-            return new ElementTag(entity.hasLaser());
-        }
+        //todo
+//        else if (getEntity() instanceof Guardian entity) {
+//            return new ElementTag(entity.hasLaser());
+//        }
         return null;
     }
 
@@ -48,14 +51,15 @@ public class EntityCharged extends EntityProperty<ElementTag> {
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireBoolean()) {
             if (getEntity() instanceof WitherSkull entity) {
-                entity.setCharged(param.asBoolean());
+                entity.setDangerous(param.asBoolean());
             }
             else if (getEntity() instanceof Vex entity) {
-                entity.setCharging(param.asBoolean());
+                entity.setIsCharging(param.asBoolean());
             }
-            else if (getEntity() instanceof Guardian entity) {
-                entity.setLaser(param.asBoolean());
-            }
+            //todo
+//            else if (getEntity() instanceof Guardian entity) {
+//                entity.setLaser(param.asBoolean());
+//            }
         }
     }
 

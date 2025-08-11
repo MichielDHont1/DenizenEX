@@ -7,8 +7,11 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizen.nms.abstracts.OfflinePlayer;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.entity.ZombieVillager;
+import net.minecraft.world.entity.monster.ZombieVillager;
+
+import java.util.UUID;
 
 public class EntityConversionPlayer implements Property {
 
@@ -41,8 +44,9 @@ public class EntityConversionPlayer implements Property {
 
     @Override
     public String getPropertyString() {
-        OfflinePlayer player = getZombieVillager().getConversionPlayer();
-        if (player != null && player.hasPlayedBefore()) {
+        UUID uuid = ReflectionHelper.getFieldValue(getZombieVillager().getClass(), "conversionStarter", getZombieVillager());
+        OfflinePlayer player = new OfflinePlayer(uuid);
+        if (player.uuid != null && player.hasPlayedBefore()) {
             return new PlayerTag(player).identify();
         }
         return null;
@@ -64,8 +68,9 @@ public class EntityConversionPlayer implements Property {
         // Returns the player that caused a zombie villager to start converting back to a villager, if any.
         // -->
         PropertyParser.registerTag(EntityConversionPlayer.class, PlayerTag.class, "conversion_player", (attribute, object) -> {
-            OfflinePlayer player = object.getZombieVillager().getConversionPlayer();
-            if (player != null && player.hasPlayedBefore()) {
+            UUID uuid = ReflectionHelper.getFieldValue(object.getZombieVillager().getClass(), "conversionStarter", object.getZombieVillager());
+            OfflinePlayer player = new OfflinePlayer(uuid);
+            if (player.uuid != null && player.hasPlayedBefore()) {
                 return new PlayerTag(player);
             }
             return null;
@@ -92,11 +97,11 @@ public class EntityConversionPlayer implements Property {
         if (mechanism.matches("conversion_player")) {
             if (mechanism.hasValue()) {
                 if (mechanism.requireObject(PlayerTag.class)) {
-                    getZombieVillager().setConversionPlayer(mechanism.valueAsType(PlayerTag.class).getOfflinePlayer());
+                    ReflectionHelper.setFieldValue(getZombieVillager().getClass(), "conversionStarter", getZombieVillager(), mechanism.valueAsType(PlayerTag.class).getUUID());
                 }
             }
             else {
-                getZombieVillager().setConversionPlayer(null);
+                ReflectionHelper.setFieldValue(getZombieVillager().getClass(), "conversionStarter", getZombieVillager(), null);
             }
         }
     }

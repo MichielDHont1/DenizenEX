@@ -5,7 +5,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.SkeletonHorse;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 
 public class EntityTrapped implements Property {
 
@@ -31,7 +31,7 @@ public class EntityTrapped implements Property {
 
     @Override
     public String getPropertyString() {
-        return String.valueOf(((SkeletonHorse) entity.getBukkitEntity()).isTrapped());
+        return String.valueOf(((SkeletonHorse) entity.getBukkitEntity()).isTrap());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EntityTrapped implements Property {
         // A trapped skeleton horse will trigger the skeleton horse trap when the player is within 10 blocks of it.
         // -->
         PropertyParser.registerTag(EntityTrapped.class, ElementTag.class, "trapped", (attribute, object) -> {
-            return new ElementTag(object.getSkeletonHorse().isTrapped());
+            return new ElementTag(object.getSkeletonHorse().isTrap());
         });
 
         // <--[mechanism]
@@ -68,7 +68,7 @@ public class EntityTrapped implements Property {
             if (!mechanism.requireBoolean()) {
                 return;
             }
-            object.getSkeletonHorse().setTrapped(input.asBoolean());
+            object.getSkeletonHorse().setTrap(input.asBoolean());
         });
     }
 

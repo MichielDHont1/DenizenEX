@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 
 public class EntityCritical implements Property {
 
@@ -36,7 +36,7 @@ public class EntityCritical implements Property {
 
     @Override
     public String getPropertyString() {
-        return getAbstractArrow().isCritical() ? "true" : null;
+        return getAbstractArrow().isCritArrow() ? "true" : null;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class EntityCritical implements Property {
         // If the entity is an arrow or trident, returns whether the arrow/trident is critical.
         // -->
         PropertyParser.registerTag(EntityCritical.class, ElementTag.class, "critical", (attribute, object) -> {
-            return new ElementTag(object.getAbstractArrow().isCritical());
+            return new ElementTag(object.getAbstractArrow().isCritArrow());
         });
     }
 
@@ -76,7 +76,7 @@ public class EntityCritical implements Property {
         // <EntityTag.critical>
         // -->
         if (mechanism.matches("critical") && mechanism.requireBoolean()) {
-            getAbstractArrow().setCritical(mechanism.getValue().asBoolean());
+            getAbstractArrow().setCritArrow(mechanism.getValue().asBoolean());
         }
     }
 }

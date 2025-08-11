@@ -3,7 +3,11 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import org.bukkit.entity.ArmorStand;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.decoration.ArmorStand;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class EntityBasePlate extends EntityProperty<ElementTag> {
 
@@ -26,13 +30,20 @@ public class EntityBasePlate extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(ArmorStand.class).hasBasePlate());
+        return new ElementTag(!as(ArmorStand.class).isNoBasePlate());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireBoolean()) {
-            as(ArmorStand.class).setBasePlate(param.asBoolean());
+            Method method = ReflectionHelper.getMethod(ArmorStand.class, "setNoBasePlate");
+            if (method != null) {
+                try {
+                    method.invoke(as(ArmorStand.class), param.asBoolean());
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    ReflectionHelper.echoError(e);
+                }
+            }
         }
     }
 

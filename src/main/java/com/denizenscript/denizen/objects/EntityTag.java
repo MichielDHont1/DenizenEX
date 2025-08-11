@@ -4,7 +4,7 @@ import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.nms.NMSVersion;
 //import com.denizenscript.denizen.nms.abstracts.ProfileEditor;
 import com.denizenscript.denizen.nms.interfaces.EntityAnimation;
-import com.denizenscript.denizen.nms.interfaces.FakePlayer;
+//import com.denizenscript.denizen.nms.interfaces.FakePlayer;
 import com.denizenscript.denizen.nms.interfaces.PlayerHelper;
 import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 //import com.denizenscript.denizen.npc.traits.MirrorTrait;
@@ -55,10 +55,9 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.projectile.ShulkerBullet;
+import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -593,6 +592,19 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 //            }
 //        }
         return entity;
+    }
+
+    public boolean isExplosive()
+    {
+        //todo 1.21
+        return //this.entity instanceof AbstractWindCharge ||
+               // this.entity instanceof BreezeWindCharge ||
+                this.entity instanceof DragonFireball ||
+                this.entity instanceof MinecartTNT ||
+                this.entity instanceof Fireball ||
+                this.entity instanceof PrimedTnt ||
+//                this.entity instanceof WindCharge ||
+                this.entity instanceof WitherSkull;
     }
 
     public LivingEntity getLivingEntity() {

@@ -345,10 +345,10 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         }
     }
 
-    public static LocationTag fromRotation(float xRotation, float yRotation)
-    {
-        LocationTag newTag = new LocationTag()
-    }
+//    public static LocationTag fromRotation(float xRotation, float yRotation)
+//    {
+//        LocationTag newTag = new LocationTag();
+//    }
 
 //todo
 //    public BlockData getBlockDataForTag(Attribute attribute) {

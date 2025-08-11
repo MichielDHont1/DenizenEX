@@ -6,13 +6,13 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Explosive;
+import net.minecraft.world.entity.item.PrimedTnt;
 
 public class EntityExplosionFire implements Property {
 
     public static boolean describes(ObjectTag entity) {
         return entity instanceof EntityTag
-                && ((EntityTag) entity).getBukkitEntity() instanceof Explosive;
+                && ((EntityTag) entity).getBukkitEntity() instanceof PrimedTnt;
     }
 
     public static EntityExplosionFire getFrom(ObjectTag entity) {
@@ -28,7 +28,7 @@ public class EntityExplosionFire implements Property {
     };
 
     public boolean isIncendiary() {
-        return ((Explosive) entity.getBukkitEntity()).isIncendiary();
+        return ((PrimedTnt) entity.getBukkitEntity()).fire();
     }
 
     public EntityExplosionFire(EntityTag ent) {

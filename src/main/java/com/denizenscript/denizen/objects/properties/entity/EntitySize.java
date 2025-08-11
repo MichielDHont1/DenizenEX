@@ -5,9 +5,13 @@ import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.Phantom;
-import org.bukkit.entity.PufferFish;
-import org.bukkit.entity.Slime;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.animal.Pufferfish;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Slime;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class EntitySize implements Property {
 
@@ -15,7 +19,7 @@ public class EntitySize implements Property {
         return entity instanceof EntityTag &&
                 (((EntityTag) entity).getBukkitEntity() instanceof Slime
                 || ((EntityTag) entity).getBukkitEntity() instanceof Phantom
-                || ((EntityTag) entity).getBukkitEntity() instanceof PufferFish);
+                || ((EntityTag) entity).getBukkitEntity() instanceof Pufferfish);
     }
 
     public static EntitySize getFrom(ObjectTag entity) {
@@ -38,7 +42,7 @@ public class EntitySize implements Property {
             return getSlime().getSize();
         }
         else if (isPhantom()) {
-            return getPhantom().getSize();
+            return getPhantom().getPhantomSize();
         }
         else {
             return getPufferFish().getPuffState();
@@ -84,10 +88,17 @@ public class EntitySize implements Property {
         PropertyParser.registerMechanism(EntitySize.class, ElementTag.class, "size", (object, mechanism, input) -> {
             if (mechanism.requireInteger()) {
                 if (object.isSlime()) {
-                    object.getSlime().setSize(input.asInt());
+                    Method method = ReflectionHelper.getMethod(object.getSlime().getClass(), "setSize");
+                    if (method != null) {
+                        try {
+                            method.invoke(object.getSlime(), input.asInt());
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            ReflectionHelper.echoError(e);
+                        }
+                    }
                 }
                 else if (object.isPhantom()) {
-                    object.getPhantom().setSize(input.asInt());
+                    object.getPhantom().setPhantomSize(input.asInt());
                 }
                 else {
                     object.getPufferFish().setPuffState(input.asInt());
@@ -112,7 +123,7 @@ public class EntitySize implements Property {
         return (Phantom) entity.getBukkitEntity();
     }
 
-    public PufferFish getPufferFish() {
-        return (PufferFish) entity.getBukkitEntity();
+    public Pufferfish getPufferFish() {
+        return (Pufferfish) entity.getBukkitEntity();
     }
 }

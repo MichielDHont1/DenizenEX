@@ -1,12 +1,13 @@
 package com.denizenscript.denizen.objects.properties.entity;
 
 import com.denizenscript.denizen.objects.EntityTag;
-import com.denizenscript.denizen.utilities.PaperAPITools;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class EntityCustomName implements Property {
 
@@ -31,7 +32,14 @@ public class EntityCustomName implements Property {
 
     @Override
     public String getPropertyString() {
-        return PaperAPITools.instance.getCustomName(entity.getBukkitEntity());
+        if (entity.getBukkitEntity().getCustomName() != null)
+        {
+            return entity.getBukkitEntity().getCustomName().getString();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
@@ -50,11 +58,11 @@ public class EntityCustomName implements Property {
         // Returns the entity's custom name (as set by plugin or name tag item), if any.
         // -->
         PropertyParser.registerTag(EntityCustomName.class, ElementTag.class, "custom_name", (attribute, object) -> {
-            String name = PaperAPITools.instance.getCustomName(object.entity.getBukkitEntity());
-            if (name == null) {
+            Component nameComponent = object.entity.getBukkitEntity().getCustomName();
+            if (nameComponent == null) {
                 return null;
             }
-            return new ElementTag(name, true);
+            return new ElementTag(nameComponent.toString(), true);
         });
 
         // <--[mechanism]
@@ -68,7 +76,7 @@ public class EntityCustomName implements Property {
         // <EntityTag.custom_name>
         // -->
         PropertyParser.registerMechanism(EntityCustomName.class, "custom_name", (object, mechanism) -> {
-            PaperAPITools.instance.setCustomName(object.entity.getBukkitEntity(), mechanism.value != null ? CoreUtilities.clearNBSPs(mechanism.getValue().asString()) : null);
+            object.entity.getBukkitEntity().setCustomName(new TextComponent(mechanism.value != null ? CoreUtilities.clearNBSPs(mechanism.getValue().asString()) : null));
         });
     }
 }

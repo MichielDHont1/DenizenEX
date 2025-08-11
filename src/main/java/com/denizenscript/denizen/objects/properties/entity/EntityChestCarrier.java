@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import org.bukkit.entity.ChestedHorse;
+import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
 
 public class EntityChestCarrier extends EntityProperty<ElementTag> {
 
@@ -16,18 +16,18 @@ public class EntityChestCarrier extends EntityProperty<ElementTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-          return entity.getBukkitEntity() instanceof ChestedHorse;
+          return entity.getBukkitEntity() instanceof AbstractChestedHorse;
     }
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(ChestedHorse.class).isCarryingChest());
+        return new ElementTag(as(AbstractChestedHorse.class).hasChest());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireBoolean()) {
-            as(ChestedHorse.class).setCarryingChest(param.asBoolean());
+            as(AbstractChestedHorse.class).setChest(param.asBoolean());
         }
     }
 

@@ -5,7 +5,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.SkeletonHorse;
+import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 
 public class EntityTrapTime implements Property {
 

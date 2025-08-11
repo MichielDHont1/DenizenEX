@@ -7,7 +7,8 @@ import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.*;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.SnowGolem;
 
 public class EntitySheared extends EntityProperty<ElementTag> {
 
@@ -23,8 +24,8 @@ public class EntitySheared extends EntityProperty<ElementTag> {
 
     public static boolean describes(EntityTag entity) {
         return entity.getBukkitEntity() instanceof Sheep
-                || entity.getBukkitEntity() instanceof Snowman
-                || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && entity.getBukkitEntity() instanceof Bogged);
+                || entity.getBukkitEntity() instanceof SnowGolem;//todo 1.21
+//                || (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && entity.getBukkitEntity() instanceof Bogged);
     }
 
     @Override
@@ -32,12 +33,12 @@ public class EntitySheared extends EntityProperty<ElementTag> {
         if (getEntity() instanceof Sheep sheep) {
             return new ElementTag(sheep.isSheared());
         }
-        else if (getEntity() instanceof Snowman snowman) {
-            return new ElementTag(snowman.isDerp());
+        else if (getEntity() instanceof SnowGolem snowman) {
+            return new ElementTag(snowman.hasPumpkin());
         }
-        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && getEntity() instanceof Bogged bogged) {
-            return new ElementTag(bogged.isSheared());
-        }
+//        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && getEntity() instanceof Bogged bogged) {
+//            return new ElementTag(bogged.isSheared());
+//        }
         return null;
     }
 
@@ -49,12 +50,13 @@ public class EntitySheared extends EntityProperty<ElementTag> {
         if (getEntity() instanceof Sheep sheep) {
             sheep.setSheared(param.asBoolean());
         }
-        else if (getEntity() instanceof Snowman snowman) {
-            snowman.setDerp(param.asBoolean());
+        else if (getEntity() instanceof SnowGolem snowman) {
+            snowman.setPumpkin(param.asBoolean());
         }
-        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && getEntity() instanceof Bogged bogged) {
-            bogged.setSheared(param.asBoolean());
-        }
+        //todo 1.21
+//        else if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && getEntity() instanceof Bogged bogged) {
+//            bogged.setSheared(param.asBoolean());
+//        }
     }
 
 
@@ -90,7 +92,7 @@ public class EntitySheared extends EntityProperty<ElementTag> {
         // -->
         PropertyParser.registerTag(EntitySheared.class, ElementTag.class, "has_pumpkin_head", (attribute, prop) -> {
             BukkitImplDeprecations.entityIsSheared.warn(attribute.context);
-            if (!(prop.getEntity() instanceof Snowman)) {
+            if (!(prop.getEntity() instanceof SnowGolem)) {
                 return null;
             }
             return new ElementTag(!prop.getPropertyValue().asBoolean());
@@ -108,7 +110,7 @@ public class EntitySheared extends EntityProperty<ElementTag> {
         // -->
         PropertyParser.registerMechanism(EntitySheared.class, ElementTag.class, "has_pumpkin_head", (prop, mechanism, input) -> {
             BukkitImplDeprecations.entityIsSheared.warn(mechanism.context);
-            if (!(prop.getEntity() instanceof Snowman)) {
+            if (!(prop.getEntity() instanceof SnowGolem)) {
                 return;
             }
             prop.setPropertyValue(new ElementTag(!input.asBoolean()), mechanism);

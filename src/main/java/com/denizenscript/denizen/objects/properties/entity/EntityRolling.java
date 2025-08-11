@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.Panda;
+import net.minecraft.world.entity.animal.Panda;
 
 public class EntityRolling extends EntityProperty<ElementTag> {
 
@@ -32,7 +32,7 @@ public class EntityRolling extends EntityProperty<ElementTag> {
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireBoolean()) {
-            as(Panda.class).setRolling(param.asBoolean());
+            as(Panda.class).roll(param.asBoolean());
         }
     }
 

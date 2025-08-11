@@ -3,8 +3,8 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
-import net.citizensnpcs.trait.versioned.SpellcasterTrait;
-import org.bukkit.entity.Spellcaster;
+import net.minecraft.world.entity.monster.SpellcasterIllager;
+//import net.citizensnpcs.trait.versioned.SpellcasterTrait;
 
 public class EntitySpell extends EntityProperty<ElementTag> {
 
@@ -18,23 +18,23 @@ public class EntitySpell extends EntityProperty<ElementTag> {
     // -->
 
     public static boolean describes(EntityTag entity) {
-        return entity.getBukkitEntity() instanceof Spellcaster;
+        return entity.getBukkitEntity() instanceof SpellcasterIllager;
     }
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(Spellcaster.class).getSpell());
+        return new ElementTag(as(SpellcasterIllager.class).getSpell());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
-        if (!mechanism.requireEnum(Spellcaster.Spell.class)) {
+        if (!mechanism.requireEnum(SpellcasterIllager.Spell.class)) {
             return;
         }
-        Spellcaster.Spell spell = param.asEnum(Spellcaster.Spell.class);
-        if (object.isCitizensNPC()) {
-            object.getDenizenNPC().getCitizen().getOrAddTrait(SpellcasterTrait.class).setSpell(spell);
-        }
+        Spellcaster.Spell spell = param.asEnum(SpellcasterIllager.Spell.class);
+//        if (object.isCitizensNPC()) {
+//            object.getDenizenNPC().getCitizen().getOrAddTrait(SpellcasterTrait.class).setSpell(spell);
+//        }
         as(Spellcaster.class).setSpell(spell);
     }
 

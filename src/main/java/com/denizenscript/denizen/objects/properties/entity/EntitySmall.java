@@ -6,7 +6,11 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.ArmorStand;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.decoration.ArmorStand;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class EntitySmall implements Property {
 
@@ -87,7 +91,14 @@ public class EntitySmall implements Property {
         // <EntityTag.is_small>
         // -->
         if (mechanism.matches("is_small") && mechanism.requireBoolean()) {
-            ((ArmorStand) entity.getBukkitEntity()).setSmall(mechanism.getValue().asBoolean());
+            Method method = ReflectionHelper.getMethod(entity.getBukkitEntity().getClass(), "setSmall");
+            if (method != null) {
+                try {
+                    method.invoke(entity.getBukkitEntity(), mechanism.getValue().asBoolean());
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    ReflectionHelper.echoError(e);
+                }
+            }
         }
     }
 }

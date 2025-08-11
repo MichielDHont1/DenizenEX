@@ -176,6 +176,27 @@ public class ReflectionHelper {
         Field f = null;
         try {
             f = clazz.getDeclaredField(field);
+            if (f == null) {
+                echoError("Reflection method missing - Tried to read method '" + field + "' of class '" + clazz.getCanonicalName() + "'.");
+                return null;
+            }
+            f.setAccessible(true);
+        }
+        catch (Exception ex) {
+            echoError(ex);
+        }
+
+        return f;
+    }
+
+    public static Object getFieldObject(Class<?> clazz, String field, Object obj)
+    {
+        Field f = null;
+        Object o = null;
+        try {
+            f = clazz.getDeclaredField(field);
+            f.setAccessible(true);
+            o = f.get(obj);
         }
         catch (Exception ex) {
             echoError(ex);
@@ -184,8 +205,7 @@ public class ReflectionHelper {
             echoError("Reflection method missing - Tried to read method '" + field + "' of class '" + clazz.getCanonicalName() + "'.");
             return null;
         }
-        f.setAccessible(true);
-        return f;
+        return o;
     }
 
     public static Method getMethod(Class<?> clazz, String method, Class<?>... params) {

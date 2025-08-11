@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Shulker;
+import net.minecraft.world.entity.monster.Shulker;
 
 public class EntityShulkerPeek implements Property {
 
@@ -47,9 +47,9 @@ public class EntityShulkerPeek implements Property {
     public String getPropertyId() {
         return "shulker_peek";
     }
-
+//todo verify
     public int getPeek() {
-        return (int) (((Shulker) entity.getBukkitEntity()).getPeek() * 100);
+        return (int) (((Shulker) entity.getBukkitEntity()).getClientPeekAmount(1) * 100);
     }
 
     @Override
@@ -86,8 +86,9 @@ public class EntityShulkerPeek implements Property {
         // @tags
         // <EntityTag.shulker_peek>
         // -->
-        if (mechanism.matches("shulker_peek") && mechanism.requireInteger()) {
-            ((Shulker) entity.getBukkitEntity()).setPeek(mechanism.getValue().asFloat() / 100);
-        }
+        //todo
+//        if (mechanism.matches("shulker_peek") && mechanism.requireInteger()) {
+//            ((Shulker) entity.getBukkitEntity()).setPeek(mechanism.getValue().asFloat() / 100);
+//        }
     }
 }

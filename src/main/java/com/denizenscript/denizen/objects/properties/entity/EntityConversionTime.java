@@ -7,7 +7,11 @@ import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.*;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 
 public class EntityConversionTime implements Property {
 
@@ -16,7 +20,7 @@ public class EntityConversionTime implements Property {
             return false;
         }
         Entity entity = ((EntityTag) object).getBukkitEntity();
-        return (entity instanceof Zombie && !(entity instanceof PigZombie))
+        return (entity instanceof Zombie && !(entity instanceof ZombifiedPiglin))
                 || entity instanceof Skeleton;
     }
 
@@ -106,20 +110,28 @@ public class EntityConversionTime implements Property {
 
     public boolean isConverting() {
         if (isZombie()) {
-            return getZombie().isConverting();
+            return getZombie().isUnderWaterConverting();
         }
         else if (isSkeleton()) {
-            return getSkeleton().isConverting();
+            return getSkeleton().isFreezeConverting();
         }
         return false;
     }
 
     public DurationTag getConversionTime() {
         if (isZombie()) {
-            return new DurationTag((long) getZombie().getConversionTime());
+            Object obj = ReflectionHelper.getFieldValue(getZombie().getClass(), "conversionTime", getZombie());
+            if (obj != null) {
+                return new DurationTag((long) obj);
+            }
+            return null;
         }
         else if (isSkeleton()) {
-            return new DurationTag((long) getSkeleton().getConversionTime());
+            Object obj = ReflectionHelper.getFieldValue(getSkeleton().getClass(), "conversionTime", getSkeleton());
+            if (obj != null) {
+                return new DurationTag((long) obj);
+            }
+            return null;
         }
         return null;
     }
@@ -139,10 +151,10 @@ public class EntityConversionTime implements Property {
         // -->
         if ((mechanism.matches("conversion_duration") || mechanism.matches("drowned_conversion_duration")) && mechanism.requireObject(DurationTag.class)) {
             if (isZombie()) {
-                getZombie().setConversionTime(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+                ReflectionHelper.setFieldValue(getZombie().getClass(), "conversionTime", getZombie(), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
             }
             else if (isSkeleton()) {
-                getSkeleton().setConversionTime(mechanism.valueAsType(DurationTag.class).getTicksAsInt());
+                ReflectionHelper.setFieldValue(getSkeleton().getClass(), "conversionTime", getSkeleton(), mechanism.valueAsType(DurationTag.class).getTicksAsInt());
             }
         }
     }

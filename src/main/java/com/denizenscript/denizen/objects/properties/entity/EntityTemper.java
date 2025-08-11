@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects.properties.entity;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 
 public class EntityTemper extends EntityProperty<ElementTag> {
 
@@ -33,13 +33,13 @@ public class EntityTemper extends EntityProperty<ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        return new ElementTag(as(AbstractHorse.class).getDomestication());
+        return new ElementTag(as(AbstractHorse.class).getTemper());
     }
 
     @Override
     public void setPropertyValue(ElementTag param, Mechanism mechanism) {
         if (mechanism.requireInteger()) {
-            as(AbstractHorse.class).setDomestication(param.asInt());
+            as(AbstractHorse.class).setTemper(param.asInt());
         }
     }
 

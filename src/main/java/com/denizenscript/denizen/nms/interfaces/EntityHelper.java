@@ -28,6 +28,7 @@ import java.util.UUID;
 public abstract class EntityHelper {
 //todo
         public static Attribute ATTRIBUTE_ARMOR = Attributes.ARMOR;
+        public static Attribute ATTRIBUTE_MOVEMENT_SPEED = Attributes.MOVEMENT_SPEED;
 //    public static Attribute ATTRIBUTE_ARMOR = Utilities.findBestEnumlike(Attribute.class, "ARMOR", "GENERIC_ARMOR");
 //    public static Attribute ATTRIBUTE_STEP_HEIGHT = Utilities.findBestEnumlike(Attribute.class, "STEP_HEIGHT", "GENERIC_STEP_HEIGHT");
 //    public static Attribute ATTRIBUTE_MOVEMENT_SPEED = Utilities.findBestEnumlike(Attribute.class, "MOVEMENT_SPEED", "GENERIC_MOVEMENT_SPEED");

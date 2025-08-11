@@ -6,12 +6,17 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.Firework;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+
+import java.lang.reflect.Field;
 
 public class EntityShotAtAngle implements Property {
 
     public static boolean describes(ObjectTag entity) {
-        return entity instanceof EntityTag && ((EntityTag) entity).getBukkitEntity() instanceof Firework;
+        return entity instanceof EntityTag && ((EntityTag) entity).getBukkitEntity() instanceof FireworkRocketEntity;
     }
 
     public static EntityShotAtAngle getFrom(ObjectTag entity) {
@@ -33,8 +38,8 @@ public class EntityShotAtAngle implements Property {
 
     EntityTag entity;
 
-    public Firework getFirework() {
-        return (Firework) entity.getBukkitEntity();
+    public FireworkRocketEntity getFirework() {
+        return (FireworkRocketEntity) entity.getBukkitEntity();
     }
 
     @Override
@@ -75,7 +80,11 @@ public class EntityShotAtAngle implements Property {
         // <EntityTag.shot_at_angle>
         // -->
         if (mechanism.matches("shot_at_angle") && mechanism.requireBoolean()) {
-            getFirework().setShotAtAngle(mechanism.getValue().asBoolean());
+            Object datafield = ReflectionHelper.getFieldObject(getFirework().getClass(), "DATA_SHOT_AT_ANGLE", getFirework());
+            if (datafield != null)
+            {
+                getFirework().getEntityData().set(((EntityDataAccessor<Boolean>) datafield), mechanism.getValue().asBoolean());
+            }
         }
     }
 }

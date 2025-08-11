@@ -9,7 +9,6 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizen.nms.abstracts.OfflinePlayer;
-import org.bukkit.entity.Tameable;
 
 public class EntityTame implements Property {
 
