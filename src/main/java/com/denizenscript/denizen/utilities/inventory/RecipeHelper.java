@@ -99,7 +99,7 @@ public class RecipeHelper {
     public static int getShapelessQuantity(CraftingInventory inventory, ShapelessRecipe recipe) {
         List<ItemStack> items = new ArrayList<>();
         for (ItemStack item : inventory.getMatrix()) {
-            if (item != null && item.getType() != Material.AIR) {
+            if (item != null && item.getItem() != Items.AIR) {
                 items.add(item.clone());
             }
         }

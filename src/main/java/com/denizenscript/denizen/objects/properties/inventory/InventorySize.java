@@ -5,7 +5,6 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.ObjectProperty;
-import org.bukkit.event.inventory.InventoryType;
 
 public class InventorySize extends ObjectProperty<InventoryTag, ElementTag> {
 
@@ -26,16 +25,19 @@ public class InventorySize extends ObjectProperty<InventoryTag, ElementTag> {
         if (object.getInventory() == null) {
             return 0;
         }
-        return object.getInventory().getSize();
+        return object.getInventory().getContainerSize();
     }
 
     public void setSize(int size) {
-        object.setSize(size);
+//todo setcontainer and copy contents
+        //        object.setSize(size);
     }
 
     @Override
     public boolean isDefaultValue(ElementTag size) {
-        return !(getSize() > 0 && (object.getIdType().equals("generic") || object.getIdType().equals("script")) && object.getInventoryType() == InventoryType.CHEST);
+        //todo
+        return false;
+//        return !(getSize() > 0 && (object.getIdType().equals("generic") || object.getIdType().equals("script")) && object.getInventoryType() == InventoryType.CHEST);
     }
 
     @Override

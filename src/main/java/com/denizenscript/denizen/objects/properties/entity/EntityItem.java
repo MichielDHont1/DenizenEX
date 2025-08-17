@@ -79,7 +79,7 @@ public class EntityItem implements Property {
 //            BukkitImplDeprecations.entityItemEnderman.warn(context);
 //            BlockData data = getEnderman().getCarriedBlock();
 //            if (data == null) {
-//                return new ItemTag(Material.AIR);
+//                return new ItemTag(Items.AIR);
 //            }
 //            return new ItemTag(data.getMaterial());
 //        }

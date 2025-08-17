@@ -2,14 +2,14 @@ package com.denizenscript.denizen.objects.properties.inventory;
 
 import com.denizenscript.denizen.objects.InventoryTag;
 import com.denizenscript.denizen.objects.ItemTag;
+import com.denizenscript.denizen.utilities.ChatColor;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.objects.properties.ObjectProperty;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class InventoryContents extends ObjectProperty<InventoryTag, ListTag> {
 
@@ -51,8 +51,8 @@ public class InventoryContents extends ObjectProperty<InventoryTag, ListTag> {
         }
         int lastNonAir = -1;
         ListTag contents = new ListTag();
-        for (ItemStack item : object.getInventory().getContents()) {
-            if (item != null && item.getType() != Material.AIR) {
+        for (ItemStack item : object.getContents()) {
+            if (item != null && item.getItem() != Items.AIR) {
                 lastNonAir = contents.size();
                 if (simple) {
                     contents.add(new ItemTag(item).identifySimple());
@@ -62,7 +62,7 @@ public class InventoryContents extends ObjectProperty<InventoryTag, ListTag> {
                 }
             }
             else {
-                contents.addObject(new ItemTag(Material.AIR));
+                contents.addObject(new ItemTag(Items.AIR));
             }
         }
         lastNonAir++;
@@ -78,23 +78,24 @@ public class InventoryContents extends ObjectProperty<InventoryTag, ListTag> {
         }
         ListTag contents = new ListTag();
         lore = ChatColor.stripColor(lore);
-        for (ItemStack item : object.getInventory().getContents()) {
-            if (item != null && item.getType() != Material.AIR) {
-                if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-                    for (String line : item.getItemMeta().getLore()) {
-                        // Add the item to the list if it contains the lore specified in
-                        // the context
-                        if (ChatColor.stripColor(line).equalsIgnoreCase(lore)) {
-                            if (simple) {
-                                contents.add(new ItemTag(item).identifySimple());
-                            }
-                            else {
-                                contents.addObject(new ItemTag(item));
-                            }
-                            break;
-                        }
-                    }
-                }
+        for (ItemStack item : object.getContents()) {
+            if (item != null && item.getItem() != Items.AIR) {
+                //todo metadata
+//                if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+//                    for (String line : item.getItemMeta().getLore()) {
+//                        // Add the item to the list if it contains the lore specified in
+//                        // the context
+//                        if (ChatColor.stripColor(line).equalsIgnoreCase(lore)) {
+//                            if (simple) {
+//                                contents.add(new ItemTag(item).identifySimple());
+//                            }
+//                            else {
+//                                contents.addObject(new ItemTag(item));
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
             }
         }
         return contents;

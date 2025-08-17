@@ -678,14 +678,14 @@ public class ItemScriptHelper {
 //        SmithingRecipe smithRecipe = (SmithingRecipe) recipe;
 //        if (smithRecipe == null || !(smithRecipe.getKey().getNamespace().equals("denizen"))) {
 //            if (!isAllowedToCraftWith(inputItem)) {
-//                event.setResult(new ItemStack(Material.AIR));
+//                event.setResult(new ItemStack(Items.AIR));
 //            }
 //            return;
 //        }
 //        ItemScriptContainer realResult = recipeIdToItemScript.get(smithRecipe.getKey().toString());
 //        if (realResult == null) {
 //            if (!isAllowedToCraftWith(inputItem)) {
-//                event.setResult(new ItemStack(Material.AIR));
+//                event.setResult(new ItemStack(Items.AIR));
 //            }
 //            return;
 //        }
@@ -693,7 +693,7 @@ public class ItemScriptHelper {
 //        if (retain == null) {
 //            Debug.echoError("Smithing recipe mis-registered for script item: " + realResult.getName());
 //            if (!isAllowedToCraftWith(inputItem)) {
-//                event.setResult(new ItemStack(Material.AIR));
+//                event.setResult(new ItemStack(Items.AIR));
 //            }
 //            return;
 //        }

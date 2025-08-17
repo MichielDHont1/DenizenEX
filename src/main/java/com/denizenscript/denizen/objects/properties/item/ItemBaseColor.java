@@ -4,8 +4,10 @@ import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.*;
+
+import static net.minecraft.world.item.ShieldItem.TAG_BASE_COLOR;
 
 public class ItemBaseColor extends ItemProperty<ElementTag> {
 
@@ -21,12 +23,12 @@ public class ItemBaseColor extends ItemProperty<ElementTag> {
     // -->
 
     public static boolean describes(ItemTag item) {
-        return item.getBukkitMaterial() == Material.SHIELD;
+        return item.getBukkitMaterial() == Items.SHIELD;
     }
 
     @Override
     public ElementTag getPropertyValue() {
-        DyeColor color = NMSHandler.itemHelper.getShieldColor(getItemStack());
+        DyeColor color = (ShieldItem.getColor(this.getItemStack()));
         return color != null ? new ElementTag(color) : null;
     }
 
@@ -35,7 +37,13 @@ public class ItemBaseColor extends ItemProperty<ElementTag> {
         if (value != null && !mechanism.requireEnum(DyeColor.class)) {
             return;
         }
-        setItemStack(NMSHandler.itemHelper.setShieldColor(getItemStack(), value != null ? value.asEnum(DyeColor.class) : null));
+        ItemStack itemStack = getItemStack();
+        CompoundTag compoundtag = BlockItem.getBlockEntityData(itemStack);
+        if (compoundtag != null) {
+            compoundtag.putInt(TAG_BASE_COLOR, value.asInt());
+            itemStack.addTagElement("BlockEntityTag", compoundtag);
+        }
+        setItemStack(itemStack);
     }
 
     @Override

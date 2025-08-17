@@ -276,7 +276,7 @@ public class CuboidBlockSet implements BlockSet {
     }
 
     public void setBlockSingle(FullBlockData block, int x, int y, int z, InputParams input) {
-        if (input.noAir && block.data.getMaterial() == Material.AIR) {
+        if (input.noAir && block.data.getMaterial() == Items.AIR) {
             return;
         }
         if (block.data.getMaterial() == Material.STRUCTURE_VOID) {

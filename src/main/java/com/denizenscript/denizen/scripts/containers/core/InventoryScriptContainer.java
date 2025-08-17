@@ -209,7 +209,7 @@ public class InventoryScriptContainer extends ScriptContainer {
                         String[] itemsInLine = items.substring(1, items.length() - 1).split("\\[?\\]?\\s+\\[", -1);
                         for (String item : itemsInLine) {
                             if (item.isEmpty()) {
-                                finalItems[itemsAdded++] = new ItemStack(Material.AIR);
+                                finalItems[itemsAdded++] = new ItemStack(Items.AIR);
                                 continue;
                             }
                             filledSlots[itemsAdded] = true;
@@ -217,7 +217,7 @@ public class InventoryScriptContainer extends ScriptContainer {
                                 ItemTag def = ItemTag.valueOf(TagManager.tag(getString("definitions." + item), context), context);
                                 if (def == null) {
                                     Debug.echoError(this, "Invalid definition '" + item + "'... Ignoring it and assuming 'AIR'");
-                                    finalItems[itemsAdded] = new ItemStack(Material.AIR);
+                                    finalItems[itemsAdded] = new ItemStack(Items.AIR);
                                 }
                                 else {
                                     finalItems[itemsAdded] = def.getItemStack();
@@ -227,7 +227,7 @@ public class InventoryScriptContainer extends ScriptContainer {
                                 try {
                                     ItemTag itemTag = ItemTag.valueOf(item, context);
                                     if (itemTag == null) {
-                                        finalItems[itemsAdded] = new ItemStack(Material.AIR);
+                                        finalItems[itemsAdded] = new ItemStack(Items.AIR);
                                         Debug.echoError(this, "Invalid slot item: [" + item + "]... ignoring it and assuming 'AIR'");
                                     }
                                     else {

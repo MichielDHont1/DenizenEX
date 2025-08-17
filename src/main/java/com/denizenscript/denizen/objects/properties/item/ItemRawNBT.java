@@ -25,7 +25,7 @@ public class ItemRawNBT extends ItemProperty<MapTag> {
 
     public static boolean describes(ItemTag item) {
         // All items can have raw NBT
-        return item.getBukkitMaterial() != Material.AIR;
+        return item.getBukkitMaterial() != Items.AIR;
     }
 
     public ItemRawNBT(ItemTag item) {

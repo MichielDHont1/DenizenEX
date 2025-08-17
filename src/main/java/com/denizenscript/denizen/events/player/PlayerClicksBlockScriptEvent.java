@@ -183,7 +183,7 @@ public class PlayerClicksBlockScriptEvent extends BukkitScriptEvent {
 //        if (event.getAction() == Action.PHYSICAL) {
 //            return;
 //        }
-//        blockMaterial = event.hasBlock() ? new MaterialTag(event.getClickedBlock()) : new MaterialTag(Material.AIR);
+//        blockMaterial = event.hasBlock() ? new MaterialTag(event.getClickedBlock()) : new MaterialTag(Items.AIR);
 //        hand = new ElementTag(event.getHand());
 //        item = new ItemTag(event.getItem());
 //        location = event.hasBlock() ? new LocationTag(event.getClickedBlock().getLocation()) : null;

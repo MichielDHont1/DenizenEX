@@ -55,7 +55,7 @@ public class ItemComponentsPatch extends ItemProperty<MapTag> {
     }
 
     public static boolean describes(ItemTag item) {
-        return item.getBukkitMaterial() != Material.AIR;
+        return item.getBukkitMaterial() != Items.AIR;
     }
 
     @Override

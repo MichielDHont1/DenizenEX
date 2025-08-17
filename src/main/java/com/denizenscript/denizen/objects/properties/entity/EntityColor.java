@@ -13,7 +13,7 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.*;

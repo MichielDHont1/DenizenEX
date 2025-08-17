@@ -56,7 +56,7 @@ public class ItemInventoryContents extends ItemProperty<ListTag> {
             }
             return new InventoryContents(getItemInventory()).getContents(false);
         }
-        return new ListTag(as(BundleMeta.class).getItems(), item -> item != null && item.getType() != Material.AIR, ItemTag::new);
+        return new ListTag(as(BundleMeta.class).getItems(), item -> item != null && item.getItem() != Items.AIR, ItemTag::new);
     }
 
     @Override

@@ -167,7 +167,7 @@ public class ServerTagBase extends PseudoObjectTagBase<ServerTagBase> {
 //            ListTag recipeItems = new ListTag();
 //            Consumer<RecipeChoice> addChoice = (choice) -> {
 //                if (choice == null) {
-//                    recipeItems.addObject(new ItemTag(Material.AIR));
+//                    recipeItems.addObject(new ItemTag(Items.AIR));
 //                }
 //                else {
 //                    if (choice instanceof RecipeChoice.ExactChoice) {

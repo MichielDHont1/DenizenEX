@@ -381,7 +381,7 @@ public class Utilities {
 //        for (BlockFace blockFace : blockFaces) {
 //            Block block = signBlock.getRelative(blockFace);
 //            Material material = block.getType();
-//            if (material != Material.AIR && !SignCommand.isAnySign(material)) {
+//            if (material != Items.AIR && !SignCommand.isAnySign(material)) {
 //                return blockFace.getOppositeFace();
 //            }
 //        }

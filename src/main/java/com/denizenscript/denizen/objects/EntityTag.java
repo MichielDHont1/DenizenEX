@@ -877,7 +877,7 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 //                // air or portals, keep trying
 //                while (data1.equalsIgnoreCase("RANDOM") &&
 //                        ((!material.getMaterial().isBlock()) ||
-//                                material.getMaterial() == Material.AIR ||
+//                                material.getMaterial() == Items.AIR ||
 //                                material.getMaterial() == Material.NETHER_PORTAL ||
 //                                material.getMaterial() == Material.END_PORTAL)) {
 //                    material = MaterialTag.valueOf(data1, CoreUtilities.basicContext);
@@ -1250,7 +1250,7 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 //                range = 50;
 //            }
 //            Set<Material> set = new HashSet<>();
-//            set.add(Material.AIR);
+//            set.add(Items.AIR);
 //
 //            if (attribute.startsWith("ignore", 3) && attribute.hasContext(3)) {
 //                List<MaterialTag> ignoreList = attribute.contextAsType(3, ListTag.class).filter(MaterialTag.class, attribute.context);

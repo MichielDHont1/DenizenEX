@@ -45,7 +45,7 @@ public class SpongeSchematicHelper {
         catch (Exception ex) {
             Debug.echoError(ex);
             MaterialTag material = MaterialTag.valueOf(BlockHelper.getMaterialNameFromBlockData(key), CoreUtilities.noDebugContext);
-            data = (material == null ? new MaterialTag(Material.AIR) : material).getModernData();
+            data = (material == null ? new MaterialTag(Items.AIR) : material).getModernData();
         }
         return data;
     }

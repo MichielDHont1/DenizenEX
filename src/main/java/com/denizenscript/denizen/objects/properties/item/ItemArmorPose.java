@@ -8,9 +8,9 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class ItemArmorPose extends ItemProperty<MapTag> {
     // -->
 
     public static boolean describes(ItemTag item) {
-        return item.getBukkitMaterial() == Material.ARMOR_STAND;
+        return item.getBukkitMaterial() == Items.ARMOR_STAND;
     }
 
     @Override

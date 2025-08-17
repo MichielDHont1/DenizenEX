@@ -1586,7 +1586,7 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         // -->
         //todo
 //        tagProcessor.registerTag(ElementTag.class, "xp_drop", (attribute, object) -> {
-//            ItemStack inputItem = new ItemStack(Material.AIR);
+//            ItemStack inputItem = new ItemStack(Items.AIR);
 //            if (attribute.hasParam()) {
 //                inputItem = attribute.paramAsType(ItemTag.class).getItemStack();
 //            }
@@ -3118,18 +3118,18 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
 //                                if (!materials.isEmpty()) {
 //                                    for (MaterialTag material : materials) {
 //                                        if (material.getMaterial() == l.getBlockTypeForTag(attribute)) {
-//                                            if (new LocationTag(l.clone().add(0, 1, 0)).getBlockTypeForTag(attribute) == Material.AIR
-//                                                    && new LocationTag(l.clone().add(0, 2, 0)).getBlockTypeForTag(attribute) == Material.AIR
-//                                                    && l.getBlockTypeForTag(attribute) != Material.AIR) {
+//                                            if (new LocationTag(l.clone().add(0, 1, 0)).getBlockTypeForTag(attribute) == Items.AIR
+//                                                    && new LocationTag(l.clone().add(0, 2, 0)).getBlockTypeForTag(attribute) == Items.AIR
+//                                                    && l.getBlockTypeForTag(attribute) != Items.AIR) {
 //                                                found.add(new LocationTag(blockLoc.clone().add(x + 0.5, y, z + 0.5)));
 //                                            }
 //                                        }
 //                                    }
 //                                }
 //                                else {
-//                                    if (new LocationTag(l.clone().add(0, 1, 0)).getBlockTypeForTag(attribute) == Material.AIR
-//                                            && new LocationTag(l.clone().add(0, 2, 0)).getBlockTypeForTag(attribute) == Material.AIR
-//                                            && l.getBlockTypeForTag(attribute) != Material.AIR) {
+//                                    if (new LocationTag(l.clone().add(0, 1, 0)).getBlockTypeForTag(attribute) == Items.AIR
+//                                            && new LocationTag(l.clone().add(0, 2, 0)).getBlockTypeForTag(attribute) == Items.AIR
+//                                            && l.getBlockTypeForTag(attribute) != Items.AIR) {
 //                                        found.add(new LocationTag(blockLoc.clone().add(x + 0.5, y, z + 0.5)));
 //                                    }
 //                                }
@@ -5525,7 +5525,7 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
 //            if (state instanceof Jukebox) {
 //                if (mechanism.getValue().asBoolean()) {
 //                    Material mat = ((Jukebox) state).getRecord().getType();
-//                    if (mat == Material.AIR) {
+//                    if (mat == Items.AIR) {
 //                        mechanism.echoError("'jukebox_play' cannot play nothing.");
 //                        return;
 //                    }

@@ -8,27 +8,29 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.block.Banner;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemPatterns implements Property {
 
-    public static boolean isBannerOrShield(Material material) {
-        return material == Material.SHIELD || material.name().endsWith("_BANNER");
+    public static boolean isBannerOrShield(ItemStack itemStack) {
+        Item banneritem = itemStack.getItem();
+        return banneritem == Items.SHIELD || banneritem.getName(itemStack).getString().endsWith("_BANNER");
     }
 
     public static boolean describes(ObjectTag item) {
         if (item instanceof ItemTag) {
-            Material material = ((ItemTag) item).getBukkitMaterial();
+            ItemStack material = ((ItemTag) item).getItemStack();
             return isBannerOrShield(material);
         }
         return false;
@@ -59,47 +61,30 @@ public class ItemPatterns implements Property {
 
     public ListTag listPatterns() {
         ListTag list = new ListTag();
-        for (Pattern pattern : getPatterns()) {
-            list.add(pattern.getColor().name() + "/" + pattern.getPattern().name());
+        net.minecraft.nbt.ListTag listtag = getPatterns();
+        for(int i = 0; i < listtag.size() && i < 6; ++i) {
+            CompoundTag compoundtag1 = listtag.getCompound(i);
+            DyeColor dyecolor = DyeColor.byId(compoundtag1.getInt("Color"));
+            BannerPattern bannerpattern = BannerPattern.byHash(compoundtag1.getString("Pattern"));
+            if (bannerpattern != null)
+            {
+                list.add(dyecolor.name() + "/" + bannerpattern.name());
+            }
+            else
+            {
+                list.add(dyecolor.name() + "/NULL" );
+            }
         }
         return list;
     }
 
-    public List<Pattern> getPatterns() {
-        ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta instanceof BannerMeta) {
-            return ((BannerMeta) itemMeta).getPatterns();
+    public net.minecraft.nbt.ListTag getPatterns() {
+        CompoundTag blockEntityData = BlockItem.getBlockEntityData(item.getItemStack());
+        if (blockEntityData != null && blockEntityData.contains("Patterns")) {
+            return blockEntityData.getList("Patterns", 10);
+        } else {
+            return null;
         }
-        else if (itemMeta instanceof BlockStateMeta) {
-            return ((Banner) ((BlockStateMeta) itemMeta).getBlockState()).getPatterns();
-        }
-        else {
-            // ...???
-            return new ArrayList<>();
-        }
-    }
-
-    public void setPatterns(List<Pattern> patterns) {
-        ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta instanceof BannerMeta) {
-            ((BannerMeta) itemMeta).setPatterns(patterns);
-        }
-        else if (itemMeta instanceof BlockStateMeta) {
-            try {
-                Banner banner = (Banner) ((BlockStateMeta) itemMeta).getBlockState();
-                banner.setPatterns(patterns);
-                banner.update();
-                ((BlockStateMeta) itemMeta).setBlockState(banner);
-            }
-            catch (Exception ex) {
-                Debug.echoError("Banner setPatterns failed!");
-                Debug.echoError(ex);
-            }
-        }
-        else {
-            // ...???
-        }
-        item.setItemMeta(itemMeta);
     }
 
     @Override
@@ -157,20 +142,31 @@ public class ItemPatterns implements Property {
         // <server.pattern_types>
         // -->
         if (mechanism.matches("patterns")) {
-            List<Pattern> patterns = new ArrayList<>();
+            CompoundTag compoundtag = BlockItem.getBlockEntityData(item.getItemStack());
+            net.minecraft.nbt.ListTag patterns = new net.minecraft.nbt.ListTag();
             ListTag list = mechanism.valueAsType(ListTag.class);
             List<String> split;
             for (String string : list) {
                 try {
+                    CompoundTag Pattern = new CompoundTag();
                     split = CoreUtilities.split(string, '/', 2);
-                    patterns.add(new Pattern(DyeColor.valueOf(split.get(0).toUpperCase()),
-                            PatternType.valueOf(split.get(1).toUpperCase())));
+                    Pattern.putInt("Color", DyeColor.valueOf(split.get(0).toUpperCase()).getId());
+                    BannerPattern bannerPattern = BannerPattern.byFilename(split.get(1).toUpperCase());
+                    if (bannerPattern != null)
+                    {
+                        Pattern.putString("Pattern",bannerPattern .getHashname());
+                    }
+                    patterns.add(Pattern);
                 }
                 catch (Exception e) {
                     Debug.echoError("Could not apply pattern to banner: " + string);
                 }
             }
-            setPatterns(patterns);
+            if (compoundtag != null)
+            {
+                compoundtag.put("Patterns", patterns);
+                item.getItemStack().addTagElement("BlockEntityTag", compoundtag);
+            }
         }
     }
 }

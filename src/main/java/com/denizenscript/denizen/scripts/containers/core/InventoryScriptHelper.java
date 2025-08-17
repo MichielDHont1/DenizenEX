@@ -7,9 +7,7 @@ import com.denizenscript.denizen.utilities.Settings;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.objects.core.ScriptTag;
 import net.minecraft.world.Container;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.*;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
@@ -23,9 +21,9 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = "denizenex", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class InventoryScriptHelper {
 
-//    public static boolean isPersonalSpecialInv(InventoryType type) {
-//        return type == InventoryType.ANVIL || type == InventoryType.WORKBENCH;
-//    }
+    public static boolean isPersonalSpecialInv(AbstractContainerMenu type) {
+        return type instanceof AnvilMenu || type instanceof CraftingMenu;
+    }
 
 //    public static boolean isPersonalSpecialInv(Inventory inv) {
 //        return isPersonalSpecialInv(inv.getType());

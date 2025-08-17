@@ -115,7 +115,7 @@ public class ItemNBT implements Property {
 
         if (mechanism.matches("remove_nbt")) {
             BukkitImplDeprecations.itemNbt.warn(mechanism.context);
-            if (item.getMaterial().getMaterial() == Material.AIR) {
+            if (item.getMaterial().getMaterial() == Items.AIR) {
                 mechanism.echoError("Cannot apply NBT to AIR!");
                 return;
             }
@@ -135,7 +135,7 @@ public class ItemNBT implements Property {
 
         if (mechanism.matches("nbt")) {
             BukkitImplDeprecations.itemNbt.warn(mechanism.context);
-            if (item.getMaterial().getMaterial() == Material.AIR) {
+            if (item.getMaterial().getMaterial() == Items.AIR) {
                 mechanism.echoError("Cannot apply NBT to AIR!");
                 return;
             }

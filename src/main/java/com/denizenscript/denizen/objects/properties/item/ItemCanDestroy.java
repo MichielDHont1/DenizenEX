@@ -107,7 +107,7 @@ public class ItemCanDestroy implements Property {
         // <ItemTag.can_destroy>
         // -->
         if (mechanism.matches("can_destroy")) {
-            if (item.getMaterial().getMaterial() == Material.AIR) {
+            if (item.getMaterial().getMaterial() == Items.AIR) {
                 mechanism.echoError("Cannot apply NBT to AIR!");
                 return;
             }

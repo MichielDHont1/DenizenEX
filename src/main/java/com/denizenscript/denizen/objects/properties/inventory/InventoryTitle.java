@@ -2,11 +2,10 @@ package com.denizenscript.denizen.objects.properties.inventory;
 
 import com.denizenscript.denizen.objects.InventoryTag;
 import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
-import com.denizenscript.denizen.utilities.PaperAPITools;
+//import com.denizenscript.denizen.utilities.PaperAPITools;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.ObjectProperty;
-import org.bukkit.event.inventory.InventoryType;
 import net.minecraft.world.item.ItemStack;
 
 public class InventoryTitle extends ObjectProperty<InventoryTag, ElementTag> {
@@ -31,14 +30,15 @@ public class InventoryTitle extends ObjectProperty<InventoryTag, ElementTag> {
 
     @Override
     public ElementTag getPropertyValue() {
-        if (object.getInventory() != null) {
-            String title = PaperAPITools.instance.getTitle(object.getInventory());
-            if (title != null) {
-                if (!title.startsWith("container.")) {
-                    return new ElementTag(title, true);
-                }
-            }
-        }
+        //todo
+//        if (object.getInventory() != null) {
+//            String title = PaperAPITools.instance.getTitle(object.getInventory());
+//            if (title != null) {
+//                if (!title.startsWith("container.")) {
+//                    return new ElementTag(title, true);
+//                }
+//            }
+//        }
         return null;
     }
 
@@ -50,26 +50,28 @@ public class InventoryTitle extends ObjectProperty<InventoryTag, ElementTag> {
             return;
         }
         String title = param.asString();
-        if (InventoryScriptHelper.isPersonalSpecialInv(inventory.getInventory())) {
+        //todo menu null check
+        if (InventoryScriptHelper.isPersonalSpecialInv(inventory.getMenu())) {
             inventory.customTitle = title;
             return;
         }
-        if (inventory.getInventory() != null && PaperAPITools.instance.getTitle(inventory.getInventory()).equals(title)) {
-            return;
-        }
+        //todo
+//        if (inventory.getInventory() != null && PaperAPITools.instance.getTitle(inventory.getInventory()).equals(title)) {
+//            return;
+//        }
         inventory.uniquifier = null;
-        if (inventory.getInventory() == null) {
-            inventory.setInventory(PaperAPITools.instance.createInventory(null, InventoryTag.maxSlots, title));
-            InventoryTag.trackTemporaryInventory(inventory);
-            return;
-        }
+//        if (inventory.getInventory() == null) {
+//            inventory.setInventory(PaperAPITools.instance.createInventory(null, InventoryTag.maxSlots, title));
+//            InventoryTag.trackTemporaryInventory(inventory);
+//            return;
+//        }
         ItemStack[] contents = inventory.getContents();
-        if (inventory.getInventory().getType() == InventoryType.CHEST) {
-            inventory.setInventory(PaperAPITools.instance.createInventory(null, inventory.getSize(), title));
-        }
-        else {
-            inventory.setInventory(PaperAPITools.instance.createInventory(null, inventory.getInventory().getType(), title));
-        }
+//        if (inventory.getInventory().getType() == InventoryType.CHEST) {
+//            inventory.setInventory(PaperAPITools.instance.createInventory(null, inventory.getSize(), title));
+//        }
+//        else {
+//            inventory.setInventory(PaperAPITools.instance.createInventory(null, inventory.getInventory().getType(), title));
+//        }
         inventory.setContents(contents);
         InventoryTag.trackTemporaryInventory(inventory);
     }
