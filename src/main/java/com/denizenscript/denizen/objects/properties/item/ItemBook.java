@@ -12,6 +12,7 @@ import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.tags.core.EscapeTagUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.world.item.Items;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -22,8 +23,8 @@ public class ItemBook implements Property {
 
     public static boolean describes(ObjectTag item) {
         return item instanceof ItemTag
-                && (((ItemTag) item).getBukkitMaterial() == Material.WRITTEN_BOOK
-                || ((ItemTag) item).getBukkitMaterial() == Material.WRITABLE_BOOK);
+                && (((ItemTag) item).getBukkitMaterial() == Items.WRITTEN_BOOK
+                || ((ItemTag) item).getBukkitMaterial() == Items.WRITABLE_BOOK);
     }
 
     public static ItemBook getFrom(ObjectTag _item) {
@@ -315,7 +316,7 @@ public class ItemBook implements Property {
     }
 
     public boolean isWrittenBook() {
-        return item.getBukkitMaterial() == Material.WRITTEN_BOOK;
+        return item.getBukkitMaterial() == Items.WRITTEN_BOOK;
     }
 
     public BookMeta getBookMeta() {
