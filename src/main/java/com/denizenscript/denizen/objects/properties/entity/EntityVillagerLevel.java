@@ -6,7 +6,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Villager;
+import net.minecraft.world.entity.npc.Villager;
 
 public class EntityVillagerLevel implements Property {
 
@@ -40,7 +40,7 @@ public class EntityVillagerLevel implements Property {
 
     @Override
     public String getPropertyString() {
-        return String.valueOf(((Villager) entity.getBukkitEntity()).getVillagerLevel());
+        return String.valueOf(((Villager) entity.getBukkitEntity()).getVillagerData().getLevel());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class EntityVillagerLevel implements Property {
         // Returns the level of a villager.
         // -->
         if (attribute.startsWith("villager_level")) {
-            return new ElementTag(((Villager) entity.getBukkitEntity()).getVillagerLevel())
+            return new ElementTag(((Villager) entity.getBukkitEntity()).getVillagerData().getLevel())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -84,7 +84,7 @@ public class EntityVillagerLevel implements Property {
         // <EntityTag.villager_level>
         // -->
         if (mechanism.matches("villager_level") && mechanism.requireInteger()) {
-            ((Villager) entity.getBukkitEntity()).setVillagerLevel(mechanism.getValue().asInt());
+            ((Villager) entity.getBukkitEntity()).getVillagerData().setLevel(mechanism.getValue().asInt());
         }
     }
 }

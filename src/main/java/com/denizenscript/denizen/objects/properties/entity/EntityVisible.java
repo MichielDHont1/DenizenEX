@@ -1,13 +1,13 @@
 package com.denizenscript.denizen.objects.properties.entity;
 
-import com.denizenscript.denizen.npc.traits.InvisibleTrait;
+//import com.denizenscript.denizen.npc.traits.InvisibleTrait;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.ItemFrame;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.ItemFrame;
 
 public class EntityVisible implements Property {
 
@@ -35,10 +35,10 @@ public class EntityVisible implements Property {
 
     public boolean isVisible() {
         if (isArmorStand()) {
-            return getArmorStand().isVisible();
+            return !getArmorStand().isInvisible();
         }
         else if (isItemFrame()) {
-            return getItemFrame().isVisible();
+            return !getItemFrame().isInvisible();
         }
         else {
             return !entity.getLivingEntity().isInvisible();
@@ -82,14 +82,14 @@ public class EntityVisible implements Property {
         // -->
         PropertyParser.registerMechanism(EntityVisible.class, ElementTag.class, "visible", (object, mechanism, input) -> {
             if (mechanism.requireBoolean()) {
-                if (object.entity.isCitizensNPC()) {
-                    InvisibleTrait.setInvisible(object.entity.getLivingEntity(), object.entity.getDenizenNPC().getCitizen(), !input.asBoolean());
-                }
-                else if (object.isArmorStand()) {
-                    object.getArmorStand().setVisible(input.asBoolean());
+//                if (object.entity.isCitizensNPC()) {
+//                    InvisibleTrait.setInvisible(object.entity.getLivingEntity(), object.entity.getDenizenNPC().getCitizen(), !input.asBoolean());
+//                }else
+                 if (object.isArmorStand()) {
+                    object.getArmorStand().setInvisible(!input.asBoolean());
                 }
                 else if (object.isItemFrame()) {
-                    object.getItemFrame().setVisible(input.asBoolean());
+                    object.getItemFrame().setInvisible(!input.asBoolean());
                 }
                 else {
                     object.entity.getLivingEntity().setInvisible(!input.asBoolean());

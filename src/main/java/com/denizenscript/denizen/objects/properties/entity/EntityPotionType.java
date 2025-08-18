@@ -4,9 +4,8 @@ import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
-import org.bukkit.entity.AreaEffectCloud;
-import org.bukkit.entity.Arrow;
-import org.bukkit.potion.PotionType;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.projectile.Arrow;
 
 public class EntityPotionType extends EntityProperty<ElementTag> {
 

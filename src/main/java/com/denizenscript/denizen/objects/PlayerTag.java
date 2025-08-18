@@ -3871,7 +3871,7 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         if (mechanism.matches("show_book")
                 && mechanism.requireObject(ItemTag.class)) {
             ItemTag book = mechanism.valueAsType(ItemTag.class);
-            if (book.getItemStack().getItem() != Items.WRITTEN_BOOK) {
+            if (book.getItem() != Items.WRITTEN_BOOK) {
                 mechanism.echoError("show_book mechanism must have a written book as input.");
                 return;
             }

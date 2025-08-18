@@ -265,6 +265,11 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
     public ItemStack getItemStack() {
         return item;
     }
+
+    public Item getItem()
+    {
+        return item.getItem();
+    }
 //todo replace
 
     //    public ItemMeta metaCache;

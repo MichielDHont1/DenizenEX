@@ -6,8 +6,9 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Creeper;
+
 
 public class EntityPowered implements Property {
 
@@ -46,6 +47,7 @@ public class EntityPowered implements Property {
         if (powered == null) {
             return;
         }
+        this.entityData.set(DATA_IS_POWERED, true);
 
         ((Creeper) (powered.getBukkitEntity())).setPowered(power);
     }

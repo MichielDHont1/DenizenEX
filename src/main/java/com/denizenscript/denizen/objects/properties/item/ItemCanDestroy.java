@@ -8,8 +8,9 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
-import org.bukkit.Material;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -46,10 +47,10 @@ public class ItemCanDestroy implements Property {
 
     public ListTag getMaterials() {
         ItemStack itemStack = item.getItemStack();
-        List<Material> materials = NMSHandler.itemHelper.getCanBreak(itemStack);
+        List<Block> materials = NMSHandler.itemHelper.getCanBreak(itemStack);
         if (materials != null && !materials.isEmpty()) {
             ListTag list = new ListTag();
-            for (Material material : materials) {
+            for (Block material : materials) {
                 list.addObject(new MaterialTag(material));
             }
             return list;
@@ -107,7 +108,7 @@ public class ItemCanDestroy implements Property {
         // <ItemTag.can_destroy>
         // -->
         if (mechanism.matches("can_destroy")) {
-            if (item.getMaterial().getMaterial() == Items.AIR) {
+            if (item.getItem() == Items.AIR) {
                 mechanism.echoError("Cannot apply NBT to AIR!");
                 return;
             }
@@ -115,8 +116,8 @@ public class ItemCanDestroy implements Property {
             ItemStack itemStack = item.getItemStack();
 
             if (mechanism.hasValue()) {
-                List<Material> materials = mechanism.valueAsType(ListTag.class).filter(MaterialTag.class, mechanism.context)
-                        .stream().map(MaterialTag::getMaterial).collect(Collectors.toList());
+                List<Block> materials = mechanism.valueAsType(ListTag.class).filter(Block, mechanism.context)
+                        .stream().map(MaterialTag::getBlock).collect(Collectors.toList());
                 itemStack = NMSHandler.itemHelper.setCanBreak(itemStack, materials);
             }
             else {

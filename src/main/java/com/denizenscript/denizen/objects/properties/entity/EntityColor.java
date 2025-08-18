@@ -4,7 +4,7 @@ import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.objects.properties.bukkit.BukkitColorExtensions;
-import com.denizenscript.denizen.utilities.MultiVersionHelper1_19;
+//import com.denizenscript.denizen.utilities.MultiVersionHelper1_19;
 import com.denizenscript.denizen.utilities.Utilities;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ColorTag;
@@ -13,11 +13,15 @@ import com.denizenscript.denizencore.objects.core.ListTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
+import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import com.google.errorprone.annotations.Var;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.horse.Markings;
+import net.minecraft.world.entity.animal.horse.Variant;
 import net.minecraft.world.item.DyeColor;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
-import org.bukkit.entity.*;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class EntityColor extends EntityProperty<ElementTag> {
@@ -31,9 +35,6 @@ public class EntityColor extends EntityProperty<ElementTag> {
     // For the available color options, refer to <@link language Entity Color Types>.
     // -->
 
-    // TODO once 1.20 is the minimum supported version, can reference the enum directly
-    public static final EntityType MOOSHROOM_ENTITY_TYPE = Registry.ENTITY_TYPE.get(NamespacedKey.minecraft("mooshroom"));
-
     public static boolean describes(EntityTag entity) {
         EntityType type = entity.getBukkitEntityType();
         return type == EntityType.SHEEP ||
@@ -44,7 +45,7 @@ public class EntityColor extends EntityProperty<ElementTag> {
                 type == EntityType.LLAMA ||
                 type == EntityType.PARROT ||
                 type == EntityType.SHULKER ||
-                type == MOOSHROOM_ENTITY_TYPE ||
+                type == EntityType.MOOSHROOM ||
                 type == EntityType.CAT ||
                 type == EntityType.FOX ||
                 type == EntityType.PANDA ||
@@ -55,8 +56,9 @@ public class EntityColor extends EntityProperty<ElementTag> {
                 type == EntityType.TROPICAL_FISH ||
                 type == EntityType.GOAT ||
                 type == EntityType.AXOLOTL ||
-                type == EntityType.AREA_EFFECT_CLOUD ||
-                (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && MultiVersionHelper1_19.colorIsApplicable(type));
+                type == EntityType.AREA_EFFECT_CLOUD;
+                //||
+                //(NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19) && MultiVersionHelper1_19.colorIsApplicable(type));
     }
 
     @Override
@@ -85,9 +87,34 @@ public class EntityColor extends EntityProperty<ElementTag> {
         if (type == EntityType.HORSE && mechanism.requireObject(ListTag.class)) {
             ListTag list = mechanism.valueAsType(ListTag.class);
             Horse horse = as(Horse.class);
-            ElementTag horseColor = new ElementTag(list.get(0));
-            if (horseColor.matchesEnum(Horse.Color.class)) {
-                horse.setColor(horseColor.asEnum(Horse.Color.class));
+            if (list.size() >= 2)
+            {
+                String variantName = (new ElementTag(list.get(0))).toString();
+                String markingName = (new ElementTag(list.get(1))).toString();
+            }
+            else
+            {
+                mechanism.echoError("missing horse variant or marking. required 2 arguments, given " + list.size());
+            }
+            Variant horseVariant = null;
+            Markings horseMarking = null;
+            try
+            {
+                horseVariant = Variant.valueOf(variantName);
+            } catch (IllegalArgumentException e) {
+                mechanism.echoError("Invalid horse variant: " + variantName);
+            }
+            try
+            {
+                horseMarking = Markings.valueOf(markingName);
+            } catch (IllegalArgumentException e) {
+                mechanism.echoError("Invalid horse variant: " + markingName);
+            }
+
+            if (horseVariant.matchesEnum(Variant.class) && horseMarking.matchesEnum(Markings.class)) {
+                Method method = ReflectionHelper.getMethod(horse.getClass(), "setVariantAndMarkings", Variant.class, Markings.class);
+                method.invoke(horse, new Variant[].asInt())
+                horse.setVariantAndMarkings(horseColor.asEnum(Horse.Color.class));
             }
             else {
                 mechanism.echoError("Invalid horse color specified: " + horseColor);

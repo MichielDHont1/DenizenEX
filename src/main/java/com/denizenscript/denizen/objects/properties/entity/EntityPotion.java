@@ -7,11 +7,11 @@ import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.ThrownPotion;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
+import net.minecraft.world.item.Items;
 
 @Deprecated
 public class EntityPotion extends EntityProperty<ItemTag> {
@@ -35,7 +35,7 @@ public class EntityPotion extends EntityProperty<ItemTag> {
             return new ItemTag(thrownPotion.getItem());
         }
         else { // Tipped arrow
-            ItemStack refItem = new ItemStack(Material.POTION);
+            ItemStack refItem = new ItemStack(Items.POTION);
             PotionMeta meta = (PotionMeta) refItem.getItemMeta();
             if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_20)) {
                 meta.setBasePotionType(as(Arrow.class).getBasePotionType());

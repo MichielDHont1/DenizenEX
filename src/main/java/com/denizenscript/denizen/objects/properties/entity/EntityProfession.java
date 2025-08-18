@@ -8,9 +8,11 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Villager;
-import org.bukkit.entity.ZombieVillager;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerProfession;
 
 public class EntityProfession implements Property {
 
@@ -46,20 +48,12 @@ public class EntityProfession implements Property {
 
     EntityTag professional;
 
-    public Villager.Profession getProfession() {
-        if (professional.getBukkitEntityType() == EntityType.ZOMBIE_VILLAGER) {
-            return ((ZombieVillager) professional.getBukkitEntity()).getVillagerProfession();
-        }
-        return ((Villager) professional.getBukkitEntity()).getProfession();
+    public VillagerProfession getProfession() {
+        return ((Villager)professional.getBukkitEntity()).getVillagerData().getProfession();
     }
 
-    public void setProfession(Villager.Profession profession) {
-        if (professional.getBukkitEntityType() == EntityType.ZOMBIE_VILLAGER) {
-            ((ZombieVillager) professional.getBukkitEntity()).setVillagerProfession(profession);
-        }
-        else {
-            ((Villager) professional.getBukkitEntity()).setProfession(profession);
-        }
+    public void setProfession(VillagerProfession profession) {
+        ((Villager)professional.getBukkitEntity()).getVillagerData().setProfession(profession);
     }
 
     @Override
@@ -87,7 +81,7 @@ public class EntityProfession implements Property {
         // @description
         // If the entity can have professions, returns the entity's profession.
         // Currently, only Villager-type and infected zombie entities can have professions.
-        // For the list of possible professions, refer to <@link url https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Villager.Profession.html>
+        // For the list of possible professions, refer to <@link url https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/VillagerProfession.html>
         // -->
         if (attribute.startsWith("profession")) {
             return new ElementTag(String.valueOf(getProfession()), true)
@@ -107,12 +101,12 @@ public class EntityProfession implements Property {
         // @description
         // Changes the entity's profession.
         // Currently, only Villager-type entities can have professions.
-        // For the list of possible professions, refer to <@link url https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Villager.Profession.html>
+        // For the list of possible professions, refer to <@link url https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/VillagerProfession.html>
         // @tags
         // <EntityTag.profession>
         // -->
-        if (mechanism.matches("profession") && Utilities.requireEnumlike(mechanism, Villager.Profession.class)) {
-            setProfession(Utilities.elementToEnumlike(mechanism.getValue(), Villager.Profession.class));
+        if (mechanism.matches("profession") && Utilities.requireEnumlike(mechanism, VillagerProfession.class)) {
+            setProfession(Utilities.elementToEnumlike(mechanism.getValue(), VillagerProfession.class));
         }
     }
 }
