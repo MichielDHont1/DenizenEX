@@ -14,7 +14,7 @@ import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.tags.TagContext;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
-import org.bukkit.Material;
+import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,7 +25,7 @@ public class ItemRawNBT extends ItemProperty<MapTag> {
 
     public static boolean describes(ItemTag item) {
         // All items can have raw NBT
-        return item.getBukkitMaterial() != Items.AIR;
+        return item.getItem() != Items.AIR;
     }
 
     public ItemRawNBT(ItemTag item) {
@@ -77,7 +77,8 @@ public class ItemRawNBT extends ItemProperty<MapTag> {
         for (String key : defaultNbtKeys) {
             result.remove(key);
         }
-        if (getMaterial() == Material.ITEM_FRAME) {
+        //todo check if this should be item or block
+        if (getItemStack().getItem() == Items.ITEM_FRAME) {
             MapTag entityMap = (MapTag) result.getObject("EntityTag");
             if (entityMap != null) {
                 entityMap.putObject("Invisible", null);
@@ -86,7 +87,8 @@ public class ItemRawNBT extends ItemProperty<MapTag> {
                 }
             }
         }
-        if (getMaterial() == Material.ARMOR_STAND) {
+        //todo check if this should be item or block
+        if (getItemStack().getItem() == Items.ARMOR_STAND) {
             MapTag entityMap = (MapTag) result.getObject("EntityTag");
             if (entityMap != null) {
                 entityMap.putObject("Pose", null);

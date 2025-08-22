@@ -10,8 +10,8 @@ import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.core.EscapeTagUtil;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
-import org.bukkit.Material;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.List;
 
@@ -115,7 +115,7 @@ public class ItemNBT implements Property {
 
         if (mechanism.matches("remove_nbt")) {
             BukkitImplDeprecations.itemNbt.warn(mechanism.context);
-            if (item.getMaterial().getMaterial() == Items.AIR) {
+            if (item.getItem() == Items.AIR) {
                 mechanism.echoError("Cannot apply NBT to AIR!");
                 return;
             }
@@ -135,7 +135,7 @@ public class ItemNBT implements Property {
 
         if (mechanism.matches("nbt")) {
             BukkitImplDeprecations.itemNbt.warn(mechanism.context);
-            if (item.getMaterial().getMaterial() == Items.AIR) {
+            if (item.getItem() == Items.AIR) {
                 mechanism.echoError("Cannot apply NBT to AIR!");
                 return;
             }

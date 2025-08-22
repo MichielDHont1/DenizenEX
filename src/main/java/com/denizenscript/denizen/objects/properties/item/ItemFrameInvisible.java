@@ -9,15 +9,15 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
 
 public class ItemFrameInvisible implements Property {
 
     public static boolean describes(ObjectTag object) {
         return object instanceof ItemTag &&
-                (((ItemTag) object).getBukkitMaterial() == Material.ITEM_FRAME
-                || ((ItemTag) object).getBukkitMaterial() == Material.GLOW_ITEM_FRAME);
+                (((ItemTag) object).getBukkitMaterial() == Items.ITEM_FRAME
+                || ((ItemTag) object).getBukkitMaterial() == Items.GLOW_ITEM_FRAME);
     }
 
     public static ItemFrameInvisible getFrom(ObjectTag object) {
@@ -107,7 +107,7 @@ public class ItemFrameInvisible implements Property {
             else {
                 entityNbt = entityNbt.createBuilder().remove("Invisible").build();
             }
-            item.setItemStack(NMSHandler.itemHelper.setEntityData(item.getItemStack(), entityNbt, item.getBukkitMaterial() == Material.ITEM_FRAME ? EntityType.ITEM_FRAME : EntityType.GLOW_ITEM_FRAME));
+            item.setItemStack(NMSHandler.itemHelper.setEntityData(item.getItemStack(), entityNbt, item.getBukkitMaterial() == Items.ITEM_FRAME ? EntityType.ITEM_FRAME : EntityType.GLOW_ITEM_FRAME));
         }
     }
 }

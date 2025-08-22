@@ -371,7 +371,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
 //        }
         return determination;
     }
-
+    public boolean isAir()
+    {
+        return item.getItem() == Items.AIR;
+    }
     public boolean isItemscript() {
         return ItemScriptHelper.isItemscript(item);
     }
@@ -583,9 +586,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // If this returns true, it will enable access to:
         // <@link mechanism ItemTag.inventory_contents>, and <@link tag ItemTag.inventory_contents>.
         // -->
-        tagProcessor.registerTag(ElementTag.class, "has_inventory", (attribute, object) -> {
-            return new ElementTag(ItemInventoryContents.describes(object));
-        });
+        //todo
+//        tagProcessor.registerTag(ElementTag.class, "has_inventory", (attribute, object) -> {
+//            return new ElementTag(ItemInventoryContents.describes(object));
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.is_lockable>
@@ -596,9 +600,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // If this returns true, it will enable access to:
         // <@link mechanism ItemTag.lock>, and <@link tag ItemTag.lock>.
         // -->
-        tagProcessor.registerTag(ElementTag.class, "is_lockable", (attribute, object) -> {
-            return new ElementTag(ItemLock.describes(object));
-        });
+        //todo
+//        tagProcessor.registerTag(ElementTag.class, "is_lockable", (attribute, object) -> {
+//            return new ElementTag(ItemLock.describes(object));
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.material>

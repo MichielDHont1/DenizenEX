@@ -116,7 +116,7 @@ public class ItemCanDestroy implements Property {
             ItemStack itemStack = item.getItemStack();
 
             if (mechanism.hasValue()) {
-                List<Block> materials = mechanism.valueAsType(ListTag.class).filter(Block, mechanism.context)
+                List<Block> materials = mechanism.valueAsType(ListTag.class).filter(MaterialTag.class, mechanism.context)
                         .stream().map(MaterialTag::getBlock).collect(Collectors.toList());
                 itemStack = NMSHandler.itemHelper.setCanBreak(itemStack, materials);
             }

@@ -5,10 +5,9 @@ import com.denizenscript.denizen.objects.properties.bukkit.BukkitColorExtensions
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ColorTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.Color;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.inventory.meta.PotionMeta;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.PotionItem;
 
 public class ItemColor extends ItemProperty<ColorTag> {
 
@@ -24,14 +23,14 @@ public class ItemColor extends ItemProperty<ColorTag> {
     // -->
 
     public static boolean describes(ItemTag item) {
-        return item.getItemMeta() instanceof LeatherArmorMeta
-                || item.getItemMeta() instanceof MapMeta
-                || item.getItemMeta() instanceof PotionMeta;
+        return (item.getItem() instanceof DyeableLeatherItem)
+                || (item.getItem() instanceof PotionItem)
+                || (item.getItem() instanceof MapItem);
     }
 
     @Override
     public ColorTag getPropertyValue() {
-        if (getItemMeta() instanceof LeatherArmorMeta leatherArmorMeta) {
+        if (object.getItem() instanceof DyeableLeatherItem) {
             return BukkitColorExtensions.fromColor(leatherArmorMeta.getColor());
         }
         if (getItemMeta() instanceof MapMeta mapMeta) {

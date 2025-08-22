@@ -9,7 +9,7 @@ import com.denizenscript.denizen.nms.interfaces.PlayerHelper;
 import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 //import com.denizenscript.denizen.npc.traits.MirrorTrait;
 import com.denizenscript.denizen.objects.properties.entity.EntityAge;
-import com.denizenscript.denizen.objects.properties.entity.EntityColor;
+//import com.denizenscript.denizen.objects.properties.entity.EntityColor;
 import com.denizenscript.denizen.objects.properties.entity.EntityTame;
 import com.denizenscript.denizen.objects.properties.inventory.InventoryHolder;
 import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
@@ -753,12 +753,13 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     }
 
     public String getName() {
+        //todo
 //        if (isCitizensNPC()) {
 //            return getDenizenNPC().getCitizen().getName();
 //        }
-        if (entity instanceof FakePlayer) {
-            return ((FakePlayer) entity).getFullName();
-        }
+//        if (entity instanceof FakePlayer) {
+//            return ((FakePlayer) entity).getFullName();
+//        }
         if (entity instanceof Player) {
             return entity.getName().getString();
         }
@@ -984,6 +985,7 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
     public boolean isValid() {
 //        Entity entity = getBukkitEntity();
 //        return entity != null && (entity.isValid() || (isFake && isFakeValid));
+        return true;
     }
 
     public void remove() {
@@ -2455,9 +2457,9 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // Returns whether the entity can be colored.
         // If this returns true, it will enable access to <@link property EntityTag.color>.
         // -->
-        registerSpawnedOnlyTag(ElementTag.class, "colorable", (attribute, object) -> {
-            return new ElementTag(EntityColor.describes(object));
-        }, "is_colorable");
+//        registerSpawnedOnlyTag(ElementTag.class, "colorable", (attribute, object) -> {
+//            return new ElementTag(EntityColor.describes(object));
+//        }, "is_colorable");
 
         // <--[tag]
         // @attribute <EntityTag.experience>

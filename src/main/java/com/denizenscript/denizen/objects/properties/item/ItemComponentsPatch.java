@@ -7,9 +7,8 @@ import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.MapTag;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
 import com.denizenscript.denizencore.utilities.text.StringHolder;
-import org.bukkit.Keyed;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,8 +43,9 @@ public class ItemComponentsPatch extends ItemProperty<MapTag> {
     }
 
     static {
-        ENTITY_DATA_REMOVER.registerRemoval(EntityType.ITEM_FRAME, "Invisible");
-        ENTITY_DATA_REMOVER.registerRemoval(EntityType.ARMOR_STAND, "Pose", "Small", "NoBasePlate", "Marker", "Invisible", "ShowArms");
+        //todo verify that descriptionid works
+        ENTITY_DATA_REMOVER.registerRemoval(EntityType.ITEM_FRAME.getDescriptionId(), "Invisible");
+        ENTITY_DATA_REMOVER.registerRemoval(EntityType.ARMOR_STAND.getDescriptionId(), "Pose", "Small", "NoBasePlate", "Marker", "Invisible", "ShowArms");
         BLOCK_ENTITY_DATA_REMOVER.registerRemoval("minecraft:sign", "front_text", "back_text", "is_waxed");
         BLOCK_ENTITY_DATA_REMOVER.registerRemoval("minecraft:hanging_sign", "front_text", "back_text", "is_waxed");
         BLOCK_ENTITY_DATA_REMOVER.registerRemoval("minecraft:spawner",
@@ -124,10 +124,10 @@ public class ItemComponentsPatch extends ItemProperty<MapTag> {
         public PerIdPropertyDataRemover(String propertyId) {
             this(new StringHolder(propertyId), new HashMap<>());
         }
-
-        public void registerRemoval(Keyed type, String... keys) {
-            registerRemoval(type.getKey().toString(), keys);
-        }
+//todo check if needed or workaround possible
+//        public void registerRemoval(Keyed type, String... keys) {
+//            registerRemoval(type.getKey().toString(), keys);
+//        }
 
         public void registerRemoval(String id, String... keys) {
             Set<StringHolder> toRemove = new HashSet<>(keys.length + 1);

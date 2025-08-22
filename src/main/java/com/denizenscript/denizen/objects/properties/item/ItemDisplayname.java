@@ -2,6 +2,7 @@ package com.denizenscript.denizen.objects.properties.item;
 
 import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.objects.ItemTag;
+import com.denizenscript.denizen.utilities.ChatColor;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
@@ -10,8 +11,7 @@ import com.denizenscript.denizencore.tags.Attribute;
 import com.denizenscript.denizencore.tags.core.EscapeTagUtil;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
-import org.bukkit.ChatColor;
-import org.bukkit.inventory.meta.ItemMeta;
+import net.minecraft.network.chat.TextComponent;
 
 public class ItemDisplayname implements Property {
 
@@ -44,7 +44,7 @@ public class ItemDisplayname implements Property {
     ItemTag item;
 
     public boolean hasDisplayName() {
-        return item.getItemMeta() != null && item.getItemMeta().hasDisplayName();
+        return item.getItemStack().hasCustomHoverName();
     }
 
     @Override
@@ -121,19 +121,11 @@ public class ItemDisplayname implements Property {
         // -->
         if (mechanism.matches("display")) {
             if (!mechanism.hasValue()) {
-                ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(null);
-                item.setItemMeta(meta);
+                item.getItemStack().setHoverName(null);
             }
             else {
-                NMSHandler.itemHelper.setDisplayName(item, mechanism.getValue().asString());
+                item.getItemStack().setHoverName(new TextComponent(mechanism.getValue().asString()));
             }
-        }
-        else if (mechanism.matches("display_name")) {
-            BukkitImplDeprecations.itemDisplayNameMechanism.warn(mechanism.context);
-            ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(mechanism.hasValue() ? CoreUtilities.clearNBSPs(EscapeTagUtil.unEscape(mechanism.getValue().asString())) : null);
-            item.setItemMeta(meta);
         }
     }
 }

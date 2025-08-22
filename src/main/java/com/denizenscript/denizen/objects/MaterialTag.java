@@ -282,71 +282,71 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
 
         AbstractFlagTracker.registerFlagHandlers(tagProcessor);
         PropertyParser.registerPropertyTagHandlers(MaterialTag.class, tagProcessor);
-
-        tagProcessor.registerTag(ElementTag.class, "is_ageable", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialAge.describes(object));
-        }, "is_plant");
-        tagProcessor.registerTag(ElementTag.class, "is_campfire", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialCampfire.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_directional", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialDirectional.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "has_multiple_faces", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialFaces.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "can_drag", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialDrags.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_bisected", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialHalf.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "has_leaf_size", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialLeafSize.describes(object));
-        }, "is_bamboo");
-        tagProcessor.registerTag(ElementTag.class, "is_levelable", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialLevel.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_lightable", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialLightable.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_leaves", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialPersistent.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "has_count", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialCount.describes(object));
-        }, "is_pickle");
-        tagProcessor.registerTag(ElementTag.class, "has_type", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialBlockType.describes(object));
-        }, "is_slab");
-        tagProcessor.registerTag(ElementTag.class, "is_snowable", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialSnowable.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_switch", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialAttachmentFace.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_waterloggable", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialWaterlogged.describes(object));
-        });
-        tagProcessor.registerTag(ElementTag.class, "is_switchable", (attribute, object) -> {
-            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
-            return new ElementTag(MaterialSwitchable.describes(object));
-        });
+//todo
+//        tagProcessor.registerTag(ElementTag.class, "is_ageable", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialAge.describes(object));
+//        }, "is_plant");
+//        tagProcessor.registerTag(ElementTag.class, "is_campfire", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialCampfire.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_directional", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialDirectional.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "has_multiple_faces", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialFaces.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "can_drag", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialDrags.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_bisected", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialHalf.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "has_leaf_size", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialLeafSize.describes(object));
+//        }, "is_bamboo");
+//        tagProcessor.registerTag(ElementTag.class, "is_levelable", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialLevel.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_lightable", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialLightable.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_leaves", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialPersistent.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "has_count", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialCount.describes(object));
+//        }, "is_pickle");
+//        tagProcessor.registerTag(ElementTag.class, "has_type", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialBlockType.describes(object));
+//        }, "is_slab");
+//        tagProcessor.registerTag(ElementTag.class, "is_snowable", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialSnowable.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_switch", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialAttachmentFace.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_waterloggable", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialWaterlogged.describes(object));
+//        });
+//        tagProcessor.registerTag(ElementTag.class, "is_switchable", (attribute, object) -> {
+//            BukkitImplDeprecations.materialPropertyTags.warn(attribute.context);
+//            return new ElementTag(MaterialSwitchable.describes(object));
+//        });
 
         // <--[tag]
         // @attribute <MaterialTag.has_gravity>
@@ -590,9 +590,10 @@ public class MaterialTag implements ObjectTag, Adjustable, FlaggableObject {
         // @description
         // Returns the material's piston reaction. (Only for block materials).
         // -->
-        tagProcessor.registerTag(ElementTag.class, "piston_reaction", (attribute, object) -> {
-            return new ElementTag(NMSHandler.blockHelper.getPushReaction(object.getBlock()));
-        });
+        //todo
+//        tagProcessor.registerTag(ElementTag.class, "piston_reaction", (attribute, object) -> {
+//            return new ElementTag(NMSHandler.blockHelper.getPushReaction(object.getBlock()));
+//        });
 
         // <--[mechanism]
         // @object MaterialTag

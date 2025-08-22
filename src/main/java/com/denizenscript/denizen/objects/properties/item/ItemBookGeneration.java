@@ -6,13 +6,12 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.BookMeta;
+import net.minecraft.world.item.Items;
 
 public class ItemBookGeneration implements Property {
 
     public static boolean describes(ObjectTag item) {
-        return item instanceof ItemTag && ((ItemTag) item).getBukkitMaterial() == Material.WRITTEN_BOOK;
+        return item instanceof ItemTag && ((ItemTag) item).getBukkitMaterial() == Items.WRITTEN_BOOK;
     }
 
     public static ItemBookGeneration getFrom(ObjectTag _item) {

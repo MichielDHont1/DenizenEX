@@ -3,8 +3,8 @@ package com.denizenscript.denizen.objects;
 import com.denizenscript.denizen.events.BukkitScriptEvent;
 import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.objects.properties.inventory.InventoryHolder;
-import com.denizenscript.denizen.scripts.containers.core.InventoryScriptContainer;
-import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
+//import com.denizenscript.denizen.scripts.containers.core.InventoryScriptContainer;
+//import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 //import com.denizenscript.denizen.utilities.PaperAPITools;
@@ -112,10 +112,10 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
             return result;
         }
         // Use the map to get noted inventories
-        result = InventoryScriptHelper.notedMenus.get(inventory);
-        if (result != null) {
-            return result;
-        }
+//        result = InventoryScriptHelper.notedMenus.get(inventory);
+//        if (result != null) {
+//            return result;
+//        }
         //todo player inventory
         // Iterate through offline player inventories
 //        for (ImprovedOfflinePlayer player : ImprovedOfflinePlayer.offlinePlayers.values()) {
@@ -170,13 +170,13 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         }
     }
 
-    public void setInventory(Container container) {
-        if (isUnique()) {
-            InventoryScriptHelper.notedInventories.remove(this.container);
-            InventoryScriptHelper.notedInventories.put(container, this);
-        }
-        this.container = container;
-    }
+//    public void setInventory(Container container) {
+//        if (isUnique()) {
+//            InventoryScriptHelper.notedInventories.remove(this.container);
+//            InventoryScriptHelper.notedInventories.put(container, this);
+//        }
+//        this.container = container;
+//    }
 
     public String noteName = null, priorNoteName = null;
 
@@ -200,7 +200,7 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
 //        else {
 //            toNote.container = PaperAPITools.instance.createInventory(null, toNote.container.getType(), title);
 //        }
-        InventoryScriptHelper.notedInventories.put(toNote.container, toNote);
+//        InventoryScriptHelper.notedInventories.put(toNote.container, toNote);
         if (!idType.equals("generic") && !idType.equals("script")) {
             toNote.idType = "generic";
             //todo
@@ -218,7 +218,7 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         }
         priorNoteName = noteName;
         NoteManager.remove(this);
-        InventoryScriptHelper.notedInventories.remove(container);
+//        InventoryScriptHelper.notedInventories.remove(container);
         flagTracker = null;
         noteName = null;
     }
@@ -391,9 +391,9 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
 //        }
         if (result == null && holder != null) {
             ScriptTag script = ScriptTag.valueOf(holder, context);
-            if (script != null && (script.getContainer() instanceof InventoryScriptContainer)) {
-                result = ((InventoryScriptContainer) script.getContainer()).getInventoryFrom(context);
-            }
+//            if (script != null && (script.getContainer() instanceof InventoryScriptContainer)) {
+//                result = ((InventoryScriptContainer) script.getContainer()).getInventoryFrom(context);
+//            }
         }
         //todo
 //        if (result == null && new ElementTag(typeName).matchesEnum(InventoryType.class)) {
@@ -457,9 +457,9 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         if (noted instanceof InventoryTag) {
             return (InventoryTag) noted;
         }
-        if (ScriptRegistry.containsScript(string, InventoryScriptContainer.class)) {
-            return ScriptRegistry.getScriptContainerAs(string, InventoryScriptContainer.class).getInventoryFrom(context);
-        }
+//        if (ScriptRegistry.containsScript(string, InventoryScriptContainer.class)) {
+//            return ScriptRegistry.getScriptContainerAs(string, InventoryScriptContainer.class).getInventoryFrom(context);
+//        }
         if (new ElementTag(string).matchesEnum(InventoryType.class)) {
             InventoryType type = InventoryType.valueOf(string.toUpperCase());
             return new InventoryTag(type);
@@ -481,9 +481,9 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
         if (new ElementTag(tid).matchesEnum(InventoryType.class)) {
             return true;
         }
-        if (ScriptRegistry.containsScript(tid, InventoryScriptContainer.class)) {
-            return true;
-        }
+//        if (ScriptRegistry.containsScript(tid, InventoryScriptContainer.class)) {
+//            return true;
+//        }
         if (NoteManager.getSavedObject(tid) instanceof InventoryTag) {
             return true;
         }

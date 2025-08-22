@@ -4,7 +4,6 @@ import com.denizenscript.denizen.objects.ItemTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.properties.PropertyParser;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemCustomModel extends ItemProperty<ElementTag> {
 
@@ -18,7 +17,7 @@ public class ItemCustomModel extends ItemProperty<ElementTag> {
     // See also <@link tag ItemTag.has_custom_model_data>
     // -->
     public static boolean describes(ItemTag item) {
-        return !item.getBukkitMaterial().isAir();
+        return !item.isAir();
     }
 
     @Override

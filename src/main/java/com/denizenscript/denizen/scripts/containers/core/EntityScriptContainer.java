@@ -2,7 +2,7 @@ package com.denizenscript.denizen.scripts.containers.core;
 
 import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizen.objects.EntityTag;
-import com.denizenscript.denizen.objects.NPCTag;
+//import com.denizenscript.denizen.objects.NPCTag;
 import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizen.tags.BukkitTagContext;
 import com.denizenscript.denizencore.flags.MapTagFlagTracker;
@@ -85,15 +85,15 @@ public class EntityScriptContainer extends ScriptContainer {
     }
 
     public EntityTag getEntityFrom() {
-        return getEntityFrom(null, null);
+        return getEntityFrom(null/*, null*/);
     }
 
     public static HashSet<String> nonMechanismKeys = new HashSet<>(Arrays.asList("entity_type", "type", "debug", "custom", "data", "flags", "mechanisms"));
 
-    public EntityTag getEntityFrom(PlayerTag player, NPCTag npc) {
+    public EntityTag getEntityFrom(PlayerTag player/*, NPCTag npc*/) {
         EntityTag entity;
         try {
-            TagContext context = new BukkitTagContext(player, npc, new ScriptTag(this));
+            TagContext context = new BukkitTagContext(player, /*npc, */new ScriptTag(this));
             if (contains("entity_type", String.class)) {
                 String entityType = TagManager.tag((getString("entity_type", "")), context);
                 entity = EntityTag.valueOf(entityType, context);

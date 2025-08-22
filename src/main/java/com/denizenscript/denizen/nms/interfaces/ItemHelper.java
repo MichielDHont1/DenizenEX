@@ -132,8 +132,6 @@ public abstract class ItemHelper {
 
     public abstract List<String> getLore(ItemTag item);
 
-    public abstract void setDisplayName(ItemTag item, String name);
-
     public abstract void setLore(ItemTag item, List<String> lore);
 
     public boolean renderEntireMap(int mapId, int xMin, int zMin, int xMax, int zMax) {

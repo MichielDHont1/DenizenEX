@@ -3,7 +3,7 @@ package com.denizenscript.denizen.utilities.entity;
 import com.denizenscript.denizen.nms.interfaces.EntityHelper;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizen.utilities.Location;
-import org.bukkit.util.Vector;
+import net.minecraft.world.phys.Vec3;
 
 public class Velocity {
 
@@ -19,7 +19,7 @@ public class Velocity {
      * @param heightGain The gain in height
      * @return A vector
      */
-    public static Vector calculate(Vector from, Vector to, double gravity, double heightGain) {
+    public static Vector calculate(Vec3 from, Vec3 to, double gravity, double heightGain) {
         // Block locations
         int endGain = to.getBlockY() - from.getBlockY();
         double horizDist = Math.sqrt(distanceSquared(from, to));
