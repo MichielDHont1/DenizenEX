@@ -2,7 +2,7 @@ package com.denizenscript.denizen.utilities.inventory;
 
 import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.objects.InventoryTag;
-import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
+//import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -96,9 +96,10 @@ public class InventoryTrackerSystem {
         if (!isGenericTrackable(tagForm)) {
             return;
         }
-        if (InventoryScriptHelper.notedInventories.containsKey(inventory)) {
-            return;
-        }
+        //todo
+//        if (InventoryScriptHelper.notedInventories.containsKey(inventory)) {
+//            return;
+//        }
         if (tagForm.uniquifier == null) {
             tagForm.uniquifier = temporaryInventoryIdCounter++;
         }
@@ -115,9 +116,10 @@ public class InventoryTrackerSystem {
         if (!isGenericTrackable(tagForm)) {
             return;
         }
-        if (InventoryScriptHelper.notedMenus.containsKey(inventory)) {
-            return;
-        }
+        //todo
+//        if (InventoryScriptHelper.notedMenus.containsKey(inventory)) {
+//            return;
+//        }
         if (tagForm.uniquifier == null) {
             tagForm.uniquifier = temporaryMenuIdCounter++;
         }

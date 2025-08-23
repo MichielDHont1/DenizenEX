@@ -31,7 +31,7 @@ public class AreaEffectCloudHelper {
     }
 
     public boolean getBPUpgraded() {
-        return getBPData().getEffects().getFirst().getAmplifier() > 1;
+        return getBPData().getEffects().get(0).getAmplifier() > 1;
     }
 
 //    public boolean getBPExtended() {

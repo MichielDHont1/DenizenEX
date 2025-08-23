@@ -310,12 +310,12 @@ public class InventoryTag implements ObjectTag, Notable, Adjustable, FlaggableOb
                         return null;
                     }
                     switch (typeName) {
-                        case "player":
-                            return player.getInventory();
-                        case "enderchest":
-                            return player.getEnderChest();
-                        case "workbench":
-                            return player.getWorkbench();
+//                        case "player":
+//                            return player.getInventory();
+//                        case "enderchest":
+//                            return player.getEnderChest();
+//                        case "workbench":
+//                            return player.getWorkbench();
                             //todo implement this
 //                        case "crafting":
 //                            Player pl = new Player() {

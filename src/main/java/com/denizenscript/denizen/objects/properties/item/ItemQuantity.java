@@ -55,11 +55,11 @@ public class ItemQuantity implements Property {
         // -->
         if (attribute.startsWith("qty")) {
             BukkitImplDeprecations.qtyTags.warn(attribute.context);
-            return new ElementTag(item.getItemStack().getAmount())
+            return new ElementTag(item.getItemStack().getCount())
                     .getObjectAttribute(attribute.fulfill(1));
         }
         if (attribute.startsWith("quantity")) {
-            return new ElementTag(item.getItemStack().getAmount())
+            return new ElementTag(item.getItemStack().getCount())
                     .getObjectAttribute(attribute.fulfill(1));
         }
 
@@ -81,8 +81,8 @@ public class ItemQuantity implements Property {
 
     @Override
     public String getPropertyString() {
-        if (item.getItemStack().getAmount() > 1) {
-            return String.valueOf(item.getItemStack().getAmount());
+        if (item.getItemStack().getCount() > 1) {
+            return String.valueOf(item.getItemStack().getCount());
         }
         else {
             return null;

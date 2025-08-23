@@ -543,9 +543,10 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // <@link mechanism ItemTag.book>,
         // <@link tag ItemTag.book_author>, <@link tag ItemTag.book_title>, and <@link tag ItemTag.book_pages>.
         // -->
-        tagProcessor.registerTag(ElementTag.class, "is_book", (attribute, object) -> {
-            return new ElementTag(ItemBook.describes(object));
-        });
+        //todo
+//        tagProcessor.registerTag(ElementTag.class, "is_book", (attribute, object) -> {
+//            return new ElementTag(ItemBook.describes(object));
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.is_colorable>
@@ -556,13 +557,14 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // If this returns true, it will enable access to:
         // <@link mechanism ItemTag.color>, and <@link tag ItemTag.color>.
         // -->
-        tagProcessor.registerTag(ElementTag.class, "is_colorable", (attribute, object) -> {
-            return new ElementTag(ItemColor.describes(object));
-        });
-
-        tagProcessor.registerTag(ElementTag.class, "is_dyeable", (attribute, object) -> {
-            return new ElementTag(ItemColor.describes(object));
-        });
+        //todo
+//        tagProcessor.registerTag(ElementTag.class, "is_colorable", (attribute, object) -> {
+//            return new ElementTag(ItemColor.describes(object));
+//        });
+//
+//        tagProcessor.registerTag(ElementTag.class, "is_dyeable", (attribute, object) -> {
+//            return new ElementTag(ItemColor.describes(object));
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.is_firework>
@@ -573,9 +575,9 @@ public class ItemTag implements ObjectTag, Adjustable, FlaggableObject {
         // If this returns true, it will enable access to:
         // <@link mechanism ItemTag.firework>, and <@link tag ItemTag.firework>.
         // -->
-        tagProcessor.registerTag(ElementTag.class, "is_firework", (attribute, object) -> {
-            return new ElementTag(ItemFirework.describes(object));
-        });
+//        tagProcessor.registerTag(ElementTag.class, "is_firework", (attribute, object) -> {
+//            return new ElementTag(ItemFirework.describes(object));
+//        });
 
         // <--[tag]
         // @attribute <ItemTag.has_inventory>

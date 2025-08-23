@@ -3,7 +3,7 @@ package com.denizenscript.denizen.objects;
 import com.denizenscript.denizen.nms.NMSHandler;
 import com.denizenscript.denizen.nms.NMSVersion;
 import com.denizenscript.denizen.nms.interfaces.BlockHelper;
-import com.denizenscript.denizen.objects.properties.material.*;
+//import com.denizenscript.denizen.objects.properties.material.*;
 import com.denizenscript.denizen.utilities.BukkitImplDeprecations;
 //import com.denizenscript.denizen.utilities.PaperAPITools;
 //import com.denizenscript.denizen.utilities.VanillaTagHelper;

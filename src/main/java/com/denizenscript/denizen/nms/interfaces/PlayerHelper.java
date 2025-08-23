@@ -5,7 +5,7 @@ import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizen.objects.PlayerTag;
 import com.denizenscript.denizen.utilities.NamespacedKey;
 import com.denizenscript.denizen.utilities.entity.DenizenEntityType;
-import com.denizenscript.denizen.utilities.entity.FakeEntity;
+//import com.denizenscript.denizen.utilities.entity.FakeEntity;
 import com.denizenscript.denizencore.objects.Mechanism;
 import net.minecraft.server.level.ServerPlayer;
 import com.denizenscript.denizen.utilities.Location;
@@ -21,7 +21,7 @@ public abstract class PlayerHelper {
 //todo
 //    public abstract void stopSound(Player player, NamespacedKey sound, SoundCategory category); // TODO: remove the category param once 1.19 is the minimum version
 
-    public abstract FakeEntity sendEntitySpawn(List<PlayerTag> players, DenizenEntityType entityType, LocationTag location, ArrayList<Mechanism> mechanisms, int customId, UUID customUUID, boolean autoTrack);
+//    public abstract FakeEntity sendEntitySpawn(List<PlayerTag> players, DenizenEntityType entityType, LocationTag location, ArrayList<Mechanism> mechanisms, int customId, UUID customUUID, boolean autoTrack);
 
     public abstract void deTrackEntity(Player player, Entity entity);
 
@@ -98,9 +98,9 @@ public abstract class PlayerHelper {
 //        throw new UnsupportedOperationException();
 //    }
 
-    public void addFakePassenger(List<PlayerTag> players, Entity entity, FakeEntity fakeEntity) {
-        throw new UnsupportedOperationException();
-    }
+//    public void addFakePassenger(List<PlayerTag> players, Entity entity, FakeEntity fakeEntity) {
+//        throw new UnsupportedOperationException();
+//    }
 
     public void refreshPlayer(Player player) {
         throw new UnsupportedOperationException();

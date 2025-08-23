@@ -32,7 +32,7 @@ public class ItemCustomData extends ItemProperty<MapTag> {
     public static final String[] DENIZEN_DATA = new String[] { "Denizen Item Script", "DenizenItemScript", "Denizen NBT", "Denizen" };
 
     public static boolean describes(ItemTag item) {
-        return !item.getBukkitMaterial().isAir();
+        return !item.isAir();
     }
 
     public ItemCustomData(ItemTag item) {

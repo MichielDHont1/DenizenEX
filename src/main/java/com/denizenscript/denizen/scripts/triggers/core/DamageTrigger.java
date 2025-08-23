@@ -2,7 +2,7 @@ package com.denizenscript.denizen.scripts.triggers.core;
 
 import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.scripts.containers.core.InteractScriptContainer;
-import com.denizenscript.denizen.scripts.containers.core.InteractScriptHelper;
+//import com.denizenscript.denizen.scripts.containers.core.InteractScriptHelper;
 //import com.denizenscript.denizen.npc.traits.TriggerTrait;
 //import com.denizenscript.denizen.objects.EntityTag;
 //import com.denizenscript.denizen.objects.ItemTag;

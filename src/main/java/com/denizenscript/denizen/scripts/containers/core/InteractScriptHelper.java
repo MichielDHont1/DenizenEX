@@ -1,22 +1,22 @@
-package com.denizenscript.denizen.scripts.containers.core;
-
-//import com.denizenscript.denizen.npc.traits.AssignmentTrait;
-import com.denizenscript.denizencore.utilities.debugging.Debug;
-//import com.denizenscript.denizen.objects.NPCTag;
-import com.denizenscript.denizen.objects.PlayerTag;
-//import com.denizenscript.denizen.scripts.commands.core.CooldownCommand;
-import com.denizenscript.denizen.scripts.triggers.AbstractTrigger;
-import com.denizenscript.denizencore.objects.ObjectTag;
-import com.denizenscript.denizencore.objects.core.TimeTag;
-import com.denizenscript.denizencore.scripts.ScriptRegistry;
-import com.denizenscript.denizencore.utilities.debugging.Debug.DebugElement;
-import com.denizenscript.denizen.utilities.ChatColor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class InteractScriptHelper {
-
+//package com.denizenscript.denizen.scripts.containers.core;
+//
+////import com.denizenscript.denizen.npc.traits.AssignmentTrait;
+//import com.denizenscript.denizencore.utilities.debugging.Debug;
+////import com.denizenscript.denizen.objects.NPCTag;
+//import com.denizenscript.denizen.objects.PlayerTag;
+////import com.denizenscript.denizen.scripts.commands.core.CooldownCommand;
+//import com.denizenscript.denizen.scripts.triggers.AbstractTrigger;
+//import com.denizenscript.denizencore.objects.ObjectTag;
+//import com.denizenscript.denizencore.objects.core.TimeTag;
+//import com.denizenscript.denizencore.scripts.ScriptRegistry;
+//import com.denizenscript.denizencore.utilities.debugging.Debug.DebugElement;
+//import com.denizenscript.denizen.utilities.ChatColor;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//public class InteractScriptHelper {
+//
 //    public static List<InteractScriptContainer> getInteractScripts(NPCTag npc) {
 //        if (npc == null) {
 //            return null;
@@ -36,7 +36,7 @@ public class InteractScriptHelper {
 //        }
 //        return result.isEmpty() ? null : result;
 //    }
-
+//
 //    public static List<InteractScriptContainer> getInteractScripts(NPCTag npc, PlayerTag player, boolean showDebug, Class<? extends AbstractTrigger> trigger) {
 //        if (player == null || trigger == null) {
 //            return null;
@@ -64,7 +64,7 @@ public class InteractScriptHelper {
 //        }
 //        return interactScripts.isEmpty() ? null : interactScripts;
 //    }
-
+//
 //    public static String getCurrentStep(PlayerTag player, String scriptName) {
 //        if (scriptName == null) {
 //            return null;
@@ -75,11 +75,11 @@ public class InteractScriptHelper {
 //        }
 //        return ScriptRegistry.getScriptContainerAs(scriptName, InteractScriptContainer.class).getDefaultStepName().toUpperCase();
 //    }
-
+//
 //    public static TimeTag getStepExpiration(PlayerTag player, String scriptName) {
 //        if (scriptName == null) {
 //            return null;
 //        }
 //        return player.getFlagTracker().getFlagExpirationTime("__interact_step." + scriptName);
 //    }
-}
+//}

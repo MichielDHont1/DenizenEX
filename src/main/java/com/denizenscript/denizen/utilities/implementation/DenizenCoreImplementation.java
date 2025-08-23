@@ -186,7 +186,7 @@ public class DenizenCoreImplementation implements DenizenImplementation {
 
     @Override
     public ScriptEntryData getEmptyScriptEntryData() {
-        return new BukkitScriptEntryData(null/*, null*/);
+        return new BukkitScriptEntryData((PlayerTag) null/*, null*/);
     }
 
     @Override

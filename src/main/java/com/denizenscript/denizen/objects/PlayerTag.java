@@ -377,15 +377,15 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
             return null;
         }
     }
-
-    public InventoryTag getInventory() {
-        if (isOnline()) {
-            return InventoryTag.mirrorBukkitInventory(getPlayerEntity().getInventory());
-        }
-        else {
-            return new InventoryTag(getNBTEditor());
-        }
-    }
+//todo
+//    public InventoryTag getInventory() {
+//        if (isOnline()) {
+//            return InventoryTag.mirrorBukkitInventory(getPlayerEntity().getInventory());
+//        }
+//        else {
+//            return new InventoryTag(getNBTEditor());
+//        }
+//    }
 //todo find correct menutype for workbench
     public CraftingMenu getBukkitWorkbench() {
         if (isOnline())
@@ -399,26 +399,26 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         return null;
     }
 
-    public InventoryTag getWorkbench() {
-        if (isOnline()) {
-            CraftingMenu workbench = getBukkitWorkbench();
-            if (workbench != null) {
-                //todo fix inventoryholder
-                return new InventoryTag(workbench, getPlayerEntity());
-            }
-        }
-        return null;
-    }
+//    public InventoryTag getWorkbench() {
+//        if (isOnline()) {
+//            CraftingMenu workbench = getBukkitWorkbench();
+//            if (workbench != null) {
+//                //todo fix inventoryholder
+//                return new InventoryTag(workbench, getPlayerEntity());
+//            }
+//        }
+//        return null;
+//    }
 
-    public InventoryTag getEnderChest() {
-        if (isOnline()) {
-            //todo fix inventoryholder
-            return new InventoryTag(getPlayerEntity().getEnderChestInventory(), getPlayerEntity());
-        }
-        else {
-            return new InventoryTag(getNBTEditor(), true);
-        }
-    }
+//    public InventoryTag getEnderChest() {
+//        if (isOnline()) {
+//            //todo fix inventoryholder
+//            return new InventoryTag(getPlayerEntity().getEnderChestInventory(), getPlayerEntity());
+//        }
+//        else {
+//            return new InventoryTag(getNBTEditor(), true);
+//        }
+//    }
 
     public WorldTag getWorldTag() {
         if (isOnline()) {
@@ -939,12 +939,12 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
 //            }
 //        });
 
-        registerOfflineTag(ObjectTag.class, "location", (attribute, object) -> {
-            if (object.isOnline() && !object.getPlayerEntity().isDeadOrDying()) {
-                return new EntityTag(object.getPlayerEntity()).doLocationTag(attribute);
-            }
-            return object.getLocation();
-        });
+//        registerOfflineTag(ObjectTag.class, "location", (attribute, object) -> {
+//            if (object.isOnline() && !object.getPlayerEntity().isDeadOrDying()) {
+//                return new EntityTag(object.getPlayerEntity()).doLocationTag(attribute);
+//            }
+//            return object.getLocation();
+//        });
 
         registerOfflineTag(WorldTag.class, "world", (attribute, object) -> {
             return object.getWorldTag();
@@ -3596,33 +3596,33 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // - adjust <player> fake_health:10|15
         // - adjust <player> fake_health:<player.health>|3|0
         // -->
-        if (mechanism.matches("fake_health")) {
-            if (!mechanism.getValue().asString().isEmpty()) {
-                String[] split = mechanism.getValue().asString().split("\\|", 3);
-                if (split.length > 0 && new ElementTag(split[0]).isFloat()) {
-                    if (split.length > 1 && new ElementTag(split[1]).isInt()) {
-                        if (split.length > 2 && new ElementTag(split[2]).isFloat()) {
-                            NMSHandler.packetHelper.showHealth(getPlayerEntity(), new ElementTag(split[0]).asFloat(),
-                                    new ElementTag(split[1]).asInt(), new ElementTag(split[2]).asFloat());
-                        }
-                        else {
-                            NMSHandler.packetHelper.showHealth(getPlayerEntity(), new ElementTag(split[0]).asFloat(),
-                                    new ElementTag(split[1]).asInt(), getPlayerEntity().getFoodData().getSaturationLevel());
-                        }
-                    }
-                    else {
-                        NMSHandler.packetHelper.showHealth(getPlayerEntity(), new ElementTag(split[0]).asFloat(),
-                                getPlayerEntity().getFoodData().getFoodLevel(), getPlayerEntity().getFoodData().getSaturationLevel());
-                    }
-                }
-                else {
-                    Debug.echoError("'" + split[0] + "' is not a valid decimal number!");
-                }
-            }
-            else {
-                NMSHandler.packetHelper.resetHealth(getPlayerEntity());
-            }
-        }
+//        if (mechanism.matches("fake_health")) {
+//            if (!mechanism.getValue().asString().isEmpty()) {
+//                String[] split = mechanism.getValue().asString().split("\\|", 3);
+//                if (split.length > 0 && new ElementTag(split[0]).isFloat()) {
+//                    if (split.length > 1 && new ElementTag(split[1]).isInt()) {
+//                        if (split.length > 2 && new ElementTag(split[2]).isFloat()) {
+//                            NMSHandler.packetHelper.showHealth(getPlayerEntity(), new ElementTag(split[0]).asFloat(),
+//                                    new ElementTag(split[1]).asInt(), new ElementTag(split[2]).asFloat());
+//                        }
+//                        else {
+//                            NMSHandler.packetHelper.showHealth(getPlayerEntity(), new ElementTag(split[0]).asFloat(),
+//                                    new ElementTag(split[1]).asInt(), getPlayerEntity().getFoodData().getSaturationLevel());
+//                        }
+//                    }
+//                    else {
+//                        NMSHandler.packetHelper.showHealth(getPlayerEntity(), new ElementTag(split[0]).asFloat(),
+//                                getPlayerEntity().getFoodData().getFoodLevel(), getPlayerEntity().getFoodData().getSaturationLevel());
+//                    }
+//                }
+//                else {
+//                    Debug.echoError("'" + split[0] + "' is not a valid decimal number!");
+//                }
+//            }
+//            else {
+//                NMSHandler.packetHelper.resetHealth(getPlayerEntity());
+//            }
+//        }
 
         // <--[mechanism]
         // @object PlayerTag
@@ -3710,42 +3710,42 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // - adjust <player> fake_equipment:<player>|head|jack_o_lantern
         // Consider instead using <@link command fakeequip>.
         // -->
-        if (mechanism.matches("fake_equipment")) {
-            if (!mechanism.getValue().asString().isEmpty()) {
-                String[] split = mechanism.getValue().asString().split("\\|", 3);
-                if (split.length > 0 && new ElementTag(split[0]).matchesType(EntityTag.class)) {
-                    String slot = split.length > 1 ? split[1].toUpperCase() : null;
-                    if (split.length > 1 && (new ElementTag(slot).matchesEnum(EquipmentSlot.class)
-                            || slot.equals("MAIN_HAND") || slot.equals("BOOTS"))) {
-                        if (split.length > 2 && new ElementTag(split[2]).matchesType(ItemTag.class)) {
-                            if (slot.equals("MAIN_HAND")) {
-                                slot = "HAND";
-                            }
-                            else if (slot.equals("BOOTS")) {
-                                slot = "FEET";
-                            }
-                            NMSHandler.packetHelper.showEquipment(getPlayerEntity(),
-                                    new ElementTag(split[0]).asType(EntityTag.class, mechanism.context).getLivingEntity(),
-                                    EquipmentSlot.valueOf(slot),
-                                    new ElementTag(split[2]).asType(ItemTag.class, mechanism.context).getItemStack());
-                        }
-                        else if (split.length > 2) {
-                            Debug.echoError("'" + split[2] + "' is not a valid ItemTag!");
-                        }
-                    }
-                    else if (split.length > 1) {
-                        Debug.echoError("'" + split[1] + "' is not a valid slot; must be HAND, OFF_HAND, BOOTS, LEGS, CHEST, or HEAD!");
-                    }
-                    else {
-                        NMSHandler.packetHelper.resetEquipment(getPlayerEntity(),
-                                new ElementTag(split[0]).asType(EntityTag.class, mechanism.context).getLivingEntity());
-                    }
-                }
-                else {
-                    Debug.echoError("'" + split[0] + "' is not a valid EntityTag!");
-                }
-            }
-        }
+//        if (mechanism.matches("fake_equipment")) {
+//            if (!mechanism.getValue().asString().isEmpty()) {
+//                String[] split = mechanism.getValue().asString().split("\\|", 3);
+//                if (split.length > 0 && new ElementTag(split[0]).matchesType(EntityTag.class)) {
+//                    String slot = split.length > 1 ? split[1].toUpperCase() : null;
+//                    if (split.length > 1 && (new ElementTag(slot).matchesEnum(EquipmentSlot.class)
+//                            || slot.equals("MAIN_HAND") || slot.equals("BOOTS"))) {
+//                        if (split.length > 2 && new ElementTag(split[2]).matchesType(ItemTag.class)) {
+//                            if (slot.equals("MAIN_HAND")) {
+//                                slot = "HAND";
+//                            }
+//                            else if (slot.equals("BOOTS")) {
+//                                slot = "FEET";
+//                            }
+//                            NMSHandler.packetHelper.showEquipment(getPlayerEntity(),
+//                                    new ElementTag(split[0]).asType(EntityTag.class, mechanism.context).getLivingEntity(),
+//                                    EquipmentSlot.valueOf(slot),
+//                                    new ElementTag(split[2]).asType(ItemTag.class, mechanism.context).getItemStack());
+//                        }
+//                        else if (split.length > 2) {
+//                            Debug.echoError("'" + split[2] + "' is not a valid ItemTag!");
+//                        }
+//                    }
+//                    else if (split.length > 1) {
+//                        Debug.echoError("'" + split[1] + "' is not a valid slot; must be HAND, OFF_HAND, BOOTS, LEGS, CHEST, or HEAD!");
+//                    }
+//                    else {
+//                        NMSHandler.packetHelper.resetEquipment(getPlayerEntity(),
+//                                new ElementTag(split[0]).asType(EntityTag.class, mechanism.context).getLivingEntity());
+//                    }
+//                }
+//                else {
+//                    Debug.echoError("'" + split[0] + "' is not a valid EntityTag!");
+//                }
+//            }
+//        }
 
         // <--[mechanism]
         // @object PlayerTag
@@ -3788,9 +3788,9 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // @description
         // Shows the player the demo screen.
         // -->
-        if (mechanism.matches("show_demo")) {
-            NMSHandler.packetHelper.showDemoScreen(getPlayerEntity());
-        }
+//        if (mechanism.matches("show_demo")) {
+//            NMSHandler.packetHelper.showDemoScreen(getPlayerEntity());
+//        }
 
         // <--[mechanism]
         // @object PlayerTag

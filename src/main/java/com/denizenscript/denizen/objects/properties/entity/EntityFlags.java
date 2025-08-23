@@ -1,7 +1,7 @@
 package com.denizenscript.denizen.objects.properties.entity;
 
 import com.denizenscript.denizen.objects.EntityTag;
-import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
+//import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
 import com.denizenscript.denizencore.flags.AbstractFlagTracker;
 import com.denizenscript.denizencore.flags.MapTagFlagTracker;
 import com.denizenscript.denizencore.objects.Mechanism;
@@ -42,10 +42,11 @@ public class EntityFlags implements Property {
 
     @Override
     public String getPropertyString() {
+        //todo
         AbstractFlagTracker tracker = entity.getFlagTracker();
-        if (!(tracker instanceof DataPersistenceFlagTracker)) {
-            return null;
-        }
+//        if (!(tracker instanceof DataPersistenceFlagTracker)) {
+//            return null;
+//        }
         Collection<String> flagNames = tracker.listAllFlags();
         if (flagNames.isEmpty()) {
             return null;
@@ -81,12 +82,13 @@ public class EntityFlags implements Property {
         if (mechanism.matches("flag_map") && mechanism.requireObject(MapTag.class)) {
             MapTagFlagTracker flags = new MapTagFlagTracker(mechanism.valueAsType(MapTag.class));
             AbstractFlagTracker tracker = entity.getFlagTracker();
-            if (!(tracker instanceof DataPersistenceFlagTracker)) {
-                return;
-            }
-            for (String flagName : flags.map.keys()) {
-                ((DataPersistenceFlagTracker) tracker).setRootMap(flagName, flags.getRootMap(flagName));
-            }
+            //todo
+//            if (!(tracker instanceof DataPersistenceFlagTracker)) {
+//                return;
+//            }
+//            for (String flagName : flags.map.keys()) {
+//                ((DataPersistenceFlagTracker) tracker).setRootMap(flagName, flags.getRootMap(flagName));
+//            }
             entity.reapplyTracker(tracker);
         }
     }

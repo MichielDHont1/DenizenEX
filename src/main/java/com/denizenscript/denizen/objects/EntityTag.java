@@ -10,7 +10,7 @@ import com.denizenscript.denizen.nms.util.jnbt.CompoundTag;
 //import com.denizenscript.denizen.npc.traits.MirrorTrait;
 import com.denizenscript.denizen.objects.properties.entity.EntityAge;
 //import com.denizenscript.denizen.objects.properties.entity.EntityColor;
-import com.denizenscript.denizen.objects.properties.entity.EntityTame;
+//import com.denizenscript.denizen.objects.properties.entity.EntityTame;
 import com.denizenscript.denizen.objects.properties.inventory.InventoryHolder;
 import com.denizenscript.denizen.objects.properties.item.ItemRawNBT;
 //import com.denizenscript.denizen.scripts.commands.player.DisguiseCommand;
@@ -24,10 +24,10 @@ import com.denizenscript.denizen.utilities.Utilities;
 //import com.denizenscript.denizen.utilities.VanillaTagHelper;
 //import com.denizenscript.denizen.utilities.depends.Depends;
 import com.denizenscript.denizen.utilities.entity.DenizenEntityType;
-import com.denizenscript.denizen.utilities.entity.EntityAttachmentHelper;
-import com.denizenscript.denizen.utilities.entity.FakeEntity;
-import com.denizenscript.denizen.utilities.entity.HideEntitiesHelper;
-import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
+//import com.denizenscript.denizen.utilities.entity.EntityAttachmentHelper;
+//import com.denizenscript.denizen.utilities.entity.FakeEntity;
+//import com.denizenscript.denizen.utilities.entity.HideEntitiesHelper;
+//import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
 import com.denizenscript.denizencore.DenizenCore;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.flags.AbstractFlagTracker;
@@ -251,19 +251,19 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         }
         string = CoreUtilities.toLowerCase(string);
         if (string.startsWith("e@")) {
-            if (string.startsWith("e@fake:")) {
-                try {
-                    UUID entityID = UUID.fromString(string.substring("e@fake:".length()));
-                    FakeEntity entity = FakeEntity.idsToEntities.get(entityID);
-                    if (entity != null) {
-                        return entity.entity;
-                    }
-                    return null;
-                }
-                catch (Exception ex) {
-                    // DO NOTHING
-                }
-            }
+//            if (string.startsWith("e@fake:")) {
+//                try {
+//                    UUID entityID = UUID.fromString(string.substring("e@fake:".length()));
+//                    FakeEntity entity = FakeEntity.idsToEntities.get(entityID);
+//                    if (entity != null) {
+//                        return entity.entity;
+//                    }
+//                    return null;
+//                }
+//                catch (Exception ex) {
+//                    // DO NOTHING
+//                }
+//            }
             string = string.substring("e@".length());
         }
         //todo descide if this wil be supported
@@ -2430,9 +2430,9 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // <@link mechanism EntityTag.tame>, <@link mechanism EntityTag.owner>,
         // <@link tag EntityTag.is_tamed>, and <@link tag EntityTag.owner>
         // -->
-        registerSpawnedOnlyTag(ElementTag.class, "tameable", (attribute, object) -> {
-            return new ElementTag(EntityTame.describes(object));
-        }, "is_tameable");
+//        registerSpawnedOnlyTag(ElementTag.class, "tameable", (attribute, object) -> {
+//            return new ElementTag(EntityTame.describes(object));
+//        }, "is_tameable");
 
         // <--[tag]
         // @attribute <EntityTag.ageable>
@@ -2819,20 +2819,20 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // Returns the entities attached to this entity by <@link command attach>.
         // Optionally, specify a player. If specified, will return entities attached visible to that player. If not specified, returns entities globally attached.
         // -->
-        registerSpawnedOnlyTag(ListTag.class, "attached_entities", (attribute, object) -> {
-            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : null;
-            EntityAttachmentHelper.EntityAttachedToMap data = EntityAttachmentHelper.toEntityToData.get(object.getUUID());
-            ListTag result = new ListTag();
-            if (data == null) {
-                return result;
-            }
-            for (EntityAttachmentHelper.PlayerAttachMap map : data.attachedToMap.values()) {
-                if (player == null || map.getAttachment(player.getUUID()) != null) {
-                    result.addObject(map.attached);
-                }
-            }
-            return result;
-        });
+//        registerSpawnedOnlyTag(ListTag.class, "attached_entities", (attribute, object) -> {
+//            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : null;
+//            EntityAttachmentHelper.EntityAttachedToMap data = EntityAttachmentHelper.toEntityToData.get(object.getUUID());
+//            ListTag result = new ListTag();
+//            if (data == null) {
+//                return result;
+//            }
+//            for (EntityAttachmentHelper.PlayerAttachMap map : data.attachedToMap.values()) {
+//                if (player == null || map.getAttachment(player.getUUID()) != null) {
+//                    result.addObject(map.attached);
+//                }
+//            }
+//            return result;
+//        });
 
         // <--[tag]
         // @attribute <EntityTag.attached_to[(<player>)]>
@@ -2841,18 +2841,18 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // Returns the entity that this entity was attached to by <@link command attach>.
         // Optionally, specify a player. If specified, will return entity attachment visible to that player. If not specified, returns any entity global attachment.
         // -->
-        registerSpawnedOnlyTag(EntityTag.class, "attached_to", (attribute, object) -> {
-            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : null;
-            EntityAttachmentHelper.PlayerAttachMap data = EntityAttachmentHelper.attachedEntityToData.get(object.getUUID());
-            if (data == null) {
-                return null;
-            }
-            EntityAttachmentHelper.AttachmentData attached = data.getAttachment(player == null ? null : player.getUUID());
-            if (attached == null) {
-                return null;
-            }
-            return attached.to;
-        });
+//        registerSpawnedOnlyTag(EntityTag.class, "attached_to", (attribute, object) -> {
+//            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : null;
+//            EntityAttachmentHelper.PlayerAttachMap data = EntityAttachmentHelper.attachedEntityToData.get(object.getUUID());
+//            if (data == null) {
+//                return null;
+//            }
+//            EntityAttachmentHelper.AttachmentData attached = data.getAttachment(player == null ? null : player.getUUID());
+//            if (attached == null) {
+//                return null;
+//            }
+//            return attached.to;
+//        });
 
         // <--[tag]
         // @attribute <EntityTag.attached_offset[(<player>)]>
@@ -2861,18 +2861,18 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // Returns the offset of an attachment for this entity to another that was attached by <@link command attach>.
         // Optionally, specify a player. If specified, will return entity attachment visible to that player. If not specified, returns any entity global attachment.
         // -->
-        registerSpawnedOnlyTag(LocationTag.class, "attached_offset", (attribute, object) -> {
-            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : null;
-            EntityAttachmentHelper.PlayerAttachMap data = EntityAttachmentHelper.attachedEntityToData.get(object.getUUID());
-            if (data == null) {
-                return null;
-            }
-            EntityAttachmentHelper.AttachmentData attached = data.getAttachment(player == null ? null : player.getUUID());
-            if (attached == null) {
-                return null;
-            }
-            return attached.positionalOffset == null ? null : new LocationTag(attached.positionalOffset);
-        });
+//        registerSpawnedOnlyTag(LocationTag.class, "attached_offset", (attribute, object) -> {
+//            PlayerTag player = attribute.hasParam() ? attribute.paramAsType(PlayerTag.class) : null;
+//            EntityAttachmentHelper.PlayerAttachMap data = EntityAttachmentHelper.attachedEntityToData.get(object.getUUID());
+//            if (data == null) {
+//                return null;
+//            }
+//            EntityAttachmentHelper.AttachmentData attached = data.getAttachment(player == null ? null : player.getUUID());
+//            if (attached == null) {
+//                return null;
+//            }
+//            return attached.positionalOffset == null ? null : new LocationTag(attached.positionalOffset);
+//        });
 
         // <--[tag]
         // @attribute <EntityTag.attack_cooldown_duration>
@@ -3463,24 +3463,24 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
             return;
         }
 
-        if (mechanism.matches("attach_to")) {
-            BukkitImplDeprecations.attachToMech.warn(mechanism.context);
-            if (mechanism.hasValue()) {
-                ListTag list = mechanism.valueAsType(ListTag.class);
-                Vec3 offset = null;
-                boolean rotateWith = true;
-                if (list.size() > 1) {
-                    offset = LocationTag.valueOf(list.get(1), mechanism.context).toVector();
-                    if (list.size() > 2) {
-                        rotateWith = new ElementTag(list.get(2)).asBoolean();
-                    }
-                }
-                EntityAttachmentHelper.forceAttachMove(this, EntityTag.valueOf(list.get(0), mechanism.context), offset, rotateWith);
-            }
-            else {
-                EntityAttachmentHelper.forceAttachMove(this, null, null, false);
-            }
-        }
+//        if (mechanism.matches("attach_to")) {
+//            BukkitImplDeprecations.attachToMech.warn(mechanism.context);
+//            if (mechanism.hasValue()) {
+//                ListTag list = mechanism.valueAsType(ListTag.class);
+//                Vec3 offset = null;
+//                boolean rotateWith = true;
+//                if (list.size() > 1) {
+//                    offset = LocationTag.valueOf(list.get(1), mechanism.context).toVector();
+//                    if (list.size() > 2) {
+//                        rotateWith = new ElementTag(list.get(2)).asBoolean();
+//                    }
+//                }
+//                EntityAttachmentHelper.forceAttachMove(this, EntityTag.valueOf(list.get(0), mechanism.context), offset, rotateWith);
+//            }
+//            else {
+//                EntityAttachmentHelper.forceAttachMove(this, null, null, false);
+//            }
+//        }
 
         // <--[mechanism]
         // @object EntityTag
@@ -4092,9 +4092,9 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // To show to only one player, see <@link mechanism PlayerTag.show_entity>.
         // Works with offline players.
         // -->
-        if (mechanism.matches("show_to_players")) {
-            HideEntitiesHelper.unhideEntity(null, getBukkitEntity());
-        }
+//        if (mechanism.matches("show_to_players")) {
+//            HideEntitiesHelper.unhideEntity(null, getBukkitEntity());
+//        }
 
         // <--[mechanism]
         // @object EntityTag
@@ -4106,9 +4106,9 @@ public class EntityTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         // To hide for only one player, see <@link mechanism PlayerTag.hide_entity>.
         // Works with offline players.
         // -->
-        if (mechanism.matches("hide_from_players")) {
-            HideEntitiesHelper.hideEntity(null, getBukkitEntity());
-        }
+//        if (mechanism.matches("hide_from_players")) {
+//            HideEntitiesHelper.hideEntity(null, getBukkitEntity());
+//        }
 
         // <--[mechanism]
         // @object EntityTag

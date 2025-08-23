@@ -245,7 +245,7 @@ public class ItemScriptContainer extends ScriptContainer {
             return null;
         }
         if (context == null) {
-            context = new BukkitTagContext(null, null, new ScriptTag(this));
+            context = new BukkitTagContext(null, /*null, */new ScriptTag(this));
         }
         else {
             context = new BukkitTagContext((BukkitTagContext) context);
@@ -279,10 +279,11 @@ public class ItemScriptContainer extends ScriptContainer {
                 }
             }
             // Set Display Name
-            if (contains("display name", String.class)) {
-                String displayName = TagManager.tag(getString("display name"), context);
-                NMSHandler.itemHelper.setDisplayName(stack, displayName);
-            }
+            //todo
+//            if (contains("display name", String.class)) {
+//                String displayName = TagManager.tag(getString("display name"), context);
+//                NMSHandler.itemHelper.setDisplayName(stack, displayName);
+//            }
             // Set if the object is bound to the player
             if (contains("bound", String.class)) {
                 BukkitImplDeprecations.boundWarning.warn(context);
@@ -306,48 +307,48 @@ public class ItemScriptContainer extends ScriptContainer {
                 stack.setDurability(durability);
             }
             // Set Enchantments
-            if (contains("enchantments", List.class)) {
-                for (String enchantment : getStringList("enchantments")) {
-                    enchantment = TagManager.tag(enchantment, context);
-                    try {
-                        // Build enchantment context
-                        int level = 1;
-                        int colon = enchantment.lastIndexOf(':');
-                        if (colon == -1) {
-                            Debug.echoError("Item script '" + getName() + "' has enchantment '" + enchantment + "' without a level.");
-                        }
-                        else {
-                            level = Integer.parseInt(enchantment.substring(colon + 1).replace(" ", ""));
-                            enchantment = enchantment.substring(0, colon).replace(" ", "");
-                        }
-                        // Add enchantment
-                        EnchantmentTag ench = EnchantmentTag.valueOf(enchantment, context);
-                        if (ench == null) {
-                            Debug.echoError("Item script '" + getName() + "' specifies enchantment '" + enchantment + "' which is invalid.");
-                            continue;
-                        }
-                        if (stack.getBukkitMaterial() == Material.ENCHANTED_BOOK) {
-                            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) stack.getItemMeta();
-                            meta.addStoredEnchant(ench.enchantment, level, true);
-                            stack.setItemMeta(meta);
-                        }
-                        else {
-                            stack.getItemStack().addUnsafeEnchantment(ench.enchantment, level);
-                            stack.resetCache();
-                        }
-                    }
-                    catch (Exception ex) {
-                        Debug.echoError("While constructing item script '" + getName() + "', encountered error while applying enchantment '" + enchantment + "':");
-                        Debug.echoError(ex);
-                    }
-                }
-            }
+//            if (contains("enchantments", List.class)) {
+//                for (String enchantment : getStringList("enchantments")) {
+//                    enchantment = TagManager.tag(enchantment, context);
+//                    try {
+//                        // Build enchantment context
+//                        int level = 1;
+//                        int colon = enchantment.lastIndexOf(':');
+//                        if (colon == -1) {
+//                            Debug.echoError("Item script '" + getName() + "' has enchantment '" + enchantment + "' without a level.");
+//                        }
+//                        else {
+//                            level = Integer.parseInt(enchantment.substring(colon + 1).replace(" ", ""));
+//                            enchantment = enchantment.substring(0, colon).replace(" ", "");
+//                        }
+//                        // Add enchantment
+//                        EnchantmentTag ench = EnchantmentTag.valueOf(enchantment, context);
+//                        if (ench == null) {
+//                            Debug.echoError("Item script '" + getName() + "' specifies enchantment '" + enchantment + "' which is invalid.");
+//                            continue;
+//                        }
+//                        if (stack.getBukkitMaterial() == Material.ENCHANTED_BOOK) {
+//                            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) stack.getItemMeta();
+//                            meta.addStoredEnchant(ench.enchantment, level, true);
+//                            stack.setItemMeta(meta);
+//                        }
+//                        else {
+//                            stack.getItemStack().addUnsafeEnchantment(ench.enchantment, level);
+//                            stack.resetCache();
+//                        }
+//                    }
+//                    catch (Exception ex) {
+//                        Debug.echoError("While constructing item script '" + getName() + "', encountered error while applying enchantment '" + enchantment + "':");
+//                        Debug.echoError(ex);
+//                    }
+//                }
+//            }
             // Set Color
-            if (contains("color", String.class)) {
-                BukkitImplDeprecations.itemScriptColor.warn(context);
-                String color = TagManager.tag(getString("color"), context);
-                LeatherColorer.colorArmor(stack, color);
-            }
+//            if (contains("color", String.class)) {
+//                BukkitImplDeprecations.itemScriptColor.warn(context);
+//                String color = TagManager.tag(getString("color"), context);
+//                LeatherColorer.colorArmor(stack, color);
+//            }
             // Set Book
             if (contains("book", String.class)) {
                 BookScriptContainer book = ScriptRegistry.getScriptContainer(TagManager.tag(getString("book"), context).replace("s@", ""));

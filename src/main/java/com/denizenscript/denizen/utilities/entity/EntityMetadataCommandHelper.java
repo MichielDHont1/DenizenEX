@@ -24,7 +24,8 @@ public record EntityMetadataCommandHelper(Predicate<Entity> getter, BiConsumer<E
         if (target == null || target.getUUID() == null || players == null) {
             return;
         }
-        NetworkInterceptHelper.enable();
+        //todo
+//        NetworkInterceptHelper.enable();
         boolean wasEntityAdded = !packetOverrides.containsKey(target.getUUID());
         Map<UUID, Boolean> playerMap = packetOverrides.computeIfAbsent(target.getUUID(), k -> new HashMap<>());
         for (PlayerTag player : players) {
@@ -41,7 +42,7 @@ public record EntityMetadataCommandHelper(Predicate<Entity> getter, BiConsumer<E
             return null;
         }
         if (player != null) {
-            Map<UUID, Boolean> playerMap = packetOverrides.get(entity.getUniqueId());
+            Map<UUID, Boolean> playerMap = packetOverrides.get(entity.getUUID());
             if (playerMap != null && playerMap.containsKey(player)) {
                 return playerMap.get(player);
             }
@@ -115,11 +116,12 @@ public record EntityMetadataCommandHelper(Predicate<Entity> getter, BiConsumer<E
                     if (playersToUpdate.isEmpty()) {
                         return;
                     }
-                    for (Player player : NMSHandler.entityHelper.getPlayersThatSee(target.getBukkitEntity())) {
-                        if (playersToUpdate.contains(player.getUniqueId())) {
-                            NMSHandler.packetHelper.sendEntityMetadataFlagsUpdate(player, target.getBukkitEntity());
-                        }
-                    }
+                    //todo
+//                    for (Player player : NMSHandler.entityHelper.getPlayersThatSee(target.getBukkitEntity())) {
+//                        if (playersToUpdate.contains(player.getUniqueId())) {
+//                            NMSHandler.packetHelper.sendEntityMetadataFlagsUpdate(player, target.getBukkitEntity());
+//                        }
+//                    }
                     if (playersToUpdate.contains(target.getUUID())) {
                         NMSHandler.packetHelper.sendEntityMetadataFlagsUpdate(target.as(Player.class), target.getBukkitEntity());
                     }

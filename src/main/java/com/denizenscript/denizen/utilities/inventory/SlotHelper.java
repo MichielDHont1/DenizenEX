@@ -3,15 +3,15 @@ package com.denizenscript.denizen.utilities.inventory;
 import com.denizenscript.denizencore.events.ScriptEvent;
 import com.denizenscript.denizencore.objects.ArgumentHelper;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.InventoryHolder;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static net.minecraft.world.entity.EquipmentSlot.*;
 
 /**
  * Helper for player inventory slots.
@@ -41,33 +41,34 @@ public class SlotHelper {
      * Returns the slot an item in the player's inventory is at (for events like PlayerItemDamageEvent where the exact item is available).
      * Returns -1 if unknown.
      */
-    public static int slotForItem(PlayerInventory inventory, ItemStack item) {
-        if (item.equals(inventory.getChestplate())) {
-            return CHESTPLATE;
-        }
-        if (item.equals(inventory.getLeggings())) {
-            return LEGGINGS;
-        }
-        if (item.equals(inventory.getBoots())) {
-            return BOOTS;
-        }
-        if (item.equals(inventory.getHelmet())) {
-            return HELMET;
-        }
-        if (item.equals(inventory.getItemInMainHand())) {
-            return inventory.getHeldItemSlot();
-        }
-        if (item.equals(inventory.getItemInOffHand())) {
-            return OFFHAND;
-        }
-        ItemStack[] contents = inventory.getContents();
-        for (int i = 0; i < contents.length; i++) {
-            if (item.equals(contents[i])) {
-                return i;
-            }
-        }
-        return -1;
-    }
+//    public static int slotForItem(Inventory inventory, ItemStack item) {
+//        //todo verify and simplify
+//        if (item.equals(inventory.getArmor(CHESTPLATE))) {
+//            return CHESTPLATE;
+//        }
+//        if (item.equals(inventory.getArmor(LEGGINGS))) {
+//            return LEGGINGS;
+//        }
+//        if (item.equals(inventory.getArmor(BOOTS))) {
+//            return BOOTS;
+//        }
+//        if (item.equals(inventory.getArmor(HELMET))) {
+//            return HELMET;
+//        }
+//        if (item.equals(inventory.getItem(0))) {
+//            return 0;
+//        }
+//        if (item.equals(inventory.getItem(OFFHAND))) {
+//            return OFFHAND;
+//        }
+//        ItemStack[] contents = inventory.getContents();
+//        for (int i = 0; i < contents.length; i++) {
+//            if (item.equals(contents[i])) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 
     // <--[language]
     // @name Slot Inputs
@@ -86,39 +87,39 @@ public class SlotHelper {
     // Note that some common alternate spellings may be automatically accepted as well.
     //
     // -->
-    public static EquipmentSlot indexToEquipSlot(int index) {
-        switch (index) {
-            case BOOTS:
-                return EquipmentSlot.FEET;
-            case LEGGINGS:
-                return EquipmentSlot.LEGS;
-            case CHESTPLATE:
-                return EquipmentSlot.CHEST;
-            case HELMET:
-                return EquipmentSlot.HEAD;
-            case OFFHAND:
-                return EquipmentSlot.OFF_HAND;
-            default:
-                return null;
-        }
-    }
-
-    public static int equipSlotToIndex(EquipmentSlot slot) {
-        switch (slot) {
-            case FEET:
-                return BOOTS;
-            case LEGS:
-                return LEGGINGS;
-            case CHEST:
-                return CHESTPLATE;
-            case HEAD:
-                return HELMET;
-            case OFF_HAND:
-                return OFFHAND;
-            default:
-                return -1;
-        }
-    }
+//    public static EquipmentSlot indexToEquipSlot(int index) {
+//        switch (index) {
+//            case BOOTS:
+//                return EquipmentSlot.FEET;
+//            case LEGGINGS:
+//                return EquipmentSlot.LEGS;
+//            case CHESTPLATE:
+//                return EquipmentSlot.CHEST;
+//            case HELMET:
+//                return EquipmentSlot.HEAD;
+//            case OFFHAND:
+//                return EquipmentSlot.OFF_HAND;
+//            default:
+//                return null;
+//        }
+//    }
+//
+//    public static int equipSlotToIndex(EquipmentSlot slot) {
+//        switch (slot) {
+//            case FEET:
+//                return BOOTS;
+//            case LEGS:
+//                return LEGGINGS;
+//            case CHEST:
+//                return CHESTPLATE;
+//            case HEAD:
+//                return HELMET;
+//            case OFF_HAND:
+//                return OFFHAND;
+//            default:
+//                return -1;
+//        }
+//    }
 
     public static final HashMap<String, Integer> nameIndexMap = new HashMap<>();
     public static final List<String>[] indexNameMap = new List[50];
@@ -149,28 +150,28 @@ public class SlotHelper {
         registerSlotName("offhand", OFFHAND);
     }
 
-    public static int nameToIndexFor(String name, InventoryHolder holder) {
-        return nameToIndex(name, holder instanceof Entity ? (Entity) holder : null);
-    }
+//    public static int nameToIndexFor(String name, InventoryHolder holder) {
+//        return nameToIndex(name, holder instanceof Entity ? (Entity) holder : null);
+//    }
 
     /**
      * Converts a user given slot name (or number) to a valid internal slot index.
      * Will subtract 1 from a user-given number, per Denizen standard for user input (1-based slot index).
      */
-    public static int nameToIndex(String name, Entity entity) {
-        name = name.toLowerCase().replace("_", "");
-        if (name.equals("hand")) {
-            return entity instanceof Player ? ((Player) entity).getInventory().getHeldItemSlot() : 0;
-        }
-        Integer matched = nameIndexMap.get(name);
-        if (matched != null) {
-            return matched;
-        }
-        if (ArgumentHelper.matchesInteger(name)) {
-            return Integer.parseInt(name) - 1;
-        }
-        return -1;
-    }
+//    public static int nameToIndex(String name, Entity entity) {
+//        name = name.toLowerCase().replace("_", "");
+//        if (name.equals("hand")) {
+//            return entity instanceof Player ? ((Player) entity).getInventory().getHeldItemSlot() : 0;
+//        }
+//        Integer matched = nameIndexMap.get(name);
+//        if (matched != null) {
+//            return matched;
+//        }
+//        if (ArgumentHelper.matchesInteger(name)) {
+//            return Integer.parseInt(name) - 1;
+//        }
+//        return -1;
+//    }
 
     public static boolean doesMatch(String text, Entity entity, int slot) {
         ScriptEvent.MatchHelper matcher = ScriptEvent.createMatcher(text);
@@ -184,7 +185,7 @@ public class SlotHelper {
                 }
             }
         }
-        if (entity instanceof Player && slot == ((Player) entity).getInventory().getHeldItemSlot()) {
+        if (entity instanceof Player && slot == ((Player) entity).getInventory().selected) {
             if (matcher.doesMatch("hand")) {
                 return true;
             }

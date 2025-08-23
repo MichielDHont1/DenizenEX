@@ -9,6 +9,7 @@ import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.core.ScriptTag;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
+import net.minecraft.Util;
 import net.minecraft.world.entity.Entity;
 import java.util.HashMap;
 
@@ -68,7 +69,7 @@ public class EntityScriptHelper {
      * Marks the entity as having been created by a specified script.
      */
     public static void setEntityScript(Entity ent, String script) {
-        if (ent == null || ent.getUniqueId() == null || script == null) {
+        if (ent == null || ent.getUUID() == Util.NIL_UUID || script == null) {
             return;
         }
         ScriptTag scriptObj = ScriptTag.valueOf(script, CoreUtilities.basicContext);

@@ -60,7 +60,7 @@ public class ItemFlags implements Property {
         // For example: <[item].with_flag[myflagname]>, or <[item].with_flag[myflag:myvalue]>, or <[item].with_flag[mycounter:+:<[amount]>]>
         // -->
         if (attribute.startsWith("with_flag")) {
-            ItemTag item = new ItemTag(this.item.getItemStack().clone());
+            ItemTag item = new ItemTag(this.item.getItemStack().copy());
             FlagCommand.FlagActionProvider provider = new FlagCommand.FlagActionProvider();
             provider.tracker = item.getFlagTracker();
             DataAction action = DataActionHelper.parse(provider, attribute.getParam(), attribute.context);

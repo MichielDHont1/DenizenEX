@@ -1,7 +1,7 @@
 package com.denizenscript.denizen.objects.properties.inventory;
 
 import com.denizenscript.denizen.objects.InventoryTag;
-import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
+//import com.denizenscript.denizen.scripts.containers.core.InventoryScriptHelper;
 //import com.denizenscript.denizen.utilities.PaperAPITools;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.ElementTag;
@@ -51,10 +51,10 @@ public class InventoryTitle extends ObjectProperty<InventoryTag, ElementTag> {
         }
         String title = param.asString();
         //todo menu null check
-        if (InventoryScriptHelper.isPersonalSpecialInv(inventory.getMenu())) {
-            inventory.customTitle = title;
-            return;
-        }
+//        if (InventoryScriptHelper.isPersonalSpecialInv(inventory.getMenu())) {
+//            inventory.customTitle = title;
+//            return;
+//        }
         //todo
 //        if (inventory.getInventory() != null && PaperAPITools.instance.getTitle(inventory.getInventory()).equals(title)) {
 //            return;

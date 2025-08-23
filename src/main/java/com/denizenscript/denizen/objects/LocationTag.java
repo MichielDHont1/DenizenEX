@@ -14,11 +14,11 @@ import com.denizenscript.denizen.objects.properties.inventory.InventoryHolder;
 //import com.denizenscript.denizen.objects.properties.material.MaterialHalf;
 //import com.denizenscript.denizen.scripts.commands.world.SwitchCommand;
 import com.denizenscript.denizen.utilities.*;
-import com.denizenscript.denizen.utilities.blocks.SpawnableHelper;
-import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
+//import com.denizenscript.denizen.utilities.blocks.SpawnableHelper;
+//import com.denizenscript.denizen.utilities.flags.DataPersistenceFlagTracker;
 import com.denizenscript.denizen.utilities.flags.LocationFlagSearchHelper;
 import com.denizenscript.denizen.utilities.world.PathFinder;
-import com.denizenscript.denizen.utilities.world.WorldListChangeTracker;
+//import com.denizenscript.denizen.utilities.world.WorldListChangeTracker;
 import com.denizenscript.denizencore.flags.AbstractFlagTracker;
 import com.denizenscript.denizencore.flags.FlaggableObject;
 import com.denizenscript.denizencore.objects.*;
@@ -115,9 +115,9 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
     public Level getWorld() {
         Level w = internalWorld == null ? null : internalWorld.get();
         if (w != null) {
-            if (trackedWorldChange == WorldListChangeTracker.changes) {
-                return w;
-            }
+//            if (trackedWorldChange == WorldListChangeTracker.changes) {
+//                return w;
+//            }
             if (backupWorld == null) {
                 backupWorld = w.toString();
             }
@@ -125,7 +125,7 @@ public class LocationTag extends Location implements VectorObject, ObjectTag, No
         if (backupWorld == null) {
             return null;
         }
-        trackedWorldChange = WorldListChangeTracker.changes;
+//        trackedWorldChange = WorldListChangeTracker.changes;
         w = getLevel(backupWorld);
         internalWorld = new WeakReference<>(w);
         super.setWorld(w);

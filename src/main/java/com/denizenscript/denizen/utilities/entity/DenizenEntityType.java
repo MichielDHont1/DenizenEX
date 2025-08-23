@@ -190,12 +190,13 @@ public class DenizenEntityType {
     }
 
     public static DenizenEntityType getByEntity(Entity entity) {
-        if (entity instanceof CustomEntity) {
-            return getByName(((CustomEntity) entity).getEntityTypeName());
-        }
-        else {
+        //todo
+//        if (entity instanceof CustomEntity) {
+//            return getByName(((CustomEntity) entity).getBukkitEntityType);
+//        }
+//        else {
             return getByName(entity.getType().toString());
-        }
+//        }
     }
 
 //    public boolean isCustom() {

@@ -1,7 +1,6 @@
 package com.denizenscript.denizen.utilities;
 
 import com.denizenscript.denizencore.utilities.AsciiMatcher;
-import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 
