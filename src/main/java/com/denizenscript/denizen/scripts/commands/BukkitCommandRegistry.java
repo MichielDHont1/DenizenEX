@@ -8,7 +8,7 @@ package com.denizenscript.denizen.scripts.commands;
 //import com.denizenscript.denizen.scripts.commands.entity.*;
 //import com.denizenscript.denizen.scripts.commands.item.*;
 //import com.denizenscript.denizen.scripts.commands.npc.*;
-//import com.denizenscript.denizen.scripts.commands.player.*;
+import com.denizenscript.denizen.scripts.commands.player.*;
 import com.denizenscript.denizen.scripts.commands.server.*;
 //import com.denizenscript.denizen.scripts.commands.world.*;
 //import com.denizenscript.denizen.utilities.depends.Depends;
@@ -20,9 +20,13 @@ import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Map;
 
 public class BukkitCommandRegistry {
 
@@ -143,7 +147,7 @@ public class BukkitCommandRegistry {
 //        registerCommand(ItemCooldownCommand.class);
 //        registerCommand(KickCommand.class);
 //        registerCommand(MoneyCommand.class);
-//        registerCommand(NarrateCommand.class);
+        registerCommand(NarrateCommand.class);
 //        registerCommand(OpenTradesCommand.class);
 //        registerCommand(OxygenCommand.class);
 //        registerCommand(PermissionCommand.class);
@@ -204,8 +208,13 @@ public class BukkitCommandRegistry {
 
         @SubscribeEvent
         public static void registerCommands(RegisterCommandsEvent event){
-            ExCommandHandler.register(event.getDispatcher());
-            DenizenCommandHandler.register(event.getDispatcher());
+            CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+            for (AbstractCommand instance : DenizenCore.commandRegistry.instances.values())
+            {
+                instance.RegisterForgeCommand(dispatcher);
+            }
+            ExCommandHandler.register(dispatcher);
+            DenizenCommandHandler.register(dispatcher);
         }
     }
 }

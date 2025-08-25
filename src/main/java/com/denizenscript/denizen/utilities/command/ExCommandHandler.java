@@ -46,7 +46,8 @@ public class ExCommandHandler {
         })));
     }
 
-        private static int execute(CommandSourceStack command, String arguments){
+
+        public static int execute(CommandSourceStack command, String arguments){
 
             // <--[language]
             // @name /ex command

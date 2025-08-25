@@ -1,5 +1,6 @@
 package com.denizenscript.denizencore.scripts.commands;
 
+import com.denizenscript.denizen.utilities.command.ExCommandHandler;
 import com.denizenscript.denizencore.exceptions.InvalidArgumentsException;
 import com.denizenscript.denizencore.objects.*;
 import com.denizenscript.denizencore.objects.notable.Notable;
@@ -13,6 +14,14 @@ import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.EnumHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraftforge.event.RegisterCommandsEvent;
 
 import java.util.*;
 
@@ -267,6 +276,23 @@ public abstract class AbstractCommand {
         for (Argument arg : scriptEntry) {
             arg.reportUnhandled();
         }
+    }
+
+
+    public void RegisterForgeCommand(CommandDispatcher<CommandSourceStack> dispatcher)
+    {
+        if (this.name != null)
+        {
+            var command = Commands.literal("execute").requires((SourceStack) -> {
+                return SourceStack.hasPermission(3);}).then(Commands.literal(this.name + " "));
+            command = command.then(Commands.argument("test", StringArgumentType.greedyString()).suggests((p_136339_, p_136340_) -> {
+                return SharedSuggestionProvider.suggest(docPrefixes, p_136340_);
+            }).executes((SourceStack) -> {
+                return ExCommandHandler.execute(SourceStack.getSource(), StringArgumentType.greedyString().getExamples().toString());
+            }));
+            dispatcher.register(command);
+        }
+
     }
 
 }
