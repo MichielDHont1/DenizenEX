@@ -22,19 +22,19 @@ public class PlayerTagBase {
         // If no input value is specified, returns the linked player.
         // -->
 //        Bukkit.getServer().getPluginManager().registerEvents(this, Denizen.getInstance());
-//        TagManager.registerTagHandler(PlayerTag.class, "player", (attribute) -> {
-//            if (!attribute.hasParam()) {
-//                PlayerTag player = ((BukkitTagContext) attribute.context).player;
-//                if (player != null) {
-//                    return player;
-//                }
-//                else {
-//                    attribute.echoError("Missing player for player tag.");
-//                    return null;
-//                }
-//            }
-//            return PlayerTag.valueOf(attribute.getParam(), attribute.context);
-//        });
+        TagManager.registerTagHandler(PlayerTag.class, "player", (attribute) -> {
+            if (!attribute.hasParam()) {
+                PlayerTag player = ((BukkitTagContext) attribute.context).player;
+                if (player != null) {
+                    return player;
+                }
+                else {
+                    attribute.echoError("Missing player for player tag.");
+                    return null;
+                }
+            }
+            return PlayerTag.valueOf(attribute.getParam(), attribute.context);
+        });
     }
 
     ///////////

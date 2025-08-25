@@ -45,7 +45,9 @@ public class ExCommandHandler {
             return execute(SourceStack.getSource(), StringArgumentType.getString(SourceStack, "script"));
         })));
     }
-
+    public static int execute2(CommandContext<CommandSourceStack> command, String arguments) {
+        return execute(command.getSource(), arguments);
+    }
 
         public static int execute(CommandSourceStack command, String arguments){
 

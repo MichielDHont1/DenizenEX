@@ -31,7 +31,7 @@ Debug:
     # Whether to show some extra info output (will spam your console).
     Extra info: false
     # Whether to show extra advanced detailed 'verbose' info output (will FLOOD your console!).
-    Verbose: false
+    Verbose: true
     # Optional text to prefix all debug output.
     Prefix: ""
     # Whether to show full information about scripts being loaded (at startup and "/ex reload" usage).

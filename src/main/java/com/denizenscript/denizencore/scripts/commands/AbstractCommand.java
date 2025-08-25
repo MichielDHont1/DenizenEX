@@ -283,13 +283,24 @@ public abstract class AbstractCommand {
     {
         if (this.name != null)
         {
-            var command = Commands.literal("execute").requires((SourceStack) -> {
-                return SourceStack.hasPermission(3);}).then(Commands.literal(this.name + " "));
-            command = command.then(Commands.argument("test", StringArgumentType.greedyString()).suggests((p_136339_, p_136340_) -> {
+            var command = Commands.literal("execute");
+            command = command.requires((SourceStack) -> {
+            return SourceStack.hasPermission(3);}).then(Commands.literal(this.name + " "));
+                    command = command.then(Commands.argument("arguments", StringArgumentType.greedyString()).suggests((p_136339_, p_136340_) -> {
                 return SharedSuggestionProvider.suggest(docPrefixes, p_136340_);
             }).executes((SourceStack) -> {
-                return ExCommandHandler.execute(SourceStack.getSource(), StringArgumentType.greedyString().getExamples().toString());
+                return ExCommandHandler.execute2(SourceStack, StringArgumentType.getString(SourceStack, "arguments"));
             }));
+
+            var commandAlias = Commands.literal("ex");
+            commandAlias = commandAlias.requires((SourceStack) -> {
+                return SourceStack.hasPermission(3);}).then(Commands.literal(this.name + " "));
+            commandAlias = commandAlias.then(Commands.argument("arguments", StringArgumentType.greedyString()).suggests((p_136339_, p_136340_) -> {
+                return SharedSuggestionProvider.suggest(docPrefixes, p_136340_);
+            }).executes((SourceStack) -> {
+                return ExCommandHandler.execute2(SourceStack, StringArgumentType.getString(SourceStack, "arguments"));
+            }));
+            dispatcher.register(commandAlias);
             dispatcher.register(command);
         }
 
